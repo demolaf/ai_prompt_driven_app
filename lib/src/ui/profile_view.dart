@@ -24,27 +24,33 @@ class _ProfileViewState extends State<ProfileView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            CupertinoSliverNavigationBar(
-              alwaysShowMiddle: false,
-              largeTitle: Text('Profile'),
-            ),
-            SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              sliver: SliverList(
-                delegate: SliverChildListDelegate([
-                  _buildProfileHeader(),
-                  SizedBox(height: 32),
-                  _buildStatsSection(),
-                  SizedBox(height: 32),
-                  _buildSettingsSection(),
-                ]),
+      body: CustomScrollView(
+        slivers: [
+          CupertinoSliverNavigationBar(
+            backgroundColor: Colors.transparent,
+            border: Border.fromBorderSide(BorderSide.none),
+            alwaysShowMiddle: false,
+            largeTitle: Text('Profile'),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            sliver: SliverFillRemaining(
+              child: SingleChildScrollView(
+                child: SafeArea(
+                  top: false,
+                  child: Column(
+                    spacing: 32,
+                    children: [
+                      _buildProfileHeader(),
+                      _buildStatsSection(),
+                      _buildSettingsSection(),
+                    ],
+                  ),
+                ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -76,10 +82,7 @@ class _ProfileViewState extends State<ProfileView> {
         ),
         Text(
           'john.doe@example.com',
-          style: TextStyle(
-            fontSize: 16,
-            color: CupertinoColors.secondaryLabel,
-          ),
+          style: TextStyle(fontSize: 16, color: CupertinoColors.secondaryLabel),
         ),
       ],
     );
@@ -116,10 +119,7 @@ class _ProfileViewState extends State<ProfileView> {
         ),
         Text(
           label,
-          style: TextStyle(
-            fontSize: 12,
-            color: CupertinoColors.secondaryLabel,
-          ),
+          style: TextStyle(fontSize: 12, color: CupertinoColors.secondaryLabel),
         ),
       ],
     );
@@ -149,7 +149,13 @@ class _ProfileViewState extends State<ProfileView> {
     );
   }
 
-  Widget _buildSettingTile(String title, String subtitle, IconData icon, bool value, ValueChanged<bool> onChanged) {
+  Widget _buildSettingTile(
+    String title,
+    String subtitle,
+    IconData icon,
+    bool value,
+    ValueChanged<bool> onChanged,
+  ) {
     return Container(
       margin: EdgeInsets.only(bottom: 12),
       padding: EdgeInsets.all(16),
@@ -159,11 +165,7 @@ class _ProfileViewState extends State<ProfileView> {
       ),
       child: Row(
         children: [
-          Icon(
-            icon,
-            size: 24,
-            color: CupertinoColors.systemBlue,
-          ),
+          Icon(icon, size: 24, color: CupertinoColors.systemBlue),
           SizedBox(width: 16),
           Expanded(
             child: Column(
@@ -187,13 +189,9 @@ class _ProfileViewState extends State<ProfileView> {
               ],
             ),
           ),
-          CupertinoSwitch(
-            value: value,
-            onChanged: onChanged,
-          ),
+          CupertinoSwitch(value: value, onChanged: onChanged),
         ],
       ),
     );
   }
-
 }

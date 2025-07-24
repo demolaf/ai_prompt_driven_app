@@ -43,12 +43,10 @@ class _PromptFABMenuState extends OverlayWidgetState<PromptFABMenu> {
 
     return Stack(
       children: [
-        ModalBarrier(
-          onDismiss: dismiss,
-        ),
+        ModalBarrier(onDismiss: dismiss),
         Positioned(
           bottom: MediaQuery.sizeOf(context).height - menuBottomPosition,
-          right: 16, // Same right margin as FAB
+          right: 0,
           child: FadeTransition(
             opacity: animation,
             child: GestureDetector(
@@ -61,7 +59,6 @@ class _PromptFABMenuState extends OverlayWidgetState<PromptFABMenu> {
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
-                    mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     spacing: 24,
                     children: [
@@ -75,7 +72,7 @@ class _PromptFABMenuState extends OverlayWidgetState<PromptFABMenu> {
                           );
                         },
                         child: FABMenuItem(
-                          title: 'Enter custom input',
+                          title: 'Ask AI',
                           icon: Icon(Icons.keyboard),
                         ),
                       ),
@@ -84,46 +81,46 @@ class _PromptFABMenuState extends OverlayWidgetState<PromptFABMenu> {
                           widget.onMenuSelection();
                         },
                         child: FABMenuItem(
-                          title: 'Translate text',
-                          icon: Icon(Icons.translate),
+                          title: 'Make the background blue',
+                          icon: Icon(Icons.diamond),
                         ),
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          widget.onMenuSelection();
-                        },
-                        child: FABMenuItem(
-                          title: 'Summarize content',
-                          icon: Icon(Icons.summarize),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          widget.onMenuSelection();
-                        },
-                        child: FABMenuItem(
-                          title: 'Generate code',
-                          icon: Icon(Icons.code),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          widget.onMenuSelection();
-                        },
-                        child: FABMenuItem(
-                          title: 'Write email',
-                          icon: Icon(Icons.email),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          widget.onMenuSelection();
-                        },
-                        child: FABMenuItem(
-                          title: 'Answer questions',
-                          icon: Icon(Icons.help_outline),
-                        ),
-                      ),
+                      // GestureDetector(
+                      //   onTap: () {
+                      //     widget.onMenuSelection();
+                      //   },
+                      //   child: FABMenuItem(
+                      //     title: 'Summarize content',
+                      //     icon: Icon(Icons.summarize),
+                      //   ),
+                      // ),
+                      // GestureDetector(
+                      //   onTap: () {
+                      //     widget.onMenuSelection();
+                      //   },
+                      //   child: FABMenuItem(
+                      //     title: 'Generate code',
+                      //     icon: Icon(Icons.code),
+                      //   ),
+                      // ),
+                      // GestureDetector(
+                      //   onTap: () {
+                      //     widget.onMenuSelection();
+                      //   },
+                      //   child: FABMenuItem(
+                      //     title: 'Write email',
+                      //     icon: Icon(Icons.email),
+                      //   ),
+                      // ),
+                      // GestureDetector(
+                      //   onTap: () {
+                      //     widget.onMenuSelection();
+                      //   },
+                      //   child: FABMenuItem(
+                      //     title: 'Answer questions',
+                      //     icon: Icon(Icons.help_outline),
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),

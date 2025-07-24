@@ -29,28 +29,32 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            CupertinoSliverNavigationBar(
-              alwaysShowMiddle: false,
-              largeTitle: Text('Home'),
-              trailing: IconButton(
-                onPressed: () {
-                  ProfileView.present(context);
-                },
-                icon: Icon(CupertinoIcons.profile_circled),
-              ),
+      body: CustomScrollView(
+        slivers: [
+          CupertinoSliverNavigationBar(
+            backgroundColor: Colors.transparent,
+            border: Border.fromBorderSide(BorderSide.none),
+            alwaysShowMiddle: false,
+            largeTitle: Text('Home'),
+            trailing: IconButton(
+              onPressed: () {
+                ProfileView.present(context);
+              },
+              icon: Icon(CupertinoIcons.profile_circled),
             ),
-            SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              sliver: SliverFillRemaining(
-                child: SingleChildScrollView(
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            sliver: SliverFillRemaining(
+              child: SingleChildScrollView(
+                child: SafeArea(
+                  top: false,
                   child: Column(
                     spacing: 24,
                     children: [
-                      SizedBox(
-                        height: 150,
+                      Container(
+                        height: 164,
+                        padding: EdgeInsets.only(top: 16),
                         child: PageView(
                           controller: PageController(viewportFraction: 0.95),
                           padEnds: false,
@@ -59,7 +63,7 @@ class _HomeViewState extends State<HomeView> {
                               .entries
                               .map(
                                 (entry) => GreetingCard(
-                                  greeting: entry.value,
+                                  data: entry.value,
                                   isLastItem:
                                       entry.key ==
                                       greetingsList.value.length - 1,
@@ -94,8 +98,8 @@ class _HomeViewState extends State<HomeView> {
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
       floatingActionButton: PromptFAB(),
     );

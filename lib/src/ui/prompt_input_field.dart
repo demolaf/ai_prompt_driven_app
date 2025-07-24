@@ -75,7 +75,7 @@ class _PromptInputFieldState extends OverlayWidgetState<PromptInputField> {
             showWhenUnlinked: false,
             offset: Offset(
               -(PromptInputField.width(context) + 16),
-              -widget.size.height,
+              -(widget.size.height + 100),
             ),
             child: Material(
               type: MaterialType.transparency,
@@ -93,31 +93,80 @@ class _PromptInputFieldState extends OverlayWidgetState<PromptInputField> {
                     ),
                   ],
                 ),
-                child: Row(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: 12,
                   children: [
-                    Expanded(
-                      child: TextField(
-                        controller: _textController,
-                        focusNode: _focusNode,
-                        keyboardType: TextInputType.multiline,
-                        maxLines: null,
-                        minLines: 1,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.black),
-                          ),
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 8,
-                          ),
-                        ),
+                    Text(
+                      'Ask AI',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.grey[800],
                       ),
                     ),
-                    IconButton(
-                      onPressed: () {
-                        widget.onSubmit?.call(_textController.text);
-                      },
-                      icon: Icon(Icons.arrow_forward),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey[50],
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: Colors.grey[300]!,
+                          width: 1,
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              controller: _textController,
+                              focusNode: _focusNode,
+                              keyboardType: TextInputType.multiline,
+                              maxLines: null,
+                              minLines: 1,
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.grey[800],
+                              ),
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintText: 'Type your message here...',
+                                hintStyle: TextStyle(
+                                  color: Colors.grey[500],
+                                  fontSize: 16,
+                                ),
+                                contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 12,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(right: 8),
+                            child: Material(
+                              color: Theme.of(context).colorScheme.primary,
+                              borderRadius: BorderRadius.circular(8),
+                              child: InkWell(
+                                borderRadius: BorderRadius.circular(8),
+                                onTap: () {
+                                  if (_textController.text.trim().isNotEmpty) {
+                                    widget.onSubmit?.call(_textController.text);
+                                  }
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.all(8),
+                                  child: Icon(
+                                    Icons.send,
+                                    color: Colors.white,
+                                    size: 20,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),

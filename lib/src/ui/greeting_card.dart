@@ -2,14 +2,14 @@ import '../model/greeting_model.dart';
 import 'package:flutter/material.dart';
 
 class GreetingCard extends StatelessWidget {
-  final GreetingModel greeting;
-  final bool isLastItem;
-
   const GreetingCard({
     super.key,
-    required this.greeting,
+    required this.data,
     this.isLastItem = false,
   });
+
+  final GreetingModel data;
+  final bool isLastItem;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,7 @@ class GreetingCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              greeting.greeting,
+              data.greeting,
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -37,12 +37,12 @@ class GreetingCard extends StatelessWidget {
             ),
             SizedBox(height: 8),
             Text(
-              greeting.question,
+              data.question,
               style: TextStyle(fontSize: 16, color: Colors.white70),
             ),
             SizedBox(height: 4),
             Text(
-              greeting.language,
+              data.language,
               style: TextStyle(
                 fontSize: 12,
                 color: Colors.white60,

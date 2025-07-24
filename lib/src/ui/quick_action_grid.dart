@@ -17,6 +17,7 @@ class QuickActionGrid extends StatelessWidget {
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: 12,
       children: [
         Text(
           'Quick Actions',
@@ -26,9 +27,9 @@ class QuickActionGrid extends StatelessWidget {
             color: CupertinoColors.label,
           ),
         ),
-        SizedBox(height: 12),
         GridView.builder(
           shrinkWrap: true,
+          padding: EdgeInsets.zero,
           physics: NeverScrollableScrollPhysics(),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
