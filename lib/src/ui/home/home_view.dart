@@ -1,13 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../../model/greeting_model.dart';
-import '../profile/profile_view.dart';
-import '../../widgets/prompt_fab.dart';
-import '../../widgets/greeting_card.dart';
-import '../../widgets/quick_action_grid.dart';
-import '../../widgets/recent_activity_list.dart';
-import '../../widgets/stat_card.dart';
-import '../../widgets/dynamic_scaffold.dart';
+import 'package:ai_prompt_driven_app/src/model/greeting_model.dart';
+import 'package:ai_prompt_driven_app/src/ui/profile/profile_view.dart';
+import 'package:ai_prompt_driven_app/src/ui/home/widgets/prompt_fab.dart';
+import 'package:ai_prompt_driven_app/src/widgets/dynamic_scaffold.dart';
+import 'package:ai_prompt_driven_app/src/ui/home/widgets/greeting_card.dart';
+import 'package:ai_prompt_driven_app/src/ui/home/widgets/quick_action_grid.dart';
+import 'package:ai_prompt_driven_app/src/ui/home/widgets/recent_activity_list.dart';
+import 'package:ai_prompt_driven_app/src/ui/home/widgets/stat_card.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});

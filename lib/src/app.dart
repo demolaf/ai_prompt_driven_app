@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'ui/home/home_view.dart';
+import 'package:ai_prompt_driven_app/src/ui/home/home_view.dart';
 
 class App extends StatelessWidget {
   const App({super.key});

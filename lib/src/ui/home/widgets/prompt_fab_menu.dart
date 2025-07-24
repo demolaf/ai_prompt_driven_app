@@ -1,6 +1,6 @@
-import 'prompt_input_field.dart';
+import 'package:ai_prompt_driven_app/src/utils/overlay_manager.dart';
+import 'package:ai_prompt_driven_app/src/ui/home/widgets/prompt_input_field.dart';
 import 'package:flutter/material.dart';
-import '../utils/overlay_manager.dart';
 
 class PromptFABMenu extends OverlayWidget {
   const PromptFABMenu({
@@ -79,9 +79,7 @@ class FABMenuContent extends StatelessWidget {
     return GestureDetector(
       onTap: onMenuSelection,
       child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -90,10 +88,7 @@ class FABMenuContent extends StatelessWidget {
             children: [
               GestureDetector(
                 onTap: onAskAI,
-                child: FABMenuItem(
-                  title: 'Ask AI',
-                  icon: Icon(Icons.keyboard),
-                ),
+                child: FABMenuItem(title: 'Ask AI', icon: Icon(Icons.keyboard)),
               ),
               GestureDetector(
                 onTap: onMenuSelection,

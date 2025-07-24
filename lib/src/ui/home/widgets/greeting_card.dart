@@ -1,12 +1,8 @@
-import '../model/greeting_model.dart';
+import 'package:ai_prompt_driven_app/src/model/greeting_model.dart';
 import 'package:flutter/material.dart';
 
 class GreetingCard extends StatelessWidget {
-  const GreetingCard({
-    super.key,
-    required this.data,
-    this.isLastItem = false,
-  });
+  const GreetingCard({super.key, required this.data, this.isLastItem = false});
 
   final GreetingModel data;
   final bool isLastItem;
