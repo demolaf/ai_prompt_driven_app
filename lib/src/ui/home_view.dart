@@ -1,0 +1,103 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import '../model/greeting_model.dart';
+import 'profile_view.dart';
+import 'prompt_fab.dart';
+import 'greeting_card.dart';
+import 'quick_action_grid.dart';
+import 'recent_activity_list.dart';
+import 'stat_card.dart';
+
+class HomeView extends StatefulWidget {
+  const HomeView({super.key});
+
+  @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+  ValueNotifier<List<GreetingModel>> greetingsList = ValueNotifier(
+    GreetingModel.getPlaceholderData,
+  );
+
+  @override
+  void dispose() {
+    greetingsList.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: CustomScrollView(
+          slivers: [
+            CupertinoSliverNavigationBar(
+              alwaysShowMiddle: false,
+              largeTitle: Text('Home'),
+              trailing: IconButton(
+                onPressed: () {
+                  ProfileView.present(context);
+                },
+                icon: Icon(CupertinoIcons.profile_circled),
+              ),
+            ),
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              sliver: SliverFillRemaining(
+                child: SingleChildScrollView(
+                  child: Column(
+                    spacing: 24,
+                    children: [
+                      SizedBox(
+                        height: 150,
+                        child: PageView(
+                          controller: PageController(viewportFraction: 0.95),
+                          padEnds: false,
+                          children: greetingsList.value
+                              .asMap()
+                              .entries
+                              .map(
+                                (entry) => GreetingCard(
+                                  greeting: entry.value,
+                                  isLastItem:
+                                      entry.key ==
+                                      greetingsList.value.length - 1,
+                                ),
+                              )
+                              .toList(),
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: StatCard(
+                              title: 'Total Conversations',
+                              value: '1,247',
+                              icon: CupertinoIcons.chat_bubble_2,
+                            ),
+                          ),
+                          SizedBox(width: 16),
+                          Expanded(
+                            child: StatCard(
+                              title: 'Languages Supported',
+                              value: '95+',
+                              icon: CupertinoIcons.globe,
+                            ),
+                          ),
+                        ],
+                      ),
+                      QuickActionGrid(),
+                      RecentActivityList(),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: PromptFAB(),
+    );
+  }
+}

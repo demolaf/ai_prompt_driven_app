@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'overlay_manager.dart';
+import '../utils/overlay_manager.dart';
 
 class PromptInputField extends OverlayWidget {
   const PromptInputField({

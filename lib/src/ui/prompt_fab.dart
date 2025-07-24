@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'prompt_fab_menu.dart';
-import 'overlay_manager.dart';
+import '../utils/overlay_manager.dart';
 
 class PromptFAB extends StatefulWidget {
   const PromptFAB({super.key});
