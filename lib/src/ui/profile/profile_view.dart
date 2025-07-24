@@ -41,9 +41,12 @@ class _ProfileViewState extends State<ProfileView> {
                   child: Column(
                     spacing: 32,
                     children: [
-                      _buildProfileHeader(),
-                      _buildStatsSection(),
-                      _buildSettingsSection(),
+                      ProfileHeader(),
+                      StatsSection(),
+                      SettingsSection(
+                        darkModeEnabled: _darkModeEnabled, 
+                        onDarkModeChanged: (value) => setState(() => _darkModeEnabled = value)
+                      ),
                     ],
                   ),
                 ),
@@ -54,8 +57,13 @@ class _ProfileViewState extends State<ProfileView> {
       ),
     );
   }
+}
 
-  Widget _buildProfileHeader() {
+class ProfileHeader extends StatelessWidget {
+  const ProfileHeader({super.key});
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       children: [
         Container(
@@ -87,8 +95,13 @@ class _ProfileViewState extends State<ProfileView> {
       ],
     );
   }
+}
 
-  Widget _buildStatsSection() {
+class StatsSection extends StatelessWidget {
+  const StatsSection({super.key});
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -98,15 +111,27 @@ class _ProfileViewState extends State<ProfileView> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildStatItem('1,247', 'Conversations'),
-          _buildStatItem('35', 'Days Active'),
-          _buildStatItem('2.4k', 'Words Generated'),
+          StatItem(value: '1,247', label: 'Conversations'),
+          StatItem(value: '35', label: 'Days Active'),
+          StatItem(value: '2.4k', label: 'Words Generated'),
         ],
       ),
     );
   }
+}
 
-  Widget _buildStatItem(String value, String label) {
+class StatItem extends StatelessWidget {
+  const StatItem({
+    super.key,
+    required this.value,
+    required this.label,
+  });
+
+  final String value;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       children: [
         Text(
@@ -124,8 +149,20 @@ class _ProfileViewState extends State<ProfileView> {
       ],
     );
   }
+}
 
-  Widget _buildSettingsSection() {
+class SettingsSection extends StatelessWidget {
+  const SettingsSection({
+    super.key,
+    required this.darkModeEnabled,
+    required this.onDarkModeChanged,
+  });
+
+  final bool darkModeEnabled;
+  final ValueChanged<bool> onDarkModeChanged;
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -138,24 +175,36 @@ class _ProfileViewState extends State<ProfileView> {
           ),
         ),
         SizedBox(height: 16),
-        _buildSettingTile(
-          'Dark Mode',
-          'Use dark theme',
-          CupertinoIcons.moon,
-          _darkModeEnabled,
-          (value) => setState(() => _darkModeEnabled = value),
+        SettingTile(
+          title: 'Dark Mode',
+          subtitle: 'Use dark theme',
+          icon: CupertinoIcons.moon,
+          value: darkModeEnabled,
+          onChanged: onDarkModeChanged,
         ),
       ],
     );
   }
+}
 
-  Widget _buildSettingTile(
-    String title,
-    String subtitle,
-    IconData icon,
-    bool value,
-    ValueChanged<bool> onChanged,
-  ) {
+class SettingTile extends StatelessWidget {
+  const SettingTile({
+    super.key,
+    required this.title,
+    required this.subtitle,
+    required this.icon,
+    required this.value,
+    required this.onChanged,
+  });
+
+  final String title;
+  final String subtitle;
+  final IconData icon;
+  final bool value;
+  final ValueChanged<bool> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(bottom: 12),
       padding: EdgeInsets.all(16),

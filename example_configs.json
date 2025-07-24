@@ -1,0 +1,57 @@
+{
+  "lightTheme": {
+    "backgroundColor": "#ffffff",
+    "extendBodyBehindAppBar": false,
+    "extendBody": false,
+    "resizeToAvoidBottomInset": true,
+    "floatingActionButtonLocation": "endFloat"
+  },
+  "darkTheme": {
+    "backgroundColor": "#121212",
+    "extendBodyBehindAppBar": false,
+    "extendBody": false,
+    "resizeToAvoidBottomInset": true,
+    "floatingActionButtonLocation": "endFloat"
+  },
+  "blueTheme": {
+    "backgroundColor": "#1976d2",
+    "extendBodyBehindAppBar": true,
+    "extendBody": true,
+    "resizeToAvoidBottomInset": true,
+    "floatingActionButtonLocation": "centerDocked",
+    "appBar": {
+      "title": "Dynamic Home",
+      "backgroundColor": "transparent",
+      "elevation": 0
+    }
+  },
+  "greenTheme": {
+    "backgroundColor": "#4caf50",
+    "extendBodyBehindAppBar": false,
+    "extendBody": false,
+    "resizeToAvoidBottomInset": true,
+    "floatingActionButtonLocation": "startFloat",
+    "bottomNavigationBar": {
+      "type": "bottomNavigationBar",
+      "items": [
+        {
+          "icon": "home",
+          "label": "Home"
+        },
+        {
+          "icon": "search",
+          "label": "Search"
+        },
+        {
+          "icon": "person",
+          "label": "Profile"
+        }
+      ],
+      "currentIndex": 0,
+      "barType": "fixed",
+      "backgroundColor": "#ffffff",
+      "selectedItemColor": "#4caf50",
+      "unselectedItemColor": "#757575"
+    }
+  }
+}

@@ -14,10 +14,8 @@ class OverlayManager {
     if (_isVisible) return;
 
     final overlay = Overlay.of(context);
-    
-    _entry = OverlayEntry(
-      builder: (context) => child,
-    );
+
+    _entry = OverlayEntry(builder: (context) => child);
 
     overlay.insert(_entry!);
     _isVisible = true;
@@ -40,13 +38,13 @@ class OverlayManager {
 abstract class OverlayWidget extends StatefulWidget {
   const OverlayWidget({
     super.key,
-    required this.layerLink,
-    required this.size,
+    required this.sourceWidgetSize,
+    this.layerLink,
     this.onDismiss,
   });
 
-  final LayerLink layerLink;
-  final Size size;
+  final Size sourceWidgetSize;
+  final LayerLink? layerLink;
   final VoidCallback? onDismiss;
 }
 

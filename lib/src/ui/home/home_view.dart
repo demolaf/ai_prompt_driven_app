@@ -1,12 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../model/greeting_model.dart';
-import 'profile_view.dart';
-import 'prompt_fab.dart';
-import 'greeting_card.dart';
-import 'quick_action_grid.dart';
-import 'recent_activity_list.dart';
-import 'stat_card.dart';
+import '../../model/greeting_model.dart';
+import '../profile/profile_view.dart';
+import '../../widgets/prompt_fab.dart';
+import '../../widgets/greeting_card.dart';
+import '../../widgets/quick_action_grid.dart';
+import '../../widgets/recent_activity_list.dart';
+import '../../widgets/stat_card.dart';
+import '../../widgets/dynamic_scaffold.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -20,6 +21,8 @@ class _HomeViewState extends State<HomeView> {
     GreetingModel.getPlaceholderData,
   );
 
+  Map<String, dynamic> scaffoldConfig = {'backgroundColor': '#ffffff'};
+
   @override
   void dispose() {
     greetingsList.dispose();
@@ -28,7 +31,8 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return DynamicScaffold(
+      config: scaffoldConfig,
       body: CustomScrollView(
         slivers: [
           CupertinoSliverNavigationBar(

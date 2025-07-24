@@ -73,8 +73,7 @@ class _PromptFABState extends State<PromptFAB>
         onMenuSelection: () {
           hideMenu();
         },
-        layerLink: layerLink,
-        size: size,
+        sourceWidgetSize: size,
         fabGlobalPosition: fabGlobalPosition,
         onDismiss: hideMenu,
       ),
@@ -82,8 +81,10 @@ class _PromptFABState extends State<PromptFAB>
   }
 
   void hideMenu() {
-    _menuOverlay.hide(onHide: () {
-      _rotationAnimationController.reverse();
-    });
+    _menuOverlay.hide(
+      onHide: () {
+        _rotationAnimationController.reverse();
+      },
+    );
   }
 }
