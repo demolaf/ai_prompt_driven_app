@@ -12,6 +12,7 @@ class PromptFABMenu extends OverlayWidget {
     required this.onResetTapped,
     required this.availablePrompts,
     required this.fabGlobalPosition,
+    required this.onAskAISubmit,
     this.showReset = false,
     super.key,
     super.onDismiss,
@@ -20,6 +21,7 @@ class PromptFABMenu extends OverlayWidget {
   final VoidCallback onMenuSelection;
   final ValueSetter<Prompt> onPromptTapped;
   final VoidCallback onResetTapped;
+  final ValueSetter<String> onAskAISubmit;
   final List<Prompt> availablePrompts;
   final Offset fabGlobalPosition;
   final bool showReset;
@@ -70,6 +72,7 @@ class _PromptFABMenuState extends OverlayWidgetState<PromptFABMenu> {
                           context,
                           layerLink: widget.layerLink,
                           size: widget.sourceWidgetSize,
+                          onSubmit: widget.onAskAISubmit,
                         );
                       },
                       title: 'Ask AI',

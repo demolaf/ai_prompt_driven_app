@@ -3,8 +3,8 @@ import 'package:ai_prompt_driven_app/src/model/scaffold_config.dart';
 import 'package:ai_prompt_driven_app/src/model/view_configurable.dart';
 import 'package:equatable/equatable.dart';
 
-class HomeViewConfigurable extends ViewConfigurable with EquatableMixin {
-  HomeViewConfigurable({this.scaffoldConfig, this.appBarConfig});
+class HomeViewConfigurable extends Equatable implements ViewConfigurable {
+  const HomeViewConfigurable({this.scaffoldConfig, this.appBarConfig});
 
   final ScaffoldConfig? scaffoldConfig;
   final AppBarConfig? appBarConfig;

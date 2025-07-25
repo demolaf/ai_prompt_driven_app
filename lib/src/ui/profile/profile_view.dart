@@ -60,10 +60,8 @@ class _ProfileViewState extends State<ProfileView> {
                           ProfileHeader(),
                           StatsSection(),
                           SettingsSection(
-                            darkModeEnabled:
-                                state.configurable?.darkModeEnabled ?? false,
-                            onDarkModeChanged: (value) =>
-                                viewModel.updateDarkMode(value),
+                            darkModeEnabled: false,
+                            onDarkModeChanged: (value) {},
                           ),
                         ],
                       ),
@@ -75,6 +73,9 @@ class _ProfileViewState extends State<ProfileView> {
           ),
           floatingActionButton: PromptFAB(
             showReset: viewModel.showReset(),
+            onAskAISubmit: (prompt) {
+              viewModel.callAIPrompt(prompt);
+            },
             onPromptTapped: (prompt) {
               viewModel.callStaticPrompt(prompt.id);
             },

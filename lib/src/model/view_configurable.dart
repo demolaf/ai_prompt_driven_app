@@ -1,4 +1,34 @@
+import 'package:ai_prompt_driven_app/src/model/appbar_config.dart';
+import 'package:ai_prompt_driven_app/src/model/scaffold_config.dart';
+import 'package:ai_prompt_driven_app/src/ui/home/home_view_configurable.dart';
+import 'package:ai_prompt_driven_app/src/ui/profile/profile_view_configurable.dart';
+
 abstract class ViewConfigurable {
+  static ViewConfigurable fromJson(Map<String, dynamic> json) {
+    switch (json['type']) {
+      case 'home':
+        return HomeViewConfigurable(
+          scaffoldConfig: json['scaffoldConfig'] != null
+              ? ScaffoldConfig.fromJson(json['scaffoldConfig'])
+              : null,
+          appBarConfig: json['appBarConfig'] != null
+              ? AppBarConfig.fromJson(json['appBarConfig'])
+              : null,
+        );
+      case 'profile':
+        return ProfileViewConfigurable(
+          scaffoldConfig: json['scaffoldConfig'] != null
+              ? ScaffoldConfig.fromJson(json['scaffoldConfig'])
+              : null,
+          appBarConfig: json['appBarConfig'] != null
+              ? AppBarConfig.fromJson(json['appBarConfig'])
+              : null,
+        );
+      default:
+        throw UnsupportedError('Unknown ViewConfigurable type: ${json['type']}');
+    }
+  }
+
   Map<String, dynamic> toJson();
 
   ViewConfigurable merge(Map<String, dynamic> updates);

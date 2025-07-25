@@ -8,12 +8,14 @@ class PromptFAB extends StatefulWidget {
     required this.onPromptTapped,
     required this.onResetTapped,
     required this.availablePrompts,
+    required this.onAskAISubmit,
     super.key,
     this.showReset = false,
   });
 
   final bool showReset;
   final ValueSetter<Prompt> onPromptTapped;
+  final ValueSetter<String> onAskAISubmit;
   final VoidCallback onResetTapped;
   final List<Prompt> availablePrompts;
 
@@ -94,6 +96,7 @@ class _PromptFABState extends State<PromptFAB>
         onDismiss: hideMenu,
         availablePrompts: widget.availablePrompts,
         showReset: widget.showReset,
+        onAskAISubmit: widget.onAskAISubmit,
       ),
     );
   }

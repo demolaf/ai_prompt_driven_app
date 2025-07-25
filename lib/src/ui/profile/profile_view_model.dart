@@ -1,3 +1,4 @@
+import 'dart:developer' as developer;
 import 'package:ai_prompt_driven_app/src/model/appbar_config.dart';
 import 'package:ai_prompt_driven_app/src/model/prompt.dart';
 import 'package:ai_prompt_driven_app/src/model/scaffold_config.dart';
@@ -22,7 +23,6 @@ class ProfileState extends Equatable {
         configurable: ProfileViewConfigurable(
           scaffoldConfig: ScaffoldConfig(backgroundColor: 'FFFFFFFF'),
           appBarConfig: AppBarConfig(title: 'Profile'),
-          darkModeEnabled: false,
         ),
       );
 
@@ -74,11 +74,16 @@ class ProfileViewModel {
   }
 
   void reset() {
-    updateState(ProfileState.initial());
+    updateState(
+      currentState.copyWith(
+        viewState: ProfileViewState.initial,
+        configurable: ProfileState.initial().configurable,
+      ),
+    );
   }
 
   void callStaticPrompt(String id) {
-    final result = promptManager.callPrompt(id);
+    final result = promptManager.callStaticPrompt(id);
     updateState(
       _state.value.copyWith(
         viewState: ProfileViewState.initial,
@@ -89,38 +94,29 @@ class ProfileViewModel {
     );
   }
 
-  void callAIPrompt(ProfileViewConfigurable configurable) {}
+  Future<void> callAIPrompt(String userPrompt) async {
+    updateState(currentState.copyWith(viewState: ProfileViewState.loading));
 
-  void updateDarkMode(bool enabled) {
-    if (_state.value.configurable == null) return;
+    try {
+      final result = await promptManager.callAIPrompt(
+        userPrompt: userPrompt,
+        currentViewConfigurable: currentState.configurable,
+      );
 
-    final updatedConfigurable = _state.value.configurable!.merge({
-      'darkModeEnabled': enabled,
-    });
+      if (result == null) {
+        return;
+      }
 
-    updateState(
-      _state.value.copyWith(
-        viewState: ProfileViewState.initial,
-        configurable: updatedConfigurable,
-      ),
-    );
-  }
-
-  void updateUserInfo({String? userName, String? userEmail}) {
-    if (_state.value.configurable == null) return;
-
-    final updates = <String, dynamic>{};
-    if (userName != null) updates['userName'] = userName;
-    if (userEmail != null) updates['userEmail'] = userEmail;
-
-    final updatedConfigurable = _state.value.configurable!.merge(updates);
-
-    updateState(
-      _state.value.copyWith(
-        viewState: ProfileViewState.initial,
-        configurable: updatedConfigurable,
-      ),
-    );
+      updateState(
+        currentState.copyWith(
+          viewState: ProfileViewState.ready,
+          configurable: ProfileViewConfigurable.fromJson(result),
+        ),
+      );
+    } catch (e) {
+      developer.log('Error calling AI prompt: $e', name: 'ProfileViewModel');
+      updateState(currentState.copyWith(viewState: ProfileViewState.initial));
+    }
   }
 
   bool showReset() {

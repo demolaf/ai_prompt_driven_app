@@ -3,41 +3,46 @@ import 'package:ai_prompt_driven_app/src/model/scaffold_config.dart';
 import 'package:ai_prompt_driven_app/src/model/view_configurable.dart';
 import 'package:equatable/equatable.dart';
 
-class ProfileViewConfigurable extends ViewConfigurable with EquatableMixin {
-  ProfileViewConfigurable({
-    required this.scaffoldConfig,
-    required this.appBarConfig,
-    this.darkModeEnabled = false,
-    this.userName,
-    this.userEmail,
+class ProfileViewConfigurable extends Equatable implements ViewConfigurable {
+  const ProfileViewConfigurable({
+    this.scaffoldConfig,
+    this.appBarConfig,
   });
 
-  ProfileViewConfigurable.fromJson(Map<String, dynamic> json)
-    : scaffoldConfig = ScaffoldConfig.fromJson(json['scaffoldConfig'] ?? {}),
-      appBarConfig = AppBarConfig.fromJson(json['appBarConfig'] ?? {}),
-      darkModeEnabled = json['darkModeEnabled'] ?? false,
-      userName = json['userName'],
-      userEmail = json['userEmail'];
+  factory ProfileViewConfigurable.fromJson(Map<String, dynamic> json) {
+    return ProfileViewConfigurable(
+      scaffoldConfig: json['scaffoldConfig'] != null
+          ? ScaffoldConfig.fromJson(json['scaffoldConfig'])
+          : null,
+      appBarConfig: json['appBarConfig'] != null
+          ? AppBarConfig.fromJson(json['appBarConfig'])
+          : null,
+    );
+  }
 
-  final ScaffoldConfig scaffoldConfig;
-  final AppBarConfig appBarConfig;
-  final bool darkModeEnabled;
-  final String? userName;
-  final String? userEmail;
+  final ScaffoldConfig? scaffoldConfig;
+  final AppBarConfig? appBarConfig;
 
   @override
-  List<Object?> get props => [scaffoldConfig, appBarConfig, darkModeEnabled, userName, userEmail];
+  List<Object?> get props => [scaffoldConfig, appBarConfig];
 
   @override
   Map<String, dynamic> toJson() {
     return {
-      'scaffoldConfig': scaffoldConfig.toJson(),
-      'appBarConfig': appBarConfig.toJson(),
-      'darkModeEnabled': darkModeEnabled,
-      'userName': userName,
-      'userEmail': userEmail,
+      'scaffoldConfig': scaffoldConfig?.toJson(),
+      'appBarConfig': appBarConfig?.toJson(),
     };
   }
+
+  static Map<String, dynamic> get schema => {
+    'type': 'profile',
+    'description': 'Configures the appearance and behavior of the Profile view.',
+    'properties': {
+      'scaffoldConfig': ScaffoldConfig.schema,
+      'appBarConfig': AppBarConfig.schema,
+    },
+  };
+
 
   @override
   ProfileViewConfigurable merge(Map<String, dynamic> updates) {

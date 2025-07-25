@@ -15,4 +15,15 @@ class AppBarConfig extends Equatable {
 
   AppBarConfig copyWith({String? title}) =>
       AppBarConfig(title: title ?? this.title);
+
+  static Map<String, dynamic> get schema => {
+    'type': 'object',
+    'description': 'Configuration for the app bar.',
+    'properties': {
+      'title': {
+        'type': 'string',
+        'description': 'Text to show in the app bar title',
+      },
+    },
+  };
 }

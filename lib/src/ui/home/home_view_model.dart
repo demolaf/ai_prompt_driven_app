@@ -65,7 +65,7 @@ class HomeViewModel {
   void getAvailablePrompts() {
     final prompts = promptManager.getHomePrompts();
     updateState(
-      _state.value.copyWith(
+      currentState.copyWith(
         viewState: HomeViewState.initial,
         availablePrompts: prompts,
       ),
@@ -73,22 +73,49 @@ class HomeViewModel {
   }
 
   void reset() {
-    updateState(HomeState.initial());
+    updateState(
+      currentState.copyWith(
+        viewState: HomeViewState.initial,
+        configurable: HomeState.initial().configurable,
+      ),
+    );
   }
 
   void callStaticPrompt(String id) {
-    final result = promptManager.callPrompt(id);
+    final result = promptManager.callStaticPrompt(id);
     updateState(
-      _state.value.copyWith(
+      currentState.copyWith(
         viewState: HomeViewState.initial,
-        configurable: _state.value.configurable?.merge(
+        configurable: currentState.configurable?.merge(
           result.configurable.toJson(),
         ),
       ),
     );
   }
 
-  void callAIPrompt(HomeViewConfigurable configurable) {}
+  Future<void> callAIPrompt(String userPrompt) async {
+    updateState(currentState.copyWith(viewState: HomeViewState.loading));
+
+    try {
+      final result = await promptManager.callAIPrompt(
+        userPrompt: userPrompt,
+        currentViewConfigurable: currentState.configurable,
+      );
+
+      if (result == null) {
+        return;
+      }
+
+      updateState(
+        currentState.copyWith(
+          viewState: HomeViewState.ready,
+          configurable: HomeViewConfigurable.fromJson(result),
+        ),
+      );
+    } catch (e) {
+      updateState(currentState.copyWith(viewState: HomeViewState.initial));
+    }
+  }
 
   bool showReset() {
     final initialState = HomeState.initial();

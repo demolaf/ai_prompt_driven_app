@@ -13,6 +13,18 @@ class ScaffoldConfig extends Equatable {
   factory ScaffoldConfig.fromJson(Map<String, dynamic> json) =>
       ScaffoldConfig(backgroundColor: json['backgroundColor'] ?? '');
 
-  ScaffoldConfig copyWith({String? backgroundColor}) =>
+  ScaffoldConfig copyWith({String? backgroundColor, dynamic body}) =>
       ScaffoldConfig(backgroundColor: backgroundColor ?? this.backgroundColor);
+
+  static Map<String, dynamic> get schema => {
+    'type': 'object',
+    'description': 'Configuration for scaffold background styling.',
+    'properties': {
+      'backgroundColor': {
+        'type': 'string',
+        'format': 'hexColor',
+        'description': 'Hex ARGB string for background color, e.g., FF00008B',
+      },
+    },
+  };
 }
