@@ -1,31 +1,36 @@
 import 'package:ai_prompt_driven_app/src/model/appbar_config.dart';
+import 'package:ai_prompt_driven_app/src/model/prompt.dart';
 import 'package:ai_prompt_driven_app/src/model/scaffold_config.dart';
 import 'package:ai_prompt_driven_app/src/ui/home/home_view_configurable.dart';
 import 'package:ai_prompt_driven_app/src/utils/prompt_manager.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 
 enum HomeViewState { initial, loading, ready }
 
-class HomeState {
-  HomeState({
+class HomeState extends Equatable {
+  const HomeState({
     required this.viewState,
     this.availablePrompts = const [],
     this.configurable,
   });
 
   HomeState.initial()
-      : this(
-    viewState: HomeViewState.initial,
-    availablePrompts: [],
-    configurable: HomeViewConfigurable(
-      scaffoldConfig: ScaffoldConfig(backgroundColor: 'FFFFFFFF'),
-      appBarConfig: AppBarConfig(title: 'Home'),
-    ),
-  );
+    : this(
+        viewState: HomeViewState.initial,
+        availablePrompts: [],
+        configurable: HomeViewConfigurable(
+          scaffoldConfig: ScaffoldConfig(backgroundColor: 'FFFFFFFF'),
+          appBarConfig: AppBarConfig(title: 'Home'),
+        ),
+      );
 
   final HomeViewState viewState;
   final List<Prompt> availablePrompts;
   final HomeViewConfigurable? configurable;
+
+  @override
+  List<Object?> get props => [viewState, availablePrompts, configurable];
 
   HomeState copyWith({
     required HomeViewState viewState,
@@ -86,6 +91,8 @@ class HomeViewModel {
   void callAIPrompt(HomeViewConfigurable configurable) {}
 
   bool showReset() {
-    return currentState != HomeState.initial();
+    final initialState = HomeState.initial();
+    return currentState.configurable?.toJson().toString() !=
+        initialState.configurable?.toJson().toString();
   }
 }

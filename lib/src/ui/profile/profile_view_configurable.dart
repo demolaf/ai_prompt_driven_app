@@ -1,8 +1,9 @@
 import 'package:ai_prompt_driven_app/src/model/appbar_config.dart';
 import 'package:ai_prompt_driven_app/src/model/scaffold_config.dart';
 import 'package:ai_prompt_driven_app/src/model/view_configurable.dart';
+import 'package:equatable/equatable.dart';
 
-class ProfileViewConfigurable extends ViewConfigurable {
+class ProfileViewConfigurable extends ViewConfigurable with EquatableMixin {
   ProfileViewConfigurable({
     required this.scaffoldConfig,
     required this.appBarConfig,
@@ -12,17 +13,20 @@ class ProfileViewConfigurable extends ViewConfigurable {
   });
 
   ProfileViewConfigurable.fromJson(Map<String, dynamic> json)
-      : scaffoldConfig = ScaffoldConfig.fromJson(json['scaffoldConfig'] ?? {}),
-        appBarConfig = AppBarConfig.fromJson(json['appBarConfig'] ?? {}),
-        darkModeEnabled = json['darkModeEnabled'] ?? false,
-        userName = json['userName'],
-        userEmail = json['userEmail'];
+    : scaffoldConfig = ScaffoldConfig.fromJson(json['scaffoldConfig'] ?? {}),
+      appBarConfig = AppBarConfig.fromJson(json['appBarConfig'] ?? {}),
+      darkModeEnabled = json['darkModeEnabled'] ?? false,
+      userName = json['userName'],
+      userEmail = json['userEmail'];
 
   final ScaffoldConfig scaffoldConfig;
   final AppBarConfig appBarConfig;
   final bool darkModeEnabled;
   final String? userName;
   final String? userEmail;
+
+  @override
+  List<Object?> get props => [scaffoldConfig, appBarConfig, darkModeEnabled, userName, userEmail];
 
   @override
   Map<String, dynamic> toJson() {

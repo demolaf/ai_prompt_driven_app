@@ -1,5 +1,5 @@
+import 'package:ai_prompt_driven_app/src/model/prompt.dart';
 import 'package:ai_prompt_driven_app/src/ui/home/widgets/prompt_fab_menu.dart';
-import 'package:ai_prompt_driven_app/src/utils/prompt_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:ai_prompt_driven_app/src/utils/overlay_manager.dart';
 
@@ -93,6 +93,7 @@ class _PromptFABState extends State<PromptFAB>
         fabGlobalPosition: fabGlobalPosition,
         onDismiss: hideMenu,
         availablePrompts: widget.availablePrompts,
+        showReset: widget.showReset,
       ),
     );
   }

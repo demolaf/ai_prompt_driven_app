@@ -5,6 +5,7 @@ import 'package:ai_prompt_driven_app/src/model/greeting_model.dart';
 import 'package:ai_prompt_driven_app/src/ui/profile/profile_view.dart';
 import 'package:ai_prompt_driven_app/src/ui/home/widgets/prompt_fab.dart';
 import 'package:ai_prompt_driven_app/src/widgets/dynamic_scaffold.dart';
+import 'package:ai_prompt_driven_app/src/widgets/dynamic_cupertino_sliver_navigation_bar.dart';
 import 'package:ai_prompt_driven_app/src/ui/home/widgets/greeting_card.dart';
 import 'package:ai_prompt_driven_app/src/ui/home/widgets/quick_action_grid.dart';
 import 'package:ai_prompt_driven_app/src/ui/home/widgets/recent_activity_list.dart';
@@ -45,11 +46,11 @@ class _HomeViewState extends State<HomeView> {
           config: state.configurable?.scaffoldConfig,
           body: CustomScrollView(
             slivers: [
-              CupertinoSliverNavigationBar(
+              DynamicCupertinoSliverNavigationBar(
                 backgroundColor: Colors.transparent,
                 border: Border.fromBorderSide(BorderSide.none),
                 alwaysShowMiddle: false,
-                largeTitle: Text('Home'),
+                config: state.configurable?.appBarConfig,
                 trailing: IconButton(
                   onPressed: () {
                     ProfileView.present(context);

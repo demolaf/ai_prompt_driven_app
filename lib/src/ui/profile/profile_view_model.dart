@@ -1,32 +1,37 @@
 import 'package:ai_prompt_driven_app/src/model/appbar_config.dart';
+import 'package:ai_prompt_driven_app/src/model/prompt.dart';
 import 'package:ai_prompt_driven_app/src/model/scaffold_config.dart';
 import 'package:ai_prompt_driven_app/src/ui/profile/profile_view_configurable.dart';
 import 'package:ai_prompt_driven_app/src/utils/prompt_manager.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 
 enum ProfileViewState { initial, loading, ready }
 
-class ProfileState {
-  ProfileState({
+class ProfileState extends Equatable {
+  const ProfileState({
     required this.viewState,
     this.availablePrompts = const [],
     this.configurable,
   });
 
   ProfileState.initial()
-      : this(
-    viewState: ProfileViewState.initial,
-    availablePrompts: [],
-    configurable: ProfileViewConfigurable(
-      scaffoldConfig: ScaffoldConfig(backgroundColor: 'FFFFFFFF'),
-      appBarConfig: AppBarConfig(title: 'Profile'),
-      darkModeEnabled: false,
-    ),
-  );
+    : this(
+        viewState: ProfileViewState.initial,
+        availablePrompts: [],
+        configurable: ProfileViewConfigurable(
+          scaffoldConfig: ScaffoldConfig(backgroundColor: 'FFFFFFFF'),
+          appBarConfig: AppBarConfig(title: 'Profile'),
+          darkModeEnabled: false,
+        ),
+      );
 
   final ProfileViewState viewState;
   final List<Prompt> availablePrompts;
   final ProfileViewConfigurable? configurable;
+
+  @override
+  List<Object?> get props => [viewState, availablePrompts, configurable];
 
   ProfileState copyWith({
     required ProfileViewState viewState,
@@ -88,11 +93,11 @@ class ProfileViewModel {
 
   void updateDarkMode(bool enabled) {
     if (_state.value.configurable == null) return;
-    
+
     final updatedConfigurable = _state.value.configurable!.merge({
       'darkModeEnabled': enabled,
     });
-    
+
     updateState(
       _state.value.copyWith(
         viewState: ProfileViewState.initial,
@@ -103,13 +108,13 @@ class ProfileViewModel {
 
   void updateUserInfo({String? userName, String? userEmail}) {
     if (_state.value.configurable == null) return;
-    
+
     final updates = <String, dynamic>{};
     if (userName != null) updates['userName'] = userName;
     if (userEmail != null) updates['userEmail'] = userEmail;
-    
+
     final updatedConfigurable = _state.value.configurable!.merge(updates);
-    
+
     updateState(
       _state.value.copyWith(
         viewState: ProfileViewState.initial,
@@ -119,6 +124,8 @@ class ProfileViewModel {
   }
 
   bool showReset() {
-    return currentState != ProfileState.initial();
+    final initialState = ProfileState.initial();
+    return currentState.configurable?.toJson().toString() !=
+        initialState.configurable?.toJson().toString();
   }
 }

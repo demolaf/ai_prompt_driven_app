@@ -1,6 +1,6 @@
+import 'package:ai_prompt_driven_app/src/model/prompt.dart';
 import 'package:ai_prompt_driven_app/src/utils/overlay_manager.dart';
 import 'package:ai_prompt_driven_app/src/ui/home/widgets/prompt_input_field.dart';
-import 'package:ai_prompt_driven_app/src/utils/prompt_manager.dart';
 import 'package:flutter/material.dart';
 
 class PromptFABMenu extends OverlayWidget {
@@ -12,6 +12,7 @@ class PromptFABMenu extends OverlayWidget {
     required this.onResetTapped,
     required this.availablePrompts,
     required this.fabGlobalPosition,
+    this.showReset = false,
     super.key,
     super.onDismiss,
   });
@@ -21,6 +22,7 @@ class PromptFABMenu extends OverlayWidget {
   final VoidCallback onResetTapped;
   final List<Prompt> availablePrompts;
   final Offset fabGlobalPosition;
+  final bool showReset;
 
   @override
   State<PromptFABMenu> createState() => _PromptFABMenuState();
@@ -73,14 +75,15 @@ class _PromptFABMenuState extends OverlayWidgetState<PromptFABMenu> {
                       title: 'Ask AI',
                       icon: Icon(Icons.keyboard),
                     ),
-                    FABMenuItem(
-                      onTap: () {
-                        widget.onMenuSelection();
-                        widget.onResetTapped();
-                      },
-                      title: 'Reset changes',
-                      icon: Icon(Icons.keyboard),
-                    ),
+                    if (widget.showReset)
+                      FABMenuItem(
+                        onTap: () {
+                          widget.onMenuSelection();
+                          widget.onResetTapped();
+                        },
+                        title: 'Reset changes',
+                        icon: Icon(Icons.restart_alt),
+                      ),
                     ...widget.availablePrompts.map((e) {
                       return FABMenuItem(
                         onTap: () {
