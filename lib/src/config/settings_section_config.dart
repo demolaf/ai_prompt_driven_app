@@ -171,57 +171,19 @@ class SettingsSectionConfig {
               'description': 'Setting subtitle/description text',
             },
             'icon': {
-              'type': 'object',
-              'properties': {
-                'codePoint': {
-                  'type': 'integer',
-                  'description': '''Icon codePoint from Flutter libraries. Common examples:
-                  
-Material Icons (fontFamily: '', fontPackage: ''):
-- 0xe57c - Settings icon
-- 0xe7f4 - Notifications icon  
-- 0xe32a - Dark mode icon
-- 0xe8f4 - Language icon
-- 0xe8f5 - Location icon
-- 0xe86c - Privacy icon
-- 0xe8b8 - Security icon
-- 0xe0c3 - Account icon
-- 0xe8dd - Help icon
-- 0xe8f0 - Info icon
-
-Cupertino Icons (fontFamily: 'CupertinoIcons', fontPackage: 'cupertino_icons'):
-- 0xf2ca - Settings icon
-- 0xf3e2 - Bell icon  
-- 0xf4b3 - Moon icon
-- 0xf2e7 - Globe icon
-- 0xf455 - Location icon
-- 0xf4c9 - Lock shield icon
-- 0xf4d0 - Person icon
-- 0xf3f0 - Question circle icon
-- 0xf3ec - Info circle icon''',
-                },
-                'fontFamily': {
-                  'type': 'string',
-                  'description': '''Font family for the icon:
-- '' (empty string) for Material Icons
-- 'CupertinoIcons' for Cupertino Icons
-- Other font families as needed''',
-                },
-                'fontPackage': {
-                  'type': 'string',
-                  'description': '''Font package for the icon:
-- '' (empty string) for Material Icons  
-- 'cupertino_icons' for Cupertino Icons
-- Other packages as needed''',
-                },
-              },
-              'required': ['codePoint'],
-              'description': '''Icon data for the setting. Use Flutter's built-in icon libraries:
+              'type': 'string',
+              'description': '''Icon name as string. Common examples:
               
-Examples:
-- Material settings: {"codePoint": 57724, "fontFamily": "", "fontPackage": ""}
-- Cupertino bell: {"codePoint": 62434, "fontFamily": "CupertinoIcons", "fontPackage": "cupertino_icons"}
-- Cupertino moon: {"codePoint": 62643, "fontFamily": "CupertinoIcons", "fontPackage": "cupertino_icons"}''',
+- 'settings' - Settings icon
+- 'notifications' - Notifications bell icon  
+- 'moon' - Dark mode/night icon
+- 'globe' - Language/global icon
+- 'location' - Location pin icon
+- 'privacy' - Privacy/lock icon
+- 'security' - Security/shield icon
+- 'person' - Account/profile icon
+- 'help' - Help/question icon
+- 'info' - Information icon''',
             },
             'type': {
               'type': 'string',

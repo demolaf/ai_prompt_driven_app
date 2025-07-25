@@ -1,7 +1,7 @@
-import 'package:ai_prompt_driven_app/src/model/appbar_config.dart';
-import 'package:ai_prompt_driven_app/src/model/scaffold_config.dart';
-import 'package:ai_prompt_driven_app/src/model/stat_card_config.dart';
-import 'package:ai_prompt_driven_app/src/model/greeting_card_config.dart';
+import 'package:ai_prompt_driven_app/src/config/appbar_config.dart';
+import 'package:ai_prompt_driven_app/src/config/greeting_card_config.dart';
+import 'package:ai_prompt_driven_app/src/config/scaffold_config.dart';
+import 'package:ai_prompt_driven_app/src/config/stat_card_config.dart';
 import 'package:ai_prompt_driven_app/src/model/greeting_model.dart';
 import 'package:ai_prompt_driven_app/src/model/view_configurable.dart';
 import 'package:equatable/equatable.dart';

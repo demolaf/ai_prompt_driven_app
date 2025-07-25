@@ -17,41 +17,33 @@ class SettingModel {
   final String id;
   final String title;
   final String subtitle;
-  final IconData icon;
+  final String icon; // Icon name as string (e.g., 'moon', 'settings', 'bell')
   final SettingType type;
   final bool? value;
   final ValueChanged<bool>? onToggle;
   final VoidCallback? onTap;
 
   factory SettingModel.fromJson(Map<String, dynamic> json) {
+    String iconString;
     final iconData = json['icon'];
-    IconData icon;
 
     if (iconData is Map<String, dynamic>) {
-      // New format: {codePoint: 0xF3E2, fontFamily: '', fontPackage: ''}
-      icon = IconData(
-        iconData['codePoint'] as int,
-        fontFamily: iconData['fontFamily']?.isEmpty == true
-            ? null
-            : iconData['fontFamily'] as String?,
-        fontPackage: iconData['fontPackage']?.isEmpty == true
-            ? null
-            : iconData['fontPackage'] as String?,
-      );
+      // New format: convert back to string representation for SettingModel
+      // Create a descriptive string from the codePoint
+      iconString = 'icon_${iconData['codePoint'].toRadixString(16)}';
+    } else if (iconData is String) {
+      // Legacy string format
+      iconString = iconData;
     } else {
-      // Legacy format: direct integer codePoint
-      icon = IconData(
-        iconData as int,
-        fontFamily: 'CupertinoIcons',
-        fontPackage: 'cupertino_icons',
-      );
+      // Fallback for any other type
+      iconString = 'settings';
     }
 
     return SettingModel(
       id: json['id'] as String,
       title: json['title'] as String,
       subtitle: json['subtitle'] as String,
-      icon: icon,
+      icon: iconString,
       type: SettingType.values.firstWhere(
         (e) => e.name == json['type'] as String,
         orElse: () => SettingType.toggle,
@@ -65,11 +57,7 @@ class SettingModel {
       'id': id,
       'title': title,
       'subtitle': subtitle,
-      'icon': {
-        'codePoint': icon.codePoint,
-        'fontFamily': icon.fontFamily ?? '',
-        'fontPackage': icon.fontPackage ?? '',
-      },
+      'icon': icon,
       'type': type.name,
       'value': value,
     };
@@ -79,7 +67,7 @@ class SettingModel {
     String? id,
     String? title,
     String? subtitle,
-    IconData? icon,
+    String? icon,
     SettingType? type,
     bool? value,
     ValueChanged<bool>? onToggle,
@@ -102,7 +90,7 @@ class SettingModel {
       id: 'dark_mode',
       title: 'Dark Mode',
       subtitle: 'Use dark theme',
-      icon: CupertinoIcons.moon,
+      icon: 'moon',
       type: SettingType.toggle,
       value: false,
     ),

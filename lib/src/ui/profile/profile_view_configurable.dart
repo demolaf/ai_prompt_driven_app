@@ -1,6 +1,6 @@
-import 'package:ai_prompt_driven_app/src/model/appbar_config.dart';
-import 'package:ai_prompt_driven_app/src/model/scaffold_config.dart';
-import 'package:ai_prompt_driven_app/src/model/settings_section_config.dart';
+import 'package:ai_prompt_driven_app/src/config/appbar_config.dart';
+import 'package:ai_prompt_driven_app/src/config/scaffold_config.dart';
+import 'package:ai_prompt_driven_app/src/config/settings_section_config.dart';
 import 'package:ai_prompt_driven_app/src/model/setting_model.dart';
 import 'package:ai_prompt_driven_app/src/model/view_configurable.dart';
 import 'package:equatable/equatable.dart';

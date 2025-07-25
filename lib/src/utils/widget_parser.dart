@@ -104,6 +104,20 @@ class WidgetParser {
         return Icons.chat_bubble_outline;
       case 'globe':
         return Icons.language;
+      case 'settings':
+        return Icons.settings;
+      case 'notifications':
+        return Icons.notifications;
+      case 'moon':
+        return Icons.dark_mode;
+      case 'privacy':
+        return Icons.privacy_tip;
+      case 'security':
+        return Icons.security;
+      case 'location':
+        return Icons.location_on;
+      case 'help':
+        return Icons.help;
       default:
         return Icons.analytics; // Default fallback icon
     }

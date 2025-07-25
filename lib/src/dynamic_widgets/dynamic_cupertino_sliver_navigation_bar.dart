@@ -1,4 +1,4 @@
-import 'package:ai_prompt_driven_app/src/model/appbar_config.dart';
+import 'package:ai_prompt_driven_app/src/config/appbar_config.dart';
 import 'package:flutter/cupertino.dart';
 
 class DynamicCupertinoSliverNavigationBar extends CupertinoSliverNavigationBar {

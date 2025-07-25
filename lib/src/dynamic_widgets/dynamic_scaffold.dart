@@ -1,4 +1,4 @@
-import 'package:ai_prompt_driven_app/src/model/scaffold_config.dart';
+import 'package:ai_prompt_driven_app/src/config/scaffold_config.dart';
 import 'package:ai_prompt_driven_app/src/utils/widget_parser.dart';
 import 'package:flutter/material.dart';
 

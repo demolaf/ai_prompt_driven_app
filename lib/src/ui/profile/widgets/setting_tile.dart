@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:ai_prompt_driven_app/src/model/setting_model.dart';
+import 'package:ai_prompt_driven_app/src/utils/widget_parser.dart';
 
 class SettingTile extends StatelessWidget {
   const SettingTile({required this.setting, super.key});
@@ -19,7 +20,11 @@ class SettingTile extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Icon(setting.icon, size: 24, color: CupertinoColors.systemBlue),
+            Icon(
+              WidgetParser.parseIcon(setting.icon),
+              size: 24,
+              color: CupertinoColors.systemBlue,
+            ),
             SizedBox(width: 16),
             Expanded(
               child: Column(

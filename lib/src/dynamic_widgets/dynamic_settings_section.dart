@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:ai_prompt_driven_app/src/model/setting_model.dart';
-import 'package:ai_prompt_driven_app/src/model/settings_section_config.dart';
+import 'package:ai_prompt_driven_app/src/config/settings_section_config.dart';
 import 'package:ai_prompt_driven_app/src/ui/profile/widgets/setting_tile.dart';
 
 class DynamicSettingsSection extends StatelessWidget {

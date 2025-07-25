@@ -52,11 +52,7 @@ class Prompt extends Equatable {
         'statCard1': {
           'title': 'Monthly Revenue',
           'value': '\$24,750',
-          'icon': {
-            'codePoint': 0xF89A, // attach_money icon
-            'fontFamily': '',
-            'fontPackage': '',
-          },
+          'icon': 'attach_money',
           'backgroundColor': 'FFE8F5E8',
           'iconColor': 'FF4CAF50',
           'valueColor': 'FF2E7D32',
@@ -71,6 +67,21 @@ class Prompt extends Equatable {
         'greetingCardConfig': {
           'gradientColors': [4294937600, 4294951175],
           // Orange to Pink gradient
+        },
+      },
+    },
+    {
+      'id': '442',
+      'title': 'Update second stat card to Users',
+      'configurable': {
+        'type': 'home',
+        'statCard2': {
+          'title': 'Active Users',
+          'value': '3,845',
+          'icon': 'person',
+          'backgroundColor': 'FFF3E5F5',
+          'iconColor': 'FF9C27B0',
+          'valueColor': 'FF7B1FA2',
         },
       },
     },
@@ -97,13 +108,34 @@ class Prompt extends Equatable {
               'id': 'notifications',
               'title': 'Notifications',
               'subtitle': 'Enable push notifications',
-              'icon': {
-                'codePoint': 0xF3E2,
-                'fontFamily': 'CupertinoIcons',
-                'fontPackage': 'cupertino_icons',
-              },
+              'icon': 'notifications',
               'type': 'toggle',
               'value': true,
+            },
+          ],
+        },
+      },
+    },
+    {
+      'id': '457',
+      'title': 'Add privacy and security settings',
+      'configurable': {
+        'type': 'profile',
+        'settingsSectionConfig': {
+          'settings': [
+            {
+              'id': 'privacy',
+              'title': 'Privacy',
+              'subtitle': 'Manage your privacy settings',
+              'icon': 'privacy',
+              'type': 'navigation',
+            },
+            {
+              'id': 'security',
+              'title': 'Security',
+              'subtitle': 'Account security settings',
+              'icon': 'security',
+              'type': 'navigation',
             },
           ],
         },

@@ -1,5 +1,5 @@
+import 'package:ai_prompt_driven_app/src/config/greeting_card_config.dart';
 import 'package:ai_prompt_driven_app/src/model/greeting_model.dart';
-import 'package:ai_prompt_driven_app/src/model/greeting_card_config.dart';
 import 'package:flutter/material.dart';
 
 class DynamicGreetingCard extends StatelessWidget {
