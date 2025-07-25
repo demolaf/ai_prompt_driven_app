@@ -1,6 +1,7 @@
 import 'package:ai_prompt_driven_app/src/ui/home/widgets/prompt_fab.dart';
 import 'package:ai_prompt_driven_app/src/ui/profile/profile_view_model.dart';
 import 'package:ai_prompt_driven_app/src/dynamic_widgets/dynamic_scaffold.dart';
+import 'package:ai_prompt_driven_app/src/widgets/ux_feedback_overlay.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ai_prompt_driven_app/src/ui/profile/widgets/profile_header.dart';
@@ -38,53 +39,62 @@ class _ProfileViewState extends State<ProfileView> {
     return ValueListenableBuilder<ProfileState>(
       valueListenable: viewModel.state,
       builder: (context, state, child) {
-        return DynamicScaffold(
-          config: state.configurable?.scaffoldConfig,
-          body: CustomScrollView(
-            slivers: [
-              CupertinoSliverNavigationBar(
-                backgroundColor: Colors.transparent,
-                border: Border.fromBorderSide(BorderSide.none),
-                alwaysShowMiddle: false,
-                largeTitle: Text('Profile'),
-              ),
-              SliverPadding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                sliver: SliverFillRemaining(
-                  child: SingleChildScrollView(
-                    child: SafeArea(
-                      top: false,
-                      child: Column(
-                        spacing: 32,
-                        children: [
-                          ProfileHeader(),
-                          StatsSection(),
-                          DynamicSettingsSection(
-                            config: state.configurable?.settingsSectionConfig,
-                            onSettingChanged: (id, value) {
-                              // Handle setting changes here
-                            },
-                          ),
-                        ],
+        return UXFeedbackOverlay(
+          isLoading: state.isProcessing,
+          errorMessage: state.errorMessage,
+          loadingMessage: 'AI is updating your profile...',
+          onRetry: () {
+            viewModel.initialize();
+          },
+          child: DynamicScaffold(
+            config: state.configurable?.scaffoldConfig,
+            body: CustomScrollView(
+              slivers: [
+                CupertinoSliverNavigationBar(
+                  backgroundColor: Colors.transparent,
+                  border: Border.fromBorderSide(BorderSide.none),
+                  alwaysShowMiddle: false,
+                  largeTitle: Text('Profile'),
+                ),
+                SliverPadding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  sliver: SliverFillRemaining(
+                    child: SingleChildScrollView(
+                      child: SafeArea(
+                        top: false,
+                        child: Column(
+                          spacing: 32,
+                          children: [
+                            ProfileHeader(),
+                            StatsSection(),
+                            DynamicSettingsSection(
+                              config: state.configurable?.settingsSectionConfig,
+                              onSettingChanged: (id, value) {
+                                // Handle setting changes here
+                              },
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          floatingActionButton: PromptFAB(
-            showReset: viewModel.showReset(),
-            onAskAISubmit: (prompt) {
-              viewModel.callAIPrompt(prompt);
-            },
-            onPromptTapped: (prompt) {
-              viewModel.callStaticPrompt(prompt.id);
-            },
-            onResetTapped: () {
-              viewModel.reset();
-            },
-            availablePrompts: state.availablePrompts,
+              ],
+            ),
+            floatingActionButton: PromptFAB(
+              showReset: viewModel.showReset(),
+              isProcessing: state.isProcessing,
+              onAskAISubmit: (prompt) {
+                viewModel.callAIPrompt(prompt);
+              },
+              onPromptTapped: (prompt) {
+                viewModel.callStaticPrompt(prompt.id);
+              },
+              onResetTapped: () {
+                viewModel.reset();
+              },
+              availablePrompts: state.availablePrompts,
+            ),
           ),
         );
       },

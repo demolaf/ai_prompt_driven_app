@@ -17,7 +17,8 @@ class DynamicGreetingCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Use config values or fallback to simple defaults
-    final gradientColors = config?.gradientColors ?? [Colors.grey.shade400, Colors.grey.shade600];
+    final gradientColors =
+        config?.gradientColors ?? [Colors.grey.shade400, Colors.grey.shade600];
     final borderRadius = config?.borderRadius ?? 8.0;
     final textColor = config?.textColor ?? Colors.black87;
     final greetingFontSize = config?.greetingFontSize ?? 18.0;

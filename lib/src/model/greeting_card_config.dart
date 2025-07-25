@@ -34,15 +34,17 @@ class GreetingCardConfig {
     return GreetingCardConfig(
       gradientColors: json['gradientColors'] != null
           ? (json['gradientColors'] as List<dynamic>)
-              .map((color) => Color(color as int))
-              .toList()
+                .map((color) => Color(color as int))
+                .toList()
           : null,
       borderRadius: json['borderRadius']?.toDouble(),
       textColor: json['textColor'] != null ? Color(json['textColor']) : null,
       greetingFontSize: json['greetingFontSize']?.toDouble(),
       questionFontSize: json['questionFontSize']?.toDouble(),
       languageFontSize: json['languageFontSize']?.toDouble(),
-      shadowColor: json['shadowColor'] != null ? Color(json['shadowColor']) : null,
+      shadowColor: json['shadowColor'] != null
+          ? Color(json['shadowColor'])
+          : null,
       shadowBlurRadius: json['shadowBlurRadius']?.toDouble(),
       shadowOffset: json['shadowOffset'] != null
           ? Offset(
@@ -68,8 +70,11 @@ class GreetingCardConfig {
           : null,
       greetingsList: json['greetingsList'] != null
           ? (json['greetingsList'] as List<dynamic>)
-              .map((greeting) => GreetingModel.fromJson(greeting as Map<String, dynamic>))
-              .toList()
+                .map(
+                  (greeting) =>
+                      GreetingModel.fromJson(greeting as Map<String, dynamic>),
+                )
+                .toList()
           : null,
     );
   }
@@ -77,13 +82,15 @@ class GreetingCardConfig {
   Map<String, dynamic> toJson() {
     return {
       if (gradientColors != null)
-        'gradientColors': gradientColors!.map((color) => color.value).toList(),
+        'gradientColors': gradientColors!
+            .map((color) => color.toARGB32())
+            .toList(),
       if (borderRadius != null) 'borderRadius': borderRadius,
-      if (textColor != null) 'textColor': textColor!.value,
+      if (textColor != null) 'textColor': textColor!.toARGB32(),
       if (greetingFontSize != null) 'greetingFontSize': greetingFontSize,
       if (questionFontSize != null) 'questionFontSize': questionFontSize,
       if (languageFontSize != null) 'languageFontSize': languageFontSize,
-      if (shadowColor != null) 'shadowColor': shadowColor!.value,
+      if (shadowColor != null) 'shadowColor': shadowColor!.toARGB32(),
       if (shadowBlurRadius != null) 'shadowBlurRadius': shadowBlurRadius,
       if (shadowOffset != null)
         'shadowOffset': {'dx': shadowOffset!.dx, 'dy': shadowOffset!.dy},
@@ -102,7 +109,9 @@ class GreetingCardConfig {
           'bottom': margin!.bottom,
         },
       if (greetingsList != null)
-        'greetingsList': greetingsList!.map((greeting) => greeting.toJson()).toList(),
+        'greetingsList': greetingsList!
+            .map((greeting) => greeting.toJson())
+            .toList(),
     };
   }
 
@@ -112,43 +121,40 @@ class GreetingCardConfig {
       'gradientColors': {
         'type': 'array',
         'items': {'type': 'integer'},
-        'description': 'List of color values for gradient background'
+        'description': 'List of color values for gradient background',
       },
       'borderRadius': {
         'type': 'number',
-        'description': 'Border radius for card corners'
+        'description': 'Border radius for card corners',
       },
       'textColor': {
         'type': 'integer',
-        'description': 'Primary text color value'
+        'description': 'Primary text color value',
       },
       'greetingFontSize': {
         'type': 'number',
-        'description': 'Font size for greeting text'
+        'description': 'Font size for greeting text',
       },
       'questionFontSize': {
         'type': 'number',
-        'description': 'Font size for question text'
+        'description': 'Font size for question text',
       },
       'languageFontSize': {
         'type': 'number',
-        'description': 'Font size for language text'
+        'description': 'Font size for language text',
       },
-      'shadowColor': {
-        'type': 'integer',
-        'description': 'Shadow color value'
-      },
+      'shadowColor': {'type': 'integer', 'description': 'Shadow color value'},
       'shadowBlurRadius': {
         'type': 'number',
-        'description': 'Shadow blur radius'
+        'description': 'Shadow blur radius',
       },
       'shadowOffset': {
         'type': 'object',
         'properties': {
           'dx': {'type': 'number'},
-          'dy': {'type': 'number'}
+          'dy': {'type': 'number'},
         },
-        'description': 'Shadow offset'
+        'description': 'Shadow offset',
       },
       'padding': {
         'type': 'object',
@@ -156,9 +162,9 @@ class GreetingCardConfig {
           'left': {'type': 'number'},
           'top': {'type': 'number'},
           'right': {'type': 'number'},
-          'bottom': {'type': 'number'}
+          'bottom': {'type': 'number'},
         },
-        'description': 'Internal padding'
+        'description': 'Internal padding',
       },
       'margin': {
         'type': 'object',
@@ -166,9 +172,9 @@ class GreetingCardConfig {
           'left': {'type': 'number'},
           'top': {'type': 'number'},
           'right': {'type': 'number'},
-          'bottom': {'type': 'number'}
+          'bottom': {'type': 'number'},
         },
-        'description': 'External margin'
+        'description': 'External margin',
       },
       'greetingsList': {
         'type': 'array',
@@ -177,21 +183,21 @@ class GreetingCardConfig {
           'properties': {
             'greeting': {
               'type': 'string',
-              'description': 'The greeting text in the specified language'
+              'description': 'The greeting text in the specified language',
             },
             'question': {
               'type': 'string',
-              'description': 'A question in the specified language'
+              'description': 'A question in the specified language',
             },
             'language': {
               'type': 'string',
-              'description': 'The name of the language'
-            }
+              'description': 'The name of the language',
+            },
           },
-          'required': ['greeting', 'question', 'language']
+          'required': ['greeting', 'question', 'language'],
         },
-        'description': 'List of greetings to display in the cards'
-      }
-    }
+        'description': 'List of greetings to display in the cards',
+      },
+    },
   };
 }

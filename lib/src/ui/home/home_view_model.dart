@@ -30,7 +30,13 @@ class HomeState extends Equatable {
   final bool isProcessing;
 
   @override
-  List<Object?> get props => [viewState, availablePrompts, configurable, errorMessage, isProcessing];
+  List<Object?> get props => [
+    viewState,
+    availablePrompts,
+    configurable,
+    errorMessage,
+    isProcessing,
+  ];
 
   HomeState copyWith({
     HomeViewState? viewState,
@@ -59,7 +65,7 @@ class HomeViewModel {
 
   void updateState(HomeState newState) {
     if (currentState == newState) return;
-    
+
     DebugLogger.stateChange(
       'HomeViewModel',
       currentState.viewState.name,
@@ -70,7 +76,7 @@ class HomeViewModel {
         'promptsCount': newState.availablePrompts.length,
       },
     );
-    
+
     _state.value = newState;
   }
 
@@ -131,11 +137,13 @@ class HomeViewModel {
   }
 
   Future<void> callAIPrompt(String userPrompt) async {
-    updateState(currentState.copyWith(
-      viewState: HomeViewState.loading,
-      isProcessing: true,
-      errorMessage: null,
-    ));
+    updateState(
+      currentState.copyWith(
+        viewState: HomeViewState.loading,
+        isProcessing: true,
+        errorMessage: null,
+      ),
+    );
 
     try {
       final result = await promptManager.callAIPrompt(
@@ -157,11 +165,13 @@ class HomeViewModel {
         throw Exception('AI returned null response');
       }
     } catch (e) {
-      updateState(currentState.copyWith(
-        viewState: HomeViewState.error,
-        isProcessing: false,
-        errorMessage: 'AI request failed: ${e.toString()}',
-      ));
+      updateState(
+        currentState.copyWith(
+          viewState: HomeViewState.error,
+          isProcessing: false,
+          errorMessage: 'AI request failed: ${e.toString()}',
+        ),
+      );
     }
   }
 

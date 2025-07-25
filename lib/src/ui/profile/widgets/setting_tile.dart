@@ -19,11 +19,7 @@ class SettingTile extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Icon(
-              setting.icon,
-              size: 24,
-              color: CupertinoColors.systemBlue,
-            ),
+            Icon(setting.icon, size: 24, color: CupertinoColors.systemBlue),
             SizedBox(width: 16),
             Expanded(
               child: Column(

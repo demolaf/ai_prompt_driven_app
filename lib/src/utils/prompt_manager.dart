@@ -30,18 +30,32 @@ class PromptManager {
     required Map<String, dynamic> viewConfigurableSchema,
     AIProvider provider = AIProvider.anthropic,
   }) async {
-    DebugLogger.userAction('AI prompt request', data: {
-      'promptLength': userPrompt.length,
-      'provider': provider.name,
-      'prompt': userPrompt.substring(0, userPrompt.length > 100 ? 100 : userPrompt.length),
-    });
-    
+    DebugLogger.userAction(
+      'AI prompt request',
+      data: {
+        'promptLength': userPrompt.length,
+        'provider': provider.name,
+        'prompt': userPrompt.substring(
+          0,
+          userPrompt.length > 100 ? 100 : userPrompt.length,
+        ),
+      },
+    );
+
     try {
       final result = switch (provider) {
-        AIProvider.openai => await _callOpenAIPrompt(userPrompt, currentViewConfigurable, viewConfigurableSchema),
-        AIProvider.anthropic => await _callAnthropicPrompt(userPrompt, currentViewConfigurable, viewConfigurableSchema),
+        AIProvider.openai => await _callOpenAIPrompt(
+          userPrompt,
+          currentViewConfigurable,
+          viewConfigurableSchema,
+        ),
+        AIProvider.anthropic => await _callAnthropicPrompt(
+          userPrompt,
+          currentViewConfigurable,
+          viewConfigurableSchema,
+        ),
       };
-      
+
       DebugLogger.aiCall(provider.name, userPrompt, response: result);
       return result;
     } catch (e, stackTrace) {
@@ -121,7 +135,20 @@ User request: $userPrompt''',
     final data = jsonDecode(res.body);
     final content = (data['choices'][0]['message']['content'] as String).trim();
 
-    return jsonDecode(content) as Map<String, dynamic>;
+    DebugLogger.info('OpenAI raw response', data: {
+      'statusCode': res.statusCode,
+      'content': content,
+      'usage': data['usage'],
+    });
+
+    final parsedResult = jsonDecode(content) as Map<String, dynamic>;
+    
+    DebugLogger.info('OpenAI parsed result', data: {
+      'parsedKeys': parsedResult.keys.toList(),
+      'parsedData': parsedResult,
+    });
+
+    return parsedResult;
   }
 
   Future<Map<String, dynamic>?> _callAnthropicPrompt(
@@ -183,19 +210,44 @@ Response (JSON only):''';
     final data = jsonDecode(res.body);
     final content = (data['content'][0]['text'] as String).trim();
 
+    DebugLogger.info('Anthropic raw response', data: {
+      'statusCode': res.statusCode,
+      'content': content,
+      'usage': data['usage'],
+    });
+
     // Extract JSON from Claude's response (it might include explanations)
     final jsonMatch = RegExp(r'\{[\s\S]*\}').firstMatch(content);
+    Map<String, dynamic> parsedResult;
+    
     if (jsonMatch != null) {
-      return jsonDecode(jsonMatch.group(0)!) as Map<String, dynamic>;
+      final extractedJson = jsonMatch.group(0)!;
+      DebugLogger.info('Anthropic extracted JSON', data: {
+        'extractedJson': extractedJson,
+      });
+      parsedResult = jsonDecode(extractedJson) as Map<String, dynamic>;
+    } else {
+      // If no JSON found, try parsing the entire content
+      try {
+        parsedResult = jsonDecode(content) as Map<String, dynamic>;
+        DebugLogger.info('Anthropic parsed entire content as JSON');
+      } catch (e) {
+        DebugLogger.error(
+          'Failed to parse Anthropic response as JSON: $content',
+          tag: 'PromptManager',
+          error: e,
+        );
+        throw Exception(
+          'Could not extract valid JSON from Anthropic response: $content',
+        );
+      }
     }
 
-    // If no JSON found, try parsing the entire content
-    try {
-      return jsonDecode(content) as Map<String, dynamic>;
-    } catch (e) {
-      throw Exception(
-        'Could not extract valid JSON from Anthropic response: $content',
-      );
-    }
+    DebugLogger.info('Anthropic parsed result', data: {
+      'parsedKeys': parsedResult.keys.toList(),
+      'parsedData': parsedResult,
+    });
+
+    return parsedResult;
   }
 }

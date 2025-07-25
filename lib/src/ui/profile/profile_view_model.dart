@@ -1,6 +1,4 @@
-import 'package:ai_prompt_driven_app/src/model/appbar_config.dart';
 import 'package:ai_prompt_driven_app/src/model/prompt.dart';
-import 'package:ai_prompt_driven_app/src/model/scaffold_config.dart';
 import 'package:ai_prompt_driven_app/src/ui/profile/profile_view_configurable.dart';
 import 'package:ai_prompt_driven_app/src/utils/prompt_manager.dart';
 import 'package:ai_prompt_driven_app/src/utils/debug_logger.dart';
@@ -22,10 +20,7 @@ class ProfileState extends Equatable {
     : this(
         viewState: ProfileViewState.initial,
         availablePrompts: [],
-        configurable: ProfileViewConfigurable(
-          scaffoldConfig: ScaffoldConfig(backgroundColor: 'FFFFFFFF'),
-          appBarConfig: AppBarConfig(title: 'Profile'),
-        ),
+        configurable: ProfileViewConfigurable.initial(),
       );
 
   final ProfileViewState viewState;

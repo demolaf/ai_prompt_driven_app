@@ -25,7 +25,7 @@ class OverlayManager {
 
   void update({required Widget child}) {
     if (!_isVisible || _entry == null) return;
-    
+
     _currentChild = child;
     _entry!.markNeedsBuild();
   }

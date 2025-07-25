@@ -121,7 +121,8 @@ class _HomeViewState extends State<HomeView> {
   }
 
   List<DynamicGreetingCard> greetingsList(HomeState state) {
-    final greetings = state.configurable?.greetingCardConfig?.greetingsList ?? [];
+    final greetings =
+        state.configurable?.greetingCardConfig?.greetingsList ?? [];
     return greetings.asMap().entries.map((entry) {
       final isLastItem = entry.key == greetings.length - 1;
       return DynamicGreetingCard(

@@ -93,14 +93,16 @@ class _PromptFABState extends State<PromptFAB>
       link: layerLink,
       child: FloatingActionButton(
         heroTag: 'PromptFAB',
-        onPressed: widget.isProcessing ? null : () {
-          if (!_menuOverlay.isVisible) {
-            _rotationAnimationController.forward();
-            showMenu();
-          } else {
-            hideMenu();
-          }
-        },
+        onPressed: widget.isProcessing
+            ? null
+            : () {
+                if (!_menuOverlay.isVisible) {
+                  _rotationAnimationController.forward();
+                  showMenu();
+                } else {
+                  hideMenu();
+                }
+              },
         backgroundColor: widget.isProcessing ? Colors.grey : null,
         child: widget.isProcessing
             ? const SizedBox(

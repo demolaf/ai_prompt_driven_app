@@ -69,9 +69,10 @@ class _PromptFABMenuState extends OverlayWidgetState<PromptFABMenu> {
                       layerLink: widget.layerLink,
                       size: widget.sourceWidgetSize,
                       onSubmit: (text) {
-                        DebugLogger.userAction('FAB menu prompt submit callback', data: {
-                          'textLength': text.length,
-                        });
+                        DebugLogger.userAction(
+                          'FAB menu prompt submit callback',
+                          data: {'textLength': text.length},
+                        );
                         widget.onAskAISubmit(text);
                       },
                     );

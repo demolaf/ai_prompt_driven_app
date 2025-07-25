@@ -26,13 +26,17 @@ class SettingModel {
   factory SettingModel.fromJson(Map<String, dynamic> json) {
     final iconData = json['icon'];
     IconData icon;
-    
+
     if (iconData is Map<String, dynamic>) {
       // New format: {codePoint: 0xF3E2, fontFamily: '', fontPackage: ''}
       icon = IconData(
         iconData['codePoint'] as int,
-        fontFamily: iconData['fontFamily']?.isEmpty == true ? null : iconData['fontFamily'] as String?,
-        fontPackage: iconData['fontPackage']?.isEmpty == true ? null : iconData['fontPackage'] as String?,
+        fontFamily: iconData['fontFamily']?.isEmpty == true
+            ? null
+            : iconData['fontFamily'] as String?,
+        fontPackage: iconData['fontPackage']?.isEmpty == true
+            ? null
+            : iconData['fontPackage'] as String?,
       );
     } else {
       // Legacy format: direct integer codePoint
@@ -42,7 +46,7 @@ class SettingModel {
         fontPackage: 'cupertino_icons',
       );
     }
-    
+
     return SettingModel(
       id: json['id'] as String,
       title: json['title'] as String,

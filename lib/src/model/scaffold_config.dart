@@ -18,7 +18,8 @@ class ScaffoldConfig extends Equatable {
 
   static Map<String, dynamic> get schema {
     return {
-      'backgroundColor': 'FFFFFFFF' // Example: white background (hex ARGB format)
+      'backgroundColor':
+          'FFFFFFFF', // Example: white background (hex ARGB format)
     };
   }
 }

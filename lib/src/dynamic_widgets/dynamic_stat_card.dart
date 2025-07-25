@@ -4,19 +4,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class DynamicStatCard extends StatelessWidget {
-  const DynamicStatCard({
-    this.config,
-    super.key,
-  });
+  const DynamicStatCard({this.config, super.key});
 
   final StatCardConfig? config;
 
   @override
   Widget build(BuildContext context) {
-    return Visibility(
-      visible: config?.visible ?? true,
-      child: _buildCard(),
-    );
+    return Visibility(visible: config?.visible ?? true, child: _buildCard());
   }
 
   Widget _buildCard() {
@@ -31,11 +25,7 @@ class DynamicStatCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(
-              Icons.analytics,
-              size: 24,
-              color: CupertinoColors.systemGrey,
-            ),
+            Icon(Icons.analytics, size: 24, color: CupertinoColors.systemGrey),
             SizedBox(height: 8),
             Text(
               '--',
@@ -47,10 +37,7 @@ class DynamicStatCard extends StatelessWidget {
             ),
             Text(
               'No data',
-              style: TextStyle(
-                fontSize: 12,
-                color: CupertinoColors.systemGrey,
-              ),
+              style: TextStyle(fontSize: 12, color: CupertinoColors.systemGrey),
             ),
           ],
         ),
@@ -60,7 +47,9 @@ class DynamicStatCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(config!.padding ?? 16),
       decoration: BoxDecoration(
-        color: WidgetParser.parseColor(config!.backgroundColor) ?? CupertinoColors.systemGrey6,
+        color:
+            WidgetParser.parseColor(config!.backgroundColor) ??
+            CupertinoColors.systemGrey6,
         borderRadius: BorderRadius.circular(config!.borderRadius ?? 12),
       ),
       child: Column(
@@ -70,7 +59,9 @@ class DynamicStatCard extends StatelessWidget {
             Icon(
               WidgetParser.parseIcon(config!.icon!),
               size: 24,
-              color: WidgetParser.parseColor(config!.iconColor) ?? CupertinoColors.systemBlue,
+              color:
+                  WidgetParser.parseColor(config!.iconColor) ??
+                  CupertinoColors.systemBlue,
             ),
           if (config!.icon != null) SizedBox(height: 8),
           Text(
@@ -78,19 +69,22 @@ class DynamicStatCard extends StatelessWidget {
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
-              color: WidgetParser.parseColor(config!.valueColor) ?? CupertinoColors.label,
+              color:
+                  WidgetParser.parseColor(config!.valueColor) ??
+                  CupertinoColors.label,
             ),
           ),
           Text(
             config!.title,
             style: TextStyle(
               fontSize: 12,
-              color: WidgetParser.parseColor(config!.titleColor) ?? CupertinoColors.secondaryLabel,
+              color:
+                  WidgetParser.parseColor(config!.titleColor) ??
+                  CupertinoColors.secondaryLabel,
             ),
           ),
         ],
       ),
     );
   }
-
 }

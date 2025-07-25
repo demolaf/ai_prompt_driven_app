@@ -40,7 +40,9 @@ abstract class ViewConfigurable {
               : null,
         );
       default:
-        throw UnsupportedError('Unknown ViewConfigurable type: ${json['type']}');
+        throw UnsupportedError(
+          'Unknown ViewConfigurable type: ${json['type']}',
+        );
     }
   }
 

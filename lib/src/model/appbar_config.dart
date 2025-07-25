@@ -18,7 +18,7 @@ class AppBarConfig extends Equatable {
 
   static Map<String, dynamic> get schema {
     return {
-      'title': 'Home' // Example: app bar title text
+      'title': 'Home', // Example: app bar title text
     };
   }
 }

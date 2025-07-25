@@ -46,7 +46,11 @@ class ProfileViewConfigurable extends Equatable implements ViewConfigurable {
   final SettingsSectionConfig? settingsSectionConfig;
 
   @override
-  List<Object?> get props => [scaffoldConfig, appBarConfig, settingsSectionConfig];
+  List<Object?> get props => [
+    scaffoldConfig,
+    appBarConfig,
+    settingsSectionConfig,
+  ];
 
   @override
   Map<String, dynamic> toJson() {
@@ -81,7 +85,52 @@ class ProfileViewConfigurable extends Equatable implements ViewConfigurable {
     (updates ?? {}).forEach((key, value) {
       if (value is Map<String, dynamic> &&
           result[key] is Map<String, dynamic>) {
-        result[key] = _deepMerge(result[key] as Map<String, dynamic>, value);
+        // Handle special case for settingsSectionConfig
+        if (key == 'settingsSectionConfig') {
+          result[key] = _mergeSettingsSection(
+            result[key] as Map<String, dynamic>,
+            value,
+          );
+        } else {
+          result[key] = _deepMerge(result[key] as Map<String, dynamic>, value);
+        }
+      } else if (value != null) {
+        result[key] = value;
+      }
+    });
+
+    return result;
+  }
+
+  Map<String, dynamic> _mergeSettingsSection(
+    Map<String, dynamic> current,
+    Map<String, dynamic> updates,
+  ) {
+    final result = Map<String, dynamic>.from(current);
+
+    updates.forEach((key, value) {
+      if (key == 'settings' && value is List<dynamic>) {
+        // Merge settings arrays
+        final currentSettings = result['settings'] as List<dynamic>? ?? [];
+        final updatedSettings = value;
+        
+        // Create a map of existing settings by ID for quick lookup
+        final existingSettingsMap = <String, Map<String, dynamic>>{};
+        for (final setting in currentSettings) {
+          if (setting is Map<String, dynamic> && setting['id'] != null) {
+            existingSettingsMap[setting['id'] as String] = setting;
+          }
+        }
+        
+        // Add or update settings from the update
+        for (final newSetting in updatedSettings) {
+          if (newSetting is Map<String, dynamic> && newSetting['id'] != null) {
+            existingSettingsMap[newSetting['id'] as String] = newSetting;
+          }
+        }
+        
+        // Convert back to list
+        result['settings'] = existingSettingsMap.values.toList();
       } else if (value != null) {
         result[key] = value;
       }
