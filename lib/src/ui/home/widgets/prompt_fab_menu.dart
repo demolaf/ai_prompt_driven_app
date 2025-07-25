@@ -1,6 +1,7 @@
 import 'package:ai_prompt_driven_app/src/model/prompt.dart';
 import 'package:ai_prompt_driven_app/src/utils/overlay_manager.dart';
 import 'package:ai_prompt_driven_app/src/ui/home/widgets/prompt_input_field.dart';
+import 'package:ai_prompt_driven_app/src/utils/debug_logger.dart';
 import 'package:flutter/material.dart';
 
 class PromptFABMenu extends OverlayWidget {
@@ -52,52 +53,50 @@ class _PromptFABMenuState extends OverlayWidgetState<PromptFABMenu> {
         ModalBarrier(onDismiss: dismiss),
         Positioned(
           bottom: MediaQuery.sizeOf(context).height - menuBottomPosition,
-          right: 0,
+          right: 16,
           child: FadeTransition(
             opacity: animation,
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  spacing: 24,
-                  children: [
-                    FABMenuItem(
-                      onTap: () {
-                        widget.onMenuSelection();
-                        PromptInputField.show(
-                          context,
-                          layerLink: widget.layerLink,
-                          size: widget.sourceWidgetSize,
-                          onSubmit: widget.onAskAISubmit,
-                        );
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              spacing: 24,
+              children: [
+                FABMenuItem(
+                  onTap: () {
+                    DebugLogger.userAction('FAB menu "Ask AI" tapped');
+                    widget.onMenuSelection();
+                    PromptInputField.show(
+                      context,
+                      layerLink: widget.layerLink,
+                      size: widget.sourceWidgetSize,
+                      onSubmit: (text) {
+                        DebugLogger.userAction('FAB menu prompt submit callback', data: {
+                          'textLength': text.length,
+                        });
+                        widget.onAskAISubmit(text);
                       },
-                      title: 'Ask AI',
-                      icon: Icon(Icons.keyboard),
-                    ),
-                    if (widget.showReset)
-                      FABMenuItem(
-                        onTap: () {
-                          widget.onResetTapped();
-                        },
-                        title: 'Reset changes',
-                        icon: Icon(Icons.restart_alt),
-                      ),
-                    ...widget.availablePrompts.map((e) {
-                      return FABMenuItem(
-                        onTap: () {
-                          widget.onPromptTapped(e);
-                        },
-                        title: e.title,
-                        icon: Icon(Icons.diamond),
-                      );
-                    }),
-                  ],
+                    );
+                  },
+                  title: 'Ask AI',
+                  icon: Icon(Icons.keyboard),
                 ),
-              ),
+                if (widget.showReset)
+                  FABMenuItem(
+                    onTap: () {
+                      widget.onResetTapped();
+                    },
+                    title: 'Reset changes',
+                    icon: Icon(Icons.restart_alt),
+                  ),
+                ...widget.availablePrompts.map((e) {
+                  return FABMenuItem(
+                    onTap: () {
+                      widget.onPromptTapped(e);
+                    },
+                    title: e.title,
+                    icon: Icon(Icons.diamond),
+                  );
+                }),
+              ],
             ),
           ),
         ),

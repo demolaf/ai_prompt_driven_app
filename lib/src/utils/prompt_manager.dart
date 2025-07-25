@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:ai_prompt_driven_app/src/model/prompt.dart';
+import 'package:ai_prompt_driven_app/src/utils/debug_logger.dart';
 import 'package:http/http.dart' as http;
 
 enum AIProvider { openai, anthropic }
@@ -15,6 +16,7 @@ class PromptManager {
   }
 
   Prompt callStaticPrompt(String id) {
+    DebugLogger.info('callStaticPrompt', data: {'promptId': id});
     return Prompt.allPrompts
         .map(Prompt.fromJson)
         .toList()
@@ -26,11 +28,28 @@ class PromptManager {
     required Map<String, dynamic> viewConfigurableSchema,
     AIProvider provider = AIProvider.anthropic,
   }) async {
-    switch (provider) {
-      case AIProvider.openai:
-        return await _callOpenAIPrompt(userPrompt, viewConfigurableSchema);
-      case AIProvider.anthropic:
-        return await _callAnthropicPrompt(userPrompt, viewConfigurableSchema);
+    DebugLogger.userAction('AI prompt request', data: {
+      'promptLength': userPrompt.length,
+      'provider': provider.name,
+      'prompt': userPrompt.substring(0, userPrompt.length > 100 ? 100 : userPrompt.length),
+    });
+    
+    try {
+      final result = switch (provider) {
+        AIProvider.openai => await _callOpenAIPrompt(userPrompt, viewConfigurableSchema),
+        AIProvider.anthropic => await _callAnthropicPrompt(userPrompt, viewConfigurableSchema),
+      };
+      
+      DebugLogger.aiCall(provider.name, userPrompt, response: result);
+      return result;
+    } catch (e, stackTrace) {
+      DebugLogger.error(
+        'AI prompt failed',
+        tag: 'PromptManager',
+        error: e,
+        stackTrace: stackTrace,
+      );
+      rethrow;
     }
   }
 
@@ -109,8 +128,6 @@ User request: $userPrompt''',
     if (key == null || key.isEmpty) {
       throw Exception('Anthropic API key not provided');
     }
-
-    print("Got here: $userPrompt");
 
     final prompt =
         '''

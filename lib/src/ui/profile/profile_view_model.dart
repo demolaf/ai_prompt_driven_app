@@ -3,16 +3,19 @@ import 'package:ai_prompt_driven_app/src/model/prompt.dart';
 import 'package:ai_prompt_driven_app/src/model/scaffold_config.dart';
 import 'package:ai_prompt_driven_app/src/ui/profile/profile_view_configurable.dart';
 import 'package:ai_prompt_driven_app/src/utils/prompt_manager.dart';
+import 'package:ai_prompt_driven_app/src/utils/debug_logger.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 
-enum ProfileViewState { initial, loading, ready }
+enum ProfileViewState { initial, loading, ready, error }
 
 class ProfileState extends Equatable {
   const ProfileState({
     required this.viewState,
     this.availablePrompts = const [],
     this.configurable,
+    this.errorMessage,
+    this.isProcessing = false,
   });
 
   ProfileState.initial()
@@ -28,19 +31,31 @@ class ProfileState extends Equatable {
   final ProfileViewState viewState;
   final List<Prompt> availablePrompts;
   final ProfileViewConfigurable? configurable;
+  final String? errorMessage;
+  final bool isProcessing;
 
   @override
-  List<Object?> get props => [viewState, availablePrompts, configurable];
+  List<Object?> get props => [
+    viewState,
+    availablePrompts,
+    configurable,
+    errorMessage,
+    isProcessing,
+  ];
 
   ProfileState copyWith({
-    required ProfileViewState viewState,
+    ProfileViewState? viewState,
     List<Prompt>? availablePrompts,
     ProfileViewConfigurable? configurable,
+    String? errorMessage,
+    bool? isProcessing,
   }) {
     return ProfileState(
-      viewState: viewState,
+      viewState: viewState ?? this.viewState,
       availablePrompts: availablePrompts ?? this.availablePrompts,
       configurable: configurable ?? this.configurable,
+      errorMessage: errorMessage,
+      isProcessing: isProcessing ?? this.isProcessing,
     );
   }
 }
@@ -55,6 +70,18 @@ class ProfileViewModel {
 
   void updateState(ProfileState newState) {
     if (currentState == newState) return;
+
+    DebugLogger.stateChange(
+      'ProfileViewModel',
+      currentState.viewState.name,
+      newState.viewState.name,
+      data: {
+        'hasError': newState.errorMessage != null,
+        'isProcessing': newState.isProcessing,
+        'promptsCount': newState.availablePrompts.length,
+      },
+    );
+
     _state.value = newState;
   }
 
@@ -63,13 +90,23 @@ class ProfileViewModel {
   }
 
   void getAvailablePrompts() {
-    final prompts = promptManager.getProfilePrompts();
-    updateState(
-      _state.value.copyWith(
-        viewState: ProfileViewState.initial,
-        availablePrompts: prompts,
-      ),
-    );
+    try {
+      final prompts = promptManager.getProfilePrompts();
+      updateState(
+        _state.value.copyWith(
+          viewState: ProfileViewState.initial,
+          availablePrompts: prompts,
+          errorMessage: null,
+        ),
+      );
+    } catch (e) {
+      updateState(
+        _state.value.copyWith(
+          viewState: ProfileViewState.error,
+          errorMessage: 'Failed to load prompts: $e',
+        ),
+      );
+    }
   }
 
   void reset() {
@@ -94,7 +131,13 @@ class ProfileViewModel {
   }
 
   Future<void> callAIPrompt(String userPrompt) async {
-    updateState(currentState.copyWith(viewState: ProfileViewState.loading));
+    updateState(
+      currentState.copyWith(
+        viewState: ProfileViewState.loading,
+        isProcessing: true,
+        errorMessage: null,
+      ),
+    );
 
     try {
       final result = await promptManager.callAIPrompt(
@@ -102,14 +145,26 @@ class ProfileViewModel {
         viewConfigurableSchema: ProfileViewConfigurable.schema,
       );
 
+      if (result != null) {
+        updateState(
+          currentState.copyWith(
+            viewState: ProfileViewState.ready,
+            configurable: currentState.configurable?.merge(result),
+            isProcessing: false,
+            errorMessage: null,
+          ),
+        );
+      } else {
+        throw Exception('AI returned null response');
+      }
+    } catch (e) {
       updateState(
         currentState.copyWith(
-          viewState: ProfileViewState.ready,
-          configurable: currentState.configurable?.merge(result),
+          viewState: ProfileViewState.error,
+          isProcessing: false,
+          errorMessage: 'AI request failed: ${e.toString()}',
         ),
       );
-    } catch (e) {
-      updateState(currentState.copyWith(viewState: ProfileViewState.initial));
     }
   }
 

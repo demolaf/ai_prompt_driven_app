@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ai_prompt_driven_app/src/utils/overlay_manager.dart';
+import 'package:ai_prompt_driven_app/src/utils/debug_logger.dart';
 
 class PromptInputField extends OverlayWidget {
   const PromptInputField({
@@ -10,8 +11,7 @@ class PromptInputField extends OverlayWidget {
     this.onSubmit,
   });
 
-
-  final Function(String)? onSubmit;
+  final ValueSetter<String>? onSubmit;
 
   static void show(
     BuildContext context, {
@@ -19,6 +19,11 @@ class PromptInputField extends OverlayWidget {
     required Size size,
     Function(String)? onSubmit,
   }) {
+    DebugLogger.userAction(
+      'show_prompt_input',
+      data: {'hasOnSubmit': onSubmit != null},
+    );
+
     final overlayManager = OverlayManager();
 
     overlayManager.show(
@@ -27,6 +32,13 @@ class PromptInputField extends OverlayWidget {
         layerLink: layerLink,
         sourceWidgetSize: size,
         onSubmit: (text) {
+          DebugLogger.userAction(
+            'prompt_input_submit',
+            data: {
+              'textLength': text.length,
+              'text': text.substring(0, text.length > 50 ? 50 : text.length),
+            },
+          );
           onSubmit?.call(text);
           overlayManager.hide();
         },
@@ -65,29 +77,36 @@ class _PromptInputFieldState extends OverlayWidgetState<PromptInputField> {
       child: Stack(
         children: [
           ModalBarrier(onDismiss: dismiss),
-          LayoutBuilder(
-            builder: (context, constraints) {
-              return CompositedTransformFollower(
-                link: widget.layerLink,
-                showWhenUnlinked: false,
-                targetAnchor: Alignment.bottomLeft,
-                followerAnchor: Alignment.bottomRight,
-                offset: Offset(-16, 0),
-                child: Material(
-                  type: MaterialType.transparency,
-                  child: PromptInputContent(
-                    maxWidth: constraints.maxWidth - widget.sourceWidgetSize.width - 48,
+          CompositedTransformFollower(
+            link: widget.layerLink,
+            showWhenUnlinked: false,
+            targetAnchor: Alignment.bottomLeft,
+            followerAnchor: Alignment.bottomRight,
+            offset: Offset(-16, 0),
+            child: Material(
+              type: MaterialType.transparency,
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  return PromptInputContent(
+                    maxWidth:
+                        constraints.maxWidth -
+                        widget.sourceWidgetSize.width -
+                        48,
                     textController: _textController,
                     focusNode: _focusNode,
                     onSubmit: () {
-                      if (_textController.text.trim().isNotEmpty) {
+                      final text = _textController.text.trim();
+                      if (text.isNotEmpty) {
+                        DebugLogger.debug('Calling widget.onSubmit with text');
                         widget.onSubmit?.call(_textController.text);
+                      } else {
+                        DebugLogger.warning('Text is empty, not submitting');
                       }
                     },
-                  ),
-                ),
-              );
-            },
+                  );
+                },
+              ),
+            ),
           ),
         ],
       ),
@@ -165,9 +184,9 @@ class PromptTextInput extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.grey[50],
+        color: Colors.grey.shade50,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey[300]!, width: 1),
+        border: Border.all(color: Colors.grey.shade300, width: 1),
       ),
       child: Row(
         children: [

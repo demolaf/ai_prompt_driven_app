@@ -11,9 +11,11 @@ class PromptFAB extends StatefulWidget {
     required this.onAskAISubmit,
     super.key,
     this.showReset = false,
+    this.isProcessing = false,
   });
 
   final bool showReset;
+  final bool isProcessing;
   final ValueSetter<Prompt> onPromptTapped;
   final ValueSetter<String> onAskAISubmit;
   final VoidCallback onResetTapped;
@@ -91,7 +93,7 @@ class _PromptFABState extends State<PromptFAB>
       link: layerLink,
       child: FloatingActionButton(
         heroTag: 'PromptFAB',
-        onPressed: () {
+        onPressed: widget.isProcessing ? null : () {
           if (!_menuOverlay.isVisible) {
             _rotationAnimationController.forward();
             showMenu();
@@ -99,10 +101,20 @@ class _PromptFABState extends State<PromptFAB>
             hideMenu();
           }
         },
-        child: RotationTransition(
-          turns: _rotationAnimation,
-          child: Icon(Icons.add),
-        ),
+        backgroundColor: widget.isProcessing ? Colors.grey : null,
+        child: widget.isProcessing
+            ? const SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                ),
+              )
+            : RotationTransition(
+                turns: _rotationAnimation,
+                child: const Icon(Icons.add),
+              ),
       ),
     );
   }

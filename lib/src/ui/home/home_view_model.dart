@@ -1,16 +1,19 @@
 import 'package:ai_prompt_driven_app/src/model/prompt.dart';
 import 'package:ai_prompt_driven_app/src/ui/home/home_view_configurable.dart';
 import 'package:ai_prompt_driven_app/src/utils/prompt_manager.dart';
+import 'package:ai_prompt_driven_app/src/utils/debug_logger.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 
-enum HomeViewState { initial, loading, ready }
+enum HomeViewState { initial, loading, ready, error }
 
 class HomeState extends Equatable {
   const HomeState({
     required this.viewState,
     this.availablePrompts = const [],
     this.configurable,
+    this.errorMessage,
+    this.isProcessing = false,
   });
 
   HomeState.initial()
@@ -23,19 +26,25 @@ class HomeState extends Equatable {
   final HomeViewState viewState;
   final List<Prompt> availablePrompts;
   final HomeViewConfigurable? configurable;
+  final String? errorMessage;
+  final bool isProcessing;
 
   @override
-  List<Object?> get props => [viewState, availablePrompts, configurable];
+  List<Object?> get props => [viewState, availablePrompts, configurable, errorMessage, isProcessing];
 
   HomeState copyWith({
-    required HomeViewState viewState,
+    HomeViewState? viewState,
     List<Prompt>? availablePrompts,
     HomeViewConfigurable? configurable,
+    String? errorMessage,
+    bool? isProcessing,
   }) {
     return HomeState(
-      viewState: viewState,
+      viewState: viewState ?? this.viewState,
       availablePrompts: availablePrompts ?? this.availablePrompts,
       configurable: configurable ?? this.configurable,
+      errorMessage: errorMessage,
+      isProcessing: isProcessing ?? this.isProcessing,
     );
   }
 }
@@ -50,6 +59,18 @@ class HomeViewModel {
 
   void updateState(HomeState newState) {
     if (currentState == newState) return;
+    
+    DebugLogger.stateChange(
+      'HomeViewModel',
+      currentState.viewState.name,
+      newState.viewState.name,
+      data: {
+        'hasError': newState.errorMessage != null,
+        'isProcessing': newState.isProcessing,
+        'promptsCount': newState.availablePrompts.length,
+      },
+    );
+    
     _state.value = newState;
   }
 
@@ -58,13 +79,23 @@ class HomeViewModel {
   }
 
   void getAvailablePrompts() {
-    final prompts = promptManager.getHomePrompts();
-    updateState(
-      currentState.copyWith(
-        viewState: HomeViewState.initial,
-        availablePrompts: prompts,
-      ),
-    );
+    try {
+      final prompts = promptManager.getHomePrompts();
+      updateState(
+        currentState.copyWith(
+          viewState: HomeViewState.initial,
+          availablePrompts: prompts,
+          errorMessage: null,
+        ),
+      );
+    } catch (e) {
+      updateState(
+        currentState.copyWith(
+          viewState: HomeViewState.error,
+          errorMessage: 'Failed to load prompts: $e',
+        ),
+      );
+    }
   }
 
   void reset() {
@@ -72,24 +103,39 @@ class HomeViewModel {
       currentState.copyWith(
         viewState: HomeViewState.initial,
         configurable: HomeState.initial().configurable,
+        errorMessage: null,
       ),
     );
   }
 
   void callStaticPrompt(String id) {
-    final result = promptManager.callStaticPrompt(id);
-    updateState(
-      currentState.copyWith(
-        viewState: HomeViewState.initial,
-        configurable: currentState.configurable?.merge(
-          result.configurable.toJson(),
+    try {
+      final result = promptManager.callStaticPrompt(id);
+      updateState(
+        currentState.copyWith(
+          viewState: HomeViewState.ready,
+          configurable: currentState.configurable?.merge(
+            result.configurable.toJson(),
+          ),
+          errorMessage: null,
         ),
-      ),
-    );
+      );
+    } catch (e) {
+      updateState(
+        currentState.copyWith(
+          viewState: HomeViewState.error,
+          errorMessage: 'Failed to apply prompt: $e',
+        ),
+      );
+    }
   }
 
   Future<void> callAIPrompt(String userPrompt) async {
-    updateState(currentState.copyWith(viewState: HomeViewState.loading));
+    updateState(currentState.copyWith(
+      viewState: HomeViewState.loading,
+      isProcessing: true,
+      errorMessage: null,
+    ));
 
     try {
       final result = await promptManager.callAIPrompt(
@@ -97,14 +143,24 @@ class HomeViewModel {
         viewConfigurableSchema: HomeViewConfigurable.schema,
       );
 
-      updateState(
-        currentState.copyWith(
-          viewState: HomeViewState.ready,
-          configurable: currentState.configurable?.merge(result),
-        ),
-      );
+      if (result != null) {
+        updateState(
+          currentState.copyWith(
+            viewState: HomeViewState.ready,
+            configurable: currentState.configurable?.merge(result),
+            isProcessing: false,
+            errorMessage: null,
+          ),
+        );
+      } else {
+        throw Exception('AI returned null response');
+      }
     } catch (e) {
-      updateState(currentState.copyWith(viewState: HomeViewState.initial));
+      updateState(currentState.copyWith(
+        viewState: HomeViewState.error,
+        isProcessing: false,
+        errorMessage: 'AI request failed: ${e.toString()}',
+      ));
     }
   }
 
