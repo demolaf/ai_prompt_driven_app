@@ -37,14 +37,14 @@ class OverlayManager {
 
 abstract class OverlayWidget extends StatefulWidget {
   const OverlayWidget({
-    super.key,
     required this.sourceWidgetSize,
-    this.layerLink,
+    required this.layerLink,
+    super.key,
     this.onDismiss,
   });
 
   final Size sourceWidgetSize;
-  final LayerLink? layerLink;
+  final LayerLink layerLink;
   final VoidCallback? onDismiss;
 }
 

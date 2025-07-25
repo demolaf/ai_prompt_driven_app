@@ -7,11 +7,6 @@ import 'package:flutter/foundation.dart';
 enum HomeViewState { initial, loading, ready }
 
 class HomeState {
-  // TODO(demolaf): we will need an object that drives the possible UI changes
-  //  a "configurable" object that contains what can change in the UI
-  //  we can pass this object to an LLM for it to know what is configurable in
-  //  the UI.
-
   HomeState({
     required this.viewState,
     this.availablePrompts = const [],
@@ -19,14 +14,14 @@ class HomeState {
   });
 
   HomeState.initial()
-    : this(
-        viewState: HomeViewState.initial,
-        availablePrompts: [],
-        configurable: HomeViewConfigurable(
-          scaffoldConfig: ScaffoldConfig(backgroundColor: 'FFFFFFFF'),
-          appBarConfig: AppBarConfig(title: 'Home'),
-        ),
-      );
+      : this(
+    viewState: HomeViewState.initial,
+    availablePrompts: [],
+    configurable: HomeViewConfigurable(
+      scaffoldConfig: ScaffoldConfig(backgroundColor: 'FFFFFFFF'),
+      appBarConfig: AppBarConfig(title: 'Home'),
+    ),
+  );
 
   final HomeViewState viewState;
   final List<Prompt> availablePrompts;
@@ -72,6 +67,10 @@ class HomeViewModel {
     );
   }
 
+  void reset() {
+    updateState(HomeState.initial());
+  }
+
   void callStaticPrompt(String id) {
     final result = promptManager.callPrompt(id);
     updateState(
@@ -85,4 +84,8 @@ class HomeViewModel {
   }
 
   void callAIPrompt(HomeViewConfigurable configurable) {}
+
+  bool showReset() {
+    return currentState != HomeState.initial();
+  }
 }

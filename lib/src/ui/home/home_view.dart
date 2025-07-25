@@ -118,8 +118,12 @@ class _HomeViewState extends State<HomeView> {
             ],
           ),
           floatingActionButton: PromptFAB(
+            showReset: viewModel.showReset(),
             onPromptTapped: (prompt) {
               viewModel.callStaticPrompt(prompt.id);
+            },
+            onResetTapped: () {
+              viewModel.reset();
             },
             availablePrompts: state.availablePrompts,
           ),

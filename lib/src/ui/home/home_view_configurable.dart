@@ -42,17 +42,21 @@ class HomeViewConfigurable extends ViewConfigurable {
     return HomeViewConfigurable.fromJson(mergedJson);
   }
 
-  Map<String, dynamic> _deepMerge(Map<String, dynamic> current, Map<String, dynamic> updates) {
+  Map<String, dynamic> _deepMerge(
+    Map<String, dynamic> current,
+    Map<String, dynamic> updates,
+  ) {
     final result = Map<String, dynamic>.from(current);
-    
+
     updates.forEach((key, value) {
-      if (value is Map<String, dynamic> && result[key] is Map<String, dynamic>) {
+      if (value is Map<String, dynamic> &&
+          result[key] is Map<String, dynamic>) {
         result[key] = _deepMerge(result[key] as Map<String, dynamic>, value);
       } else if (value != null) {
         result[key] = value;
       }
     });
-    
+
     return result;
   }
 }

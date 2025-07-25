@@ -3,12 +3,12 @@ import 'package:ai_prompt_driven_app/src/utils/overlay_manager.dart';
 
 class PromptInputField extends OverlayWidget {
   const PromptInputField({
-    super.key,
-    super.layerLink,
+    required super.layerLink,
     required super.sourceWidgetSize,
+    super.key,
     super.onDismiss,
     this.onSubmit,
-  }) : assert(layerLink != null, "PromptInputField requires a layerLink");
+  });
 
   // TODO(demolaf): add this to the static prompts available
   static double width(BuildContext context) =>
@@ -18,7 +18,7 @@ class PromptInputField extends OverlayWidget {
 
   static void show(
     BuildContext context, {
-    LayerLink? layerLink,
+    required LayerLink layerLink,
     required Size size,
     Function(String)? onSubmit,
   }) {
@@ -69,7 +69,7 @@ class _PromptInputFieldState extends OverlayWidgetState<PromptInputField> {
         children: [
           ModalBarrier(onDismiss: dismiss),
           CompositedTransformFollower(
-            link: widget.layerLink!,
+            link: widget.layerLink,
             showWhenUnlinked: false,
             offset: Offset(
               -(PromptInputField.width(context) + 16),
@@ -97,11 +97,11 @@ class _PromptInputFieldState extends OverlayWidgetState<PromptInputField> {
 
 class PromptInputContent extends StatelessWidget {
   const PromptInputContent({
-    super.key,
     required this.width,
     required this.textController,
     required this.focusNode,
     required this.onSubmit,
+    super.key,
   });
 
   final double width;
@@ -151,10 +151,10 @@ class PromptInputContent extends StatelessWidget {
 
 class PromptTextInput extends StatelessWidget {
   const PromptTextInput({
-    super.key,
     required this.textController,
     required this.focusNode,
     required this.onSubmit,
+    super.key,
   });
 
   final TextEditingController textController;

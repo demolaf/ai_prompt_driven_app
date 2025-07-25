@@ -5,17 +5,20 @@ import 'package:flutter/material.dart';
 
 class PromptFABMenu extends OverlayWidget {
   const PromptFABMenu({
-    super.key,
+    required super.layerLink,
     required super.sourceWidgetSize,
-    super.onDismiss,
     required this.onMenuSelection,
     required this.onPromptTapped,
+    required this.onResetTapped,
     required this.availablePrompts,
     required this.fabGlobalPosition,
+    super.key,
+    super.onDismiss,
   });
 
   final VoidCallback onMenuSelection;
   final ValueSetter<Prompt> onPromptTapped;
+  final VoidCallback onResetTapped;
   final List<Prompt> availablePrompts;
   final Offset fabGlobalPosition;
 
@@ -60,21 +63,29 @@ class _PromptFABMenuState extends OverlayWidgetState<PromptFABMenu> {
                   children: [
                     FABMenuItem(
                       onTap: () {
+                        widget.onMenuSelection();
                         PromptInputField.show(
                           context,
                           layerLink: widget.layerLink,
                           size: widget.sourceWidgetSize,
                         );
-                        widget.onMenuSelection();
                       },
                       title: 'Ask AI',
+                      icon: Icon(Icons.keyboard),
+                    ),
+                    FABMenuItem(
+                      onTap: () {
+                        widget.onMenuSelection();
+                        widget.onResetTapped();
+                      },
+                      title: 'Reset changes',
                       icon: Icon(Icons.keyboard),
                     ),
                     ...widget.availablePrompts.map((e) {
                       return FABMenuItem(
                         onTap: () {
-                          widget.onPromptTapped(e);
                           widget.onMenuSelection();
+                          widget.onPromptTapped(e);
                         },
                         title: e.title,
                         icon: Icon(Icons.diamond),
@@ -93,10 +104,10 @@ class _PromptFABMenuState extends OverlayWidgetState<PromptFABMenu> {
 
 class FABMenuItem extends StatelessWidget {
   const FABMenuItem({
-    super.key,
     required this.onTap,
     required this.title,
     required this.icon,
+    super.key,
   });
 
   final VoidCallback onTap;

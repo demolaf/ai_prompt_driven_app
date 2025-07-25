@@ -3,9 +3,9 @@ import 'package:ai_prompt_driven_app/src/ui/profile/widgets/setting_tile.dart';
 
 class SettingsSection extends StatelessWidget {
   const SettingsSection({
-    super.key,
     required this.darkModeEnabled,
     required this.onDarkModeChanged,
+    super.key,
   });
 
   final bool darkModeEnabled;

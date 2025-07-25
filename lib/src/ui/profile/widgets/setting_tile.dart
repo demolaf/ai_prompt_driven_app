@@ -2,12 +2,12 @@ import 'package:flutter/cupertino.dart';
 
 class SettingTile extends StatelessWidget {
   const SettingTile({
-    super.key,
     required this.title,
     required this.subtitle,
     required this.icon,
     required this.value,
     required this.onChanged,
+    super.key,
   });
 
   final String title;

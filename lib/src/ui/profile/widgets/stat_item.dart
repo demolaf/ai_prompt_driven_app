@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 class StatItem extends StatelessWidget {
-  const StatItem({super.key, required this.value, required this.label});
+  const StatItem({required this.value, required this.label, super.key});
 
   final String value;
   final String label;

@@ -6,10 +6,10 @@ class StatCard extends StatelessWidget {
   final IconData icon;
 
   const StatCard({
-    super.key,
     required this.title,
     required this.value,
     required this.icon,
+    super.key,
   });
 
   @override

@@ -5,12 +5,16 @@ import 'package:ai_prompt_driven_app/src/utils/overlay_manager.dart';
 
 class PromptFAB extends StatefulWidget {
   const PromptFAB({
-    super.key,
     required this.onPromptTapped,
+    required this.onResetTapped,
     required this.availablePrompts,
+    super.key,
+    this.showReset = false,
   });
 
+  final bool showReset;
   final ValueSetter<Prompt> onPromptTapped;
+  final VoidCallback onResetTapped;
   final List<Prompt> availablePrompts;
 
   @override
@@ -54,7 +58,7 @@ class _PromptFABState extends State<PromptFAB>
     return CompositedTransformTarget(
       link: layerLink,
       child: FloatingActionButton(
-        heroTag: '',
+        heroTag: 'PromptFAB',
         onPressed: () {
           if (!_menuOverlay.isVisible) {
             _rotationAnimationController.forward();
@@ -82,7 +86,9 @@ class _PromptFABState extends State<PromptFAB>
         onMenuSelection: () {
           hideMenu();
         },
+        layerLink: layerLink,
         onPromptTapped: widget.onPromptTapped,
+        onResetTapped: widget.onResetTapped,
         sourceWidgetSize: size,
         fabGlobalPosition: fabGlobalPosition,
         onDismiss: hideMenu,

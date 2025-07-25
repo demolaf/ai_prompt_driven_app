@@ -4,3 +4,6 @@
 
 ## Git Commit Guidelines
 - Don't include assisted by claude text in commits
+
+## Code Review Best Practices
+- Say what it's supposed to do before recommending changes
