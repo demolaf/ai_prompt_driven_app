@@ -1,3 +1,5 @@
+import 'package:ai_prompt_driven_app/src/ui/home/widgets/prompt_fab.dart';
+import 'package:ai_prompt_driven_app/src/widgets/dynamic_scaffold.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ai_prompt_driven_app/src/ui/profile/widgets/profile_header.dart';
@@ -26,7 +28,7 @@ class _ProfileViewState extends State<ProfileView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return DynamicScaffold(
       body: CustomScrollView(
         slivers: [
           CupertinoSliverNavigationBar(
@@ -58,6 +60,10 @@ class _ProfileViewState extends State<ProfileView> {
             ),
           ),
         ],
+      ),
+      floatingActionButton: PromptFAB(
+        onPromptTapped: (value) {},
+        availablePrompts: [],
       ),
     );
   }

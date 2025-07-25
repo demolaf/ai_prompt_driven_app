@@ -1,5 +1,6 @@
 import 'package:ai_prompt_driven_app/src/utils/overlay_manager.dart';
 import 'package:ai_prompt_driven_app/src/ui/home/widgets/prompt_input_field.dart';
+import 'package:ai_prompt_driven_app/src/utils/prompt_manager.dart';
 import 'package:flutter/material.dart';
 
 class PromptFABMenu extends OverlayWidget {
@@ -8,13 +9,14 @@ class PromptFABMenu extends OverlayWidget {
     required super.sourceWidgetSize,
     super.onDismiss,
     required this.onMenuSelection,
+    required this.onPromptTapped,
+    required this.availablePrompts,
     required this.fabGlobalPosition,
   });
 
-  static double height(BuildContext context) =>
-      MediaQuery.of(context).size.height * 0.3;
-
   final VoidCallback onMenuSelection;
+  final ValueSetter<Prompt> onPromptTapped;
+  final List<Prompt> availablePrompts;
   final Offset fabGlobalPosition;
 
   @override
@@ -46,16 +48,41 @@ class _PromptFABMenuState extends OverlayWidgetState<PromptFABMenu> {
           right: 0,
           child: FadeTransition(
             opacity: animation,
-            child: FABMenuContent(
-              onMenuSelection: widget.onMenuSelection,
-              onAskAI: () {
-                widget.onMenuSelection();
-                PromptInputField.show(
-                  context,
-                  layerLink: widget.layerLink,
-                  size: widget.sourceWidgetSize,
-                );
-              },
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  spacing: 24,
+                  children: [
+                    FABMenuItem(
+                      onTap: () {
+                        PromptInputField.show(
+                          context,
+                          layerLink: widget.layerLink,
+                          size: widget.sourceWidgetSize,
+                        );
+                        widget.onMenuSelection();
+                      },
+                      title: 'Ask AI',
+                      icon: Icon(Icons.keyboard),
+                    ),
+                    ...widget.availablePrompts.map((e) {
+                      return FABMenuItem(
+                        onTap: () {
+                          widget.onPromptTapped(e);
+                          widget.onMenuSelection();
+                        },
+                        title: e.title,
+                        icon: Icon(Icons.diamond),
+                      );
+                    }),
+                  ],
+                ),
+              ),
             ),
           ),
         ),
@@ -64,74 +91,42 @@ class _PromptFABMenuState extends OverlayWidgetState<PromptFABMenu> {
   }
 }
 
-class FABMenuContent extends StatelessWidget {
-  const FABMenuContent({
+class FABMenuItem extends StatelessWidget {
+  const FABMenuItem({
     super.key,
-    required this.onMenuSelection,
-    required this.onAskAI,
+    required this.onTap,
+    required this.title,
+    required this.icon,
   });
 
-  final VoidCallback onMenuSelection;
-  final VoidCallback onAskAI;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onMenuSelection,
-      child: Container(
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            spacing: 24,
-            children: [
-              GestureDetector(
-                onTap: onAskAI,
-                child: FABMenuItem(title: 'Ask AI', icon: Icon(Icons.keyboard)),
-              ),
-              GestureDetector(
-                onTap: onMenuSelection,
-                child: FABMenuItem(
-                  title: 'Make the background blue',
-                  icon: Icon(Icons.diamond),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class FABMenuItem extends StatelessWidget {
-  const FABMenuItem({super.key, required this.title, required this.icon});
-
+  final VoidCallback onTap;
   final String title;
   final Widget icon;
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(24),
-      elevation: 4,
-      shadowColor: Colors.black.withValues(alpha: 0.15),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(24),
-          border: Border.all(
-            color: Theme.of(context).colorScheme.primary,
-            width: 2,
+    return GestureDetector(
+      onTap: onTap,
+      child: Material(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        elevation: 4,
+        shadowColor: Colors.black.withValues(alpha: 0.15),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(24),
+            border: Border.all(
+              color: Theme.of(context).colorScheme.primary,
+              width: 2,
+            ),
           ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            spacing: 16,
-            children: [Text(title), icon],
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              spacing: 16,
+              children: [Text(title), icon],
+            ),
           ),
         ),
       ),

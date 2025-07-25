@@ -1,9 +1,17 @@
 import 'package:ai_prompt_driven_app/src/ui/home/widgets/prompt_fab_menu.dart';
+import 'package:ai_prompt_driven_app/src/utils/prompt_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:ai_prompt_driven_app/src/utils/overlay_manager.dart';
 
 class PromptFAB extends StatefulWidget {
-  const PromptFAB({super.key});
+  const PromptFAB({
+    super.key,
+    required this.onPromptTapped,
+    required this.availablePrompts,
+  });
+
+  final ValueSetter<Prompt> onPromptTapped;
+  final List<Prompt> availablePrompts;
 
   @override
   State<PromptFAB> createState() => _PromptFABState();
@@ -46,6 +54,7 @@ class _PromptFABState extends State<PromptFAB>
     return CompositedTransformTarget(
       link: layerLink,
       child: FloatingActionButton(
+        heroTag: '',
         onPressed: () {
           if (!_menuOverlay.isVisible) {
             _rotationAnimationController.forward();
@@ -73,9 +82,11 @@ class _PromptFABState extends State<PromptFAB>
         onMenuSelection: () {
           hideMenu();
         },
+        onPromptTapped: widget.onPromptTapped,
         sourceWidgetSize: size,
         fabGlobalPosition: fabGlobalPosition,
         onDismiss: hideMenu,
+        availablePrompts: widget.availablePrompts,
       ),
     );
   }

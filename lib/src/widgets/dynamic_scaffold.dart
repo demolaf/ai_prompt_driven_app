@@ -1,3 +1,4 @@
+import 'package:ai_prompt_driven_app/src/model/scaffold_config.dart';
 import 'package:flutter/material.dart';
 
 class DynamicScaffold extends Scaffold {
@@ -5,14 +6,14 @@ class DynamicScaffold extends Scaffold {
     super.key,
     super.body,
     super.floatingActionButton,
-    required this.config,
+    this.config,
   });
 
-  final Map<String, dynamic> config;
+  final ScaffoldConfig? config;
 
   @override
   Color? get backgroundColor {
-    return _parseColor(config['backgroundColor']);
+    return _parseColor(config?.backgroundColor);
   }
 
   Color? _parseColor(dynamic colorValue) {
@@ -23,6 +24,10 @@ class DynamicScaffold extends Scaffold {
       if (colorValue.startsWith('#')) {
         final hexColor = colorValue.substring(1);
         return Color(int.parse('FF$hexColor', radix: 16));
+      } else if (colorValue.length == 8 || colorValue.length == 6) {
+        // Handle hex strings without # (like 'FF000000' or '000000')
+        final hexColor = colorValue.length == 6 ? 'FF$colorValue' : colorValue;
+        return Color(int.parse(hexColor, radix: 16));
       }
 
       // Handle named colors

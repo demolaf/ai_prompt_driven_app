@@ -1,3 +1,4 @@
+import 'package:ai_prompt_driven_app/src/ui/home/home_view_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ai_prompt_driven_app/src/model/greeting_model.dart';
@@ -17,11 +18,17 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  final viewModel = HomeViewModel();
+
   ValueNotifier<List<GreetingModel>> greetingsList = ValueNotifier(
     GreetingModel.getPlaceholderData,
   );
 
-  Map<String, dynamic> scaffoldConfig = {'backgroundColor': '#ffffff'};
+  @override
+  void initState() {
+    viewModel.initialize();
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -31,81 +38,93 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    return DynamicScaffold(
-      config: scaffoldConfig,
-      body: CustomScrollView(
-        slivers: [
-          CupertinoSliverNavigationBar(
-            backgroundColor: Colors.transparent,
-            border: Border.fromBorderSide(BorderSide.none),
-            alwaysShowMiddle: false,
-            largeTitle: Text('Home'),
-            trailing: IconButton(
-              onPressed: () {
-                ProfileView.present(context);
-              },
-              icon: Icon(CupertinoIcons.profile_circled),
-            ),
-          ),
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            sliver: SliverFillRemaining(
-              child: SingleChildScrollView(
-                child: SafeArea(
-                  top: false,
-                  child: Column(
-                    spacing: 24,
-                    children: [
-                      Container(
-                        height: 164,
-                        padding: EdgeInsets.only(top: 16),
-                        child: PageView(
-                          controller: PageController(viewportFraction: 0.95),
-                          padEnds: false,
-                          children: greetingsList.value
-                              .asMap()
-                              .entries
-                              .map(
-                                (entry) => GreetingCard(
-                                  data: entry.value,
-                                  isLastItem:
-                                      entry.key ==
-                                      greetingsList.value.length - 1,
-                                ),
-                              )
-                              .toList(),
-                        ),
-                      ),
-                      Row(
+    return ValueListenableBuilder(
+      valueListenable: viewModel.state,
+      builder: (context, state, child) {
+        return DynamicScaffold(
+          config: state.configurable?.scaffoldConfig,
+          body: CustomScrollView(
+            slivers: [
+              CupertinoSliverNavigationBar(
+                backgroundColor: Colors.transparent,
+                border: Border.fromBorderSide(BorderSide.none),
+                alwaysShowMiddle: false,
+                largeTitle: Text('Home'),
+                trailing: IconButton(
+                  onPressed: () {
+                    ProfileView.present(context);
+                  },
+                  icon: Icon(CupertinoIcons.profile_circled),
+                ),
+              ),
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                sliver: SliverFillRemaining(
+                  child: SingleChildScrollView(
+                    child: SafeArea(
+                      top: false,
+                      child: Column(
+                        spacing: 24,
                         children: [
-                          Expanded(
-                            child: StatCard(
-                              title: 'Total Conversations',
-                              value: '1,247',
-                              icon: CupertinoIcons.chat_bubble_2,
+                          Container(
+                            height: 164,
+                            padding: EdgeInsets.only(top: 16),
+                            child: PageView(
+                              controller: PageController(
+                                viewportFraction: 0.95,
+                              ),
+                              padEnds: false,
+                              children: greetingsList.value
+                                  .asMap()
+                                  .entries
+                                  .map(
+                                    (entry) => GreetingCard(
+                                      data: entry.value,
+                                      isLastItem:
+                                          entry.key ==
+                                          greetingsList.value.length - 1,
+                                    ),
+                                  )
+                                  .toList(),
                             ),
                           ),
-                          SizedBox(width: 16),
-                          Expanded(
-                            child: StatCard(
-                              title: 'Languages Supported',
-                              value: '95+',
-                              icon: CupertinoIcons.globe,
-                            ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: StatCard(
+                                  title: 'Total Conversations',
+                                  value: '1,247',
+                                  icon: CupertinoIcons.chat_bubble_2,
+                                ),
+                              ),
+                              SizedBox(width: 16),
+                              Expanded(
+                                child: StatCard(
+                                  title: 'Languages Supported',
+                                  value: '95+',
+                                  icon: CupertinoIcons.globe,
+                                ),
+                              ),
+                            ],
                           ),
+                          QuickActionGrid(),
+                          RecentActivityList(),
                         ],
                       ),
-                      QuickActionGrid(),
-                      RecentActivityList(),
-                    ],
+                    ),
                   ),
                 ),
               ),
-            ),
+            ],
           ),
-        ],
-      ),
-      floatingActionButton: PromptFAB(),
+          floatingActionButton: PromptFAB(
+            onPromptTapped: (prompt) {
+              viewModel.callStaticPrompt(prompt.id);
+            },
+            availablePrompts: state.availablePrompts,
+          ),
+        );
+      },
     );
   }
 }
