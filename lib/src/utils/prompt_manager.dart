@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:ai_prompt_driven_app/src/model/prompt.dart';
-import 'package:ai_prompt_driven_app/src/model/view_configurable.dart';
 import 'package:http/http.dart' as http;
 
 class PromptManager {
@@ -22,38 +21,43 @@ class PromptManager {
 
   Future<Map<String, dynamic>?> callAIPrompt({
     required String userPrompt,
-    ViewConfigurable? currentViewConfigurable,
+    required Map<String, dynamic> viewConfigurableSchema,
   }) async {
-    // 1) Resolve API key from parameter, dart-define, or env
     final key = (const String.fromEnvironment('OPENAI_API_KEY').isNotEmpty
         ? const String.fromEnvironment('OPENAI_API_KEY')
         : Platform.environment['OPENAI_API_KEY']);
+
     if (key == null || key.isEmpty) {
       throw Exception('OpenAI API key not provided');
     }
 
-    // 2) Prepare the "current config" JSON
-    final currentConfigJson = currentViewConfigurable?.toJson() ?? {};
-
-    // 3) Build the chat messages
     final messages = [
       {
         'role': 'system',
         'content': '''
 You are a Flutter UI configuration expert.
-Given the current widget configuration and a user request,
-respond with **only** the updated configuration JSON.
-Do not include any explanations or extra fields.
+You will receive a JSON schema and a user request for UI changes.
+
+You must respond with **only** a JSON object containing the requested changes.
+- Use the schema to understand available properties and their types
+- Only include the properties that need to be changed
+- Return valid JSON that matches the schema structure
+- Do not include explanations, comments, or extra fields
+
+Response format: Pure JSON object only
 ''',
       },
       {
         'role': 'user',
         'content':
-            'Current config: ${jsonEncode(currentConfigJson)}\nUser request: $userPrompt',
+            '''
+Schema:
+${jsonEncode(viewConfigurableSchema)}
+
+User request: $userPrompt''',
       },
     ];
 
-    // 4) Call OpenAI
     final res = await http.post(
       Uri.parse('https://api.openai.com/v1/chat/completions'),
       headers: {
@@ -68,7 +72,6 @@ Do not include any explanations or extra fields.
       }),
     );
 
-    // 5) Handle response
     if (res.statusCode != 200) {
       final err = jsonDecode(res.body);
       throw Exception('OpenAI Error: ${err['error']['message']}');
@@ -77,7 +80,6 @@ Do not include any explanations or extra fields.
     final data = jsonDecode(res.body);
     final content = (data['choices'][0]['message']['content'] as String).trim();
 
-    // 6) Parse and return only the JSON
     return jsonDecode(content) as Map<String, dynamic>;
   }
 }

@@ -16,15 +16,9 @@ class ScaffoldConfig extends Equatable {
   ScaffoldConfig copyWith({String? backgroundColor, dynamic body}) =>
       ScaffoldConfig(backgroundColor: backgroundColor ?? this.backgroundColor);
 
-  static Map<String, dynamic> get schema => {
-    'type': 'object',
-    'description': 'Configuration for scaffold background styling.',
-    'properties': {
-      'backgroundColor': {
-        'type': 'string',
-        'format': 'hexColor',
-        'description': 'Hex ARGB string for background color, e.g., FF00008B',
-      },
-    },
-  };
+  static Map<String, dynamic> get schema {
+    return {
+      'backgroundColor': 'FFFFFFFF' // Example: white background (hex ARGB format)
+    };
+  }
 }

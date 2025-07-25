@@ -100,17 +100,13 @@ class ProfileViewModel {
     try {
       final result = await promptManager.callAIPrompt(
         userPrompt: userPrompt,
-        currentViewConfigurable: currentState.configurable,
+        viewConfigurableSchema: ProfileViewConfigurable.schema,
       );
-
-      if (result == null) {
-        return;
-      }
 
       updateState(
         currentState.copyWith(
           viewState: ProfileViewState.ready,
-          configurable: ProfileViewConfigurable.fromJson(result),
+          configurable: currentState.configurable?.merge(result),
         ),
       );
     } catch (e) {

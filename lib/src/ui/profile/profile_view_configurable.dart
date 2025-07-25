@@ -4,10 +4,7 @@ import 'package:ai_prompt_driven_app/src/model/view_configurable.dart';
 import 'package:equatable/equatable.dart';
 
 class ProfileViewConfigurable extends Equatable implements ViewConfigurable {
-  const ProfileViewConfigurable({
-    this.scaffoldConfig,
-    this.appBarConfig,
-  });
+  const ProfileViewConfigurable({this.scaffoldConfig, this.appBarConfig});
 
   factory ProfileViewConfigurable.fromJson(Map<String, dynamic> json) {
     return ProfileViewConfigurable(
@@ -34,30 +31,27 @@ class ProfileViewConfigurable extends Equatable implements ViewConfigurable {
     };
   }
 
-  static Map<String, dynamic> get schema => {
-    'type': 'profile',
-    'description': 'Configures the appearance and behavior of the Profile view.',
-    'properties': {
+  static Map<String, dynamic> get schema {
+    return {
       'scaffoldConfig': ScaffoldConfig.schema,
       'appBarConfig': AppBarConfig.schema,
-    },
-  };
-
+    };
+  }
 
   @override
-  ProfileViewConfigurable merge(Map<String, dynamic> updates) {
+  ProfileViewConfigurable merge(Map<String, dynamic>? updates) {
     final currentJson = toJson();
     final mergedJson = _deepMerge(currentJson, updates);
     return ProfileViewConfigurable.fromJson(mergedJson);
   }
 
   Map<String, dynamic> _deepMerge(
-    Map<String, dynamic> current,
-    Map<String, dynamic> updates,
+    Map<String, dynamic>? current,
+    Map<String, dynamic>? updates,
   ) {
-    final result = Map<String, dynamic>.from(current);
+    final result = Map<String, dynamic>.from(current ?? {});
 
-    updates.forEach((key, value) {
+    (updates ?? {}).forEach((key, value) {
       if (value is Map<String, dynamic> &&
           result[key] is Map<String, dynamic>) {
         result[key] = _deepMerge(result[key] as Map<String, dynamic>, value);

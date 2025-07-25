@@ -39,20 +39,27 @@ class HomeViewConfigurable extends Equatable implements ViewConfigurable {
     );
   }
 
+  static Map<String, dynamic> get schema {
+    return {
+      'scaffoldConfig': ScaffoldConfig.schema,
+      'appBarConfig': AppBarConfig.schema,
+    };
+  }
+
   @override
-  HomeViewConfigurable merge(Map<String, dynamic> updates) {
+  HomeViewConfigurable merge(Map<String, dynamic>? updates) {
     final currentJson = toJson();
     final mergedJson = _deepMerge(currentJson, updates);
     return HomeViewConfigurable.fromJson(mergedJson);
   }
 
   Map<String, dynamic> _deepMerge(
-    Map<String, dynamic> current,
-    Map<String, dynamic> updates,
+    Map<String, dynamic>? current,
+    Map<String, dynamic>? updates,
   ) {
-    final result = Map<String, dynamic>.from(current);
+    final result = Map<String, dynamic>.from(current ?? {});
 
-    updates.forEach((key, value) {
+    (updates ?? {}).forEach((key, value) {
       if (value is Map<String, dynamic> &&
           result[key] is Map<String, dynamic>) {
         result[key] = _deepMerge(result[key] as Map<String, dynamic>, value);

@@ -99,17 +99,13 @@ class HomeViewModel {
     try {
       final result = await promptManager.callAIPrompt(
         userPrompt: userPrompt,
-        currentViewConfigurable: currentState.configurable,
+        viewConfigurableSchema: HomeViewConfigurable.schema,
       );
-
-      if (result == null) {
-        return;
-      }
 
       updateState(
         currentState.copyWith(
           viewState: HomeViewState.ready,
-          configurable: HomeViewConfigurable.fromJson(result),
+          configurable: currentState.configurable?.merge(result),
         ),
       );
     } catch (e) {
