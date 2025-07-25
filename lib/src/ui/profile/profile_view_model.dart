@@ -1,4 +1,3 @@
-import 'dart:developer' as developer;
 import 'package:ai_prompt_driven_app/src/model/appbar_config.dart';
 import 'package:ai_prompt_driven_app/src/model/prompt.dart';
 import 'package:ai_prompt_driven_app/src/model/scaffold_config.dart';
@@ -110,7 +109,6 @@ class ProfileViewModel {
         ),
       );
     } catch (e) {
-      developer.log('Error calling AI prompt: $e', name: 'ProfileViewModel');
       updateState(currentState.copyWith(viewState: ProfileViewState.initial));
     }
   }

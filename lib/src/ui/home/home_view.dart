@@ -9,7 +9,7 @@ import 'package:ai_prompt_driven_app/src/widgets/dynamic_cupertino_sliver_naviga
 import 'package:ai_prompt_driven_app/src/ui/home/widgets/greeting_card.dart';
 import 'package:ai_prompt_driven_app/src/ui/home/widgets/quick_action_grid.dart';
 import 'package:ai_prompt_driven_app/src/ui/home/widgets/recent_activity_list.dart';
-import 'package:ai_prompt_driven_app/src/ui/home/widgets/stat_card.dart';
+import 'package:ai_prompt_driven_app/src/widgets/dynamic_stat_card.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -92,18 +92,14 @@ class _HomeViewState extends State<HomeView> {
                           Row(
                             children: [
                               Expanded(
-                                child: StatCard(
-                                  title: 'Total Conversations',
-                                  value: '1,247',
-                                  icon: CupertinoIcons.chat_bubble_2,
+                                child: DynamicStatCard(
+                                  config: state.configurable?.statCard1,
                                 ),
                               ),
                               SizedBox(width: 16),
                               Expanded(
-                                child: StatCard(
-                                  title: 'Languages Supported',
-                                  value: '95+',
-                                  icon: CupertinoIcons.globe,
+                                child: DynamicStatCard(
+                                  config: state.configurable?.statCard2,
                                 ),
                               ),
                             ],

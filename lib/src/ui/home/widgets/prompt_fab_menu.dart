@@ -67,7 +67,7 @@ class _PromptFABMenuState extends OverlayWidgetState<PromptFABMenu> {
                   children: [
                     FABMenuItem(
                       onTap: () {
-                        widget.onMenuSelection();
+                        // widget.onMenuSelection();
                         PromptInputField.show(
                           context,
                           layerLink: widget.layerLink,
@@ -81,7 +81,7 @@ class _PromptFABMenuState extends OverlayWidgetState<PromptFABMenu> {
                     if (widget.showReset)
                       FABMenuItem(
                         onTap: () {
-                          widget.onMenuSelection();
+                          // widget.onMenuSelection();
                           widget.onResetTapped();
                         },
                         title: 'Reset changes',
@@ -90,7 +90,7 @@ class _PromptFABMenuState extends OverlayWidgetState<PromptFABMenu> {
                     ...widget.availablePrompts.map((e) {
                       return FABMenuItem(
                         onTap: () {
-                          widget.onMenuSelection();
+                          // widget.onMenuSelection();
                           widget.onPromptTapped(e);
                         },
                         title: e.title,

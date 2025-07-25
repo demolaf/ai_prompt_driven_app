@@ -44,6 +44,21 @@ class Prompt extends Equatable {
         'appBarConfig': {'title': 'Dashboard'},
       },
     },
+    {
+      'id': '331',
+      'title': 'Change first stat card to Revenue',
+      'configurable': {
+        'type': 'home',
+        'statCard1': {
+          'title': 'Monthly Revenue',
+          'value': '\$24,750',
+          'icon': 'attach_money',
+          'backgroundColor': 'FFE8F5E8',
+          'iconColor': 'FF4CAF50',
+          'valueColor': 'FF2E7D32',
+        },
+      },
+    },
   ];
 
   static List<Map<String, dynamic>> get profilePrompts => [

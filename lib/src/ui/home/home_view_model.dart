@@ -1,6 +1,4 @@
-import 'package:ai_prompt_driven_app/src/model/appbar_config.dart';
 import 'package:ai_prompt_driven_app/src/model/prompt.dart';
-import 'package:ai_prompt_driven_app/src/model/scaffold_config.dart';
 import 'package:ai_prompt_driven_app/src/ui/home/home_view_configurable.dart';
 import 'package:ai_prompt_driven_app/src/utils/prompt_manager.dart';
 import 'package:equatable/equatable.dart';
@@ -19,10 +17,7 @@ class HomeState extends Equatable {
     : this(
         viewState: HomeViewState.initial,
         availablePrompts: [],
-        configurable: HomeViewConfigurable(
-          scaffoldConfig: ScaffoldConfig(backgroundColor: 'FFFFFFFF'),
-          appBarConfig: AppBarConfig(title: 'Home'),
-        ),
+        configurable: HomeViewConfigurable.initial(),
       );
 
   final HomeViewState viewState;

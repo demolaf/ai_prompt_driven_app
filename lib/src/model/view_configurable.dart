@@ -1,5 +1,6 @@
 import 'package:ai_prompt_driven_app/src/model/appbar_config.dart';
 import 'package:ai_prompt_driven_app/src/model/scaffold_config.dart';
+import 'package:ai_prompt_driven_app/src/model/stat_card_config.dart';
 import 'package:ai_prompt_driven_app/src/ui/home/home_view_configurable.dart';
 import 'package:ai_prompt_driven_app/src/ui/profile/profile_view_configurable.dart';
 
@@ -13,6 +14,12 @@ abstract class ViewConfigurable {
               : null,
           appBarConfig: json['appBarConfig'] != null
               ? AppBarConfig.fromJson(json['appBarConfig'])
+              : null,
+          statCard1: json['statCard1'] != null
+              ? StatCardConfig.fromJson(json['statCard1'])
+              : null,
+          statCard2: json['statCard2'] != null
+              ? StatCardConfig.fromJson(json['statCard2'])
               : null,
         );
       case 'profile':
