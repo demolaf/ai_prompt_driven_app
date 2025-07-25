@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ai_prompt_driven_app/src/ui/profile/widgets/profile_header.dart';
 import 'package:ai_prompt_driven_app/src/ui/profile/widgets/stats_section.dart';
-import 'package:ai_prompt_driven_app/src/ui/profile/widgets/settings_section.dart';
+import 'package:ai_prompt_driven_app/src/dynamic_widgets/dynamic_settings_section.dart';
 
 class ProfileView extends StatefulWidget {
   const ProfileView({super.key});
@@ -59,9 +59,11 @@ class _ProfileViewState extends State<ProfileView> {
                         children: [
                           ProfileHeader(),
                           StatsSection(),
-                          SettingsSection(
-                            darkModeEnabled: false,
-                            onDarkModeChanged: (value) {},
+                          DynamicSettingsSection(
+                            config: state.configurable?.settingsSectionConfig,
+                            onSettingChanged: (id, value) {
+                              // Handle setting changes here
+                            },
                           ),
                         ],
                       ),

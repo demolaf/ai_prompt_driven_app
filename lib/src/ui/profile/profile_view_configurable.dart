@@ -1,10 +1,31 @@
 import 'package:ai_prompt_driven_app/src/model/appbar_config.dart';
 import 'package:ai_prompt_driven_app/src/model/scaffold_config.dart';
+import 'package:ai_prompt_driven_app/src/model/settings_section_config.dart';
+import 'package:ai_prompt_driven_app/src/model/setting_model.dart';
 import 'package:ai_prompt_driven_app/src/model/view_configurable.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 
 class ProfileViewConfigurable extends Equatable implements ViewConfigurable {
-  const ProfileViewConfigurable({this.scaffoldConfig, this.appBarConfig});
+  const ProfileViewConfigurable({
+    this.scaffoldConfig,
+    this.appBarConfig,
+    this.settingsSectionConfig,
+  });
+
+  ProfileViewConfigurable.initial()
+    : this(
+        scaffoldConfig: ScaffoldConfig(backgroundColor: 'FFFFFFFF'),
+        appBarConfig: AppBarConfig(title: 'Profile'),
+        settingsSectionConfig: SettingsSectionConfig(
+          title: 'Settings',
+          titleFontSize: 18.0,
+          titleColor: CupertinoColors.label,
+          titleFontWeight: FontWeight.w600,
+          spacing: 16.0,
+          settings: SettingModel.defaultSettings,
+        ),
+      );
 
   factory ProfileViewConfigurable.fromJson(Map<String, dynamic> json) {
     return ProfileViewConfigurable(
@@ -14,20 +35,25 @@ class ProfileViewConfigurable extends Equatable implements ViewConfigurable {
       appBarConfig: json['appBarConfig'] != null
           ? AppBarConfig.fromJson(json['appBarConfig'])
           : null,
+      settingsSectionConfig: json['settingsSectionConfig'] != null
+          ? SettingsSectionConfig.fromJson(json['settingsSectionConfig'])
+          : null,
     );
   }
 
   final ScaffoldConfig? scaffoldConfig;
   final AppBarConfig? appBarConfig;
+  final SettingsSectionConfig? settingsSectionConfig;
 
   @override
-  List<Object?> get props => [scaffoldConfig, appBarConfig];
+  List<Object?> get props => [scaffoldConfig, appBarConfig, settingsSectionConfig];
 
   @override
   Map<String, dynamic> toJson() {
     return {
       'scaffoldConfig': scaffoldConfig?.toJson(),
       'appBarConfig': appBarConfig?.toJson(),
+      'settingsSectionConfig': settingsSectionConfig?.toJson(),
     };
   }
 
@@ -35,6 +61,7 @@ class ProfileViewConfigurable extends Equatable implements ViewConfigurable {
     return {
       'scaffoldConfig': ScaffoldConfig.schema,
       'appBarConfig': AppBarConfig.schema,
+      'settingsSectionConfig': SettingsSectionConfig.schema,
     };
   }
 

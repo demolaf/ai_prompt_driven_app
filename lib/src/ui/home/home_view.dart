@@ -1,14 +1,12 @@
 import 'package:ai_prompt_driven_app/src/ui/home/home_view_model.dart';
 import 'package:ai_prompt_driven_app/src/widgets/ux_feedback_overlay.dart';
-import 'package:ai_prompt_driven_app/src/utils/debug_logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ai_prompt_driven_app/src/model/greeting_model.dart';
 import 'package:ai_prompt_driven_app/src/ui/profile/profile_view.dart';
 import 'package:ai_prompt_driven_app/src/ui/home/widgets/prompt_fab.dart';
 import 'package:ai_prompt_driven_app/src/dynamic_widgets/dynamic_scaffold.dart';
 import 'package:ai_prompt_driven_app/src/dynamic_widgets/dynamic_cupertino_sliver_navigation_bar.dart';
-import 'package:ai_prompt_driven_app/src/ui/home/widgets/greeting_card.dart';
+import 'package:ai_prompt_driven_app/src/dynamic_widgets/dynamic_greeting_card.dart';
 import 'package:ai_prompt_driven_app/src/ui/home/widgets/quick_action_grid.dart';
 import 'package:ai_prompt_driven_app/src/ui/home/widgets/recent_activity_list.dart';
 import 'package:ai_prompt_driven_app/src/dynamic_widgets/dynamic_stat_card.dart';
@@ -23,20 +21,10 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   final viewModel = HomeViewModel();
 
-  ValueNotifier<List<GreetingModel>> greetingsList = ValueNotifier(
-    GreetingModel.getPlaceholderData,
-  );
-
   @override
   void initState() {
     viewModel.initialize();
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    greetingsList.dispose();
-    super.dispose();
   }
 
   @override
@@ -84,18 +72,7 @@ class _HomeViewState extends State<HomeView> {
                                   viewportFraction: 0.95,
                                 ),
                                 padEnds: false,
-                                children: greetingsList.value
-                                    .asMap()
-                                    .entries
-                                    .map(
-                                      (entry) => GreetingCard(
-                                        data: entry.value,
-                                        isLastItem:
-                                            entry.key ==
-                                            greetingsList.value.length - 1,
-                                      ),
-                                    )
-                                    .toList(),
+                                children: greetingsList(state),
                               ),
                             ),
                             Row(
@@ -141,5 +118,17 @@ class _HomeViewState extends State<HomeView> {
         );
       },
     );
+  }
+
+  List<DynamicGreetingCard> greetingsList(HomeState state) {
+    final greetings = state.configurable?.greetingCardConfig?.greetingsList ?? [];
+    return greetings.asMap().entries.map((entry) {
+      final isLastItem = entry.key == greetings.length - 1;
+      return DynamicGreetingCard(
+        data: entry.value,
+        isLastItem: isLastItem,
+        config: state.configurable?.greetingCardConfig,
+      );
+    }).toList();
   }
 }

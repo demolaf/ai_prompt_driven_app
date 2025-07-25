@@ -52,10 +52,25 @@ class Prompt extends Equatable {
         'statCard1': {
           'title': 'Monthly Revenue',
           'value': '\$24,750',
-          'icon': 'attach_money',
+          'icon': {
+            'codePoint': 0xF89A, // attach_money icon
+            'fontFamily': '',
+            'fontPackage': '',
+          },
           'backgroundColor': 'FFE8F5E8',
           'iconColor': 'FF4CAF50',
           'valueColor': 'FF2E7D32',
+        },
+      },
+    },
+    {
+      'id': '441',
+      'title': 'Make greeting cards sunset themed',
+      'configurable': {
+        'type': 'home',
+        'greetingCardConfig': {
+          'gradientColors': [4294937600, 4294951175],
+          // Orange to Pink gradient
         },
       },
     },
@@ -69,6 +84,29 @@ class Prompt extends Equatable {
         'type': 'profile',
         'scaffoldConfig': {'backgroundColor': 'FF8B0000'},
         'appBarConfig': {'title': 'Profile'},
+      },
+    },
+    {
+      'id': '456',
+      'title': 'Add notification settings',
+      'configurable': {
+        'type': 'profile',
+        'settingsSectionConfig': {
+          'settings': [
+            {
+              'id': 'notifications',
+              'title': 'Notifications',
+              'subtitle': 'Enable push notifications',
+              'icon': {
+                'codePoint': 0xF3E2,
+                'fontFamily': 'CupertinoIcons',
+                'fontPackage': 'cupertino_icons',
+              },
+              'type': 'toggle',
+              'value': true,
+            },
+          ],
+        },
       },
     },
   ];

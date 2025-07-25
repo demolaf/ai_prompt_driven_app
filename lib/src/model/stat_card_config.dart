@@ -52,18 +52,32 @@ class StatCardConfig extends Equatable {
         'visible': visible,
       };
 
-  factory StatCardConfig.fromJson(Map<String, dynamic> json) => StatCardConfig(
-        title: json['title'] ?? '',
-        value: json['value'] ?? '',
-        icon: json['icon'] as String?,
-        backgroundColor: json['backgroundColor'] as String?,
-        titleColor: json['titleColor'] as String?,
-        valueColor: json['valueColor'] as String?,
-        iconColor: json['iconColor'] as String?,
-        padding: json['padding']?.toDouble(),
-        borderRadius: json['borderRadius']?.toDouble(),
-        visible: json['visible'] ?? true,
-      );
+  factory StatCardConfig.fromJson(Map<String, dynamic> json) {
+    String? iconString;
+    final iconData = json['icon'];
+    
+    if (iconData is Map<String, dynamic>) {
+      // New format: convert back to string representation for StatCard
+      // For now, we'll use a placeholder or extract meaningful info
+      iconString = 'icon_${iconData['codePoint'].toRadixString(16)}';
+    } else if (iconData is String) {
+      // Legacy string format
+      iconString = iconData;
+    }
+    
+    return StatCardConfig(
+      title: json['title'] ?? '',
+      value: json['value'] ?? '',
+      icon: iconString,
+      backgroundColor: json['backgroundColor'] as String?,
+      titleColor: json['titleColor'] as String?,
+      valueColor: json['valueColor'] as String?,
+      iconColor: json['iconColor'] as String?,
+      padding: json['padding']?.toDouble(),
+      borderRadius: json['borderRadius']?.toDouble(),
+      visible: json['visible'] ?? true,
+    );
+  }
 
   StatCardConfig copyWith({
     String? title,

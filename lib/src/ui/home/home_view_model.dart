@@ -140,6 +140,7 @@ class HomeViewModel {
     try {
       final result = await promptManager.callAIPrompt(
         userPrompt: userPrompt,
+        currentViewConfigurable: currentState.configurable!,
         viewConfigurableSchema: HomeViewConfigurable.schema,
       );
 

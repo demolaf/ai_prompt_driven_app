@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:ai_prompt_driven_app/src/model/prompt.dart';
+import 'package:ai_prompt_driven_app/src/model/view_configurable.dart';
 import 'package:ai_prompt_driven_app/src/utils/debug_logger.dart';
 import 'package:http/http.dart' as http;
 
@@ -25,6 +26,7 @@ class PromptManager {
 
   Future<Map<String, dynamic>?> callAIPrompt({
     required String userPrompt,
+    required ViewConfigurable currentViewConfigurable,
     required Map<String, dynamic> viewConfigurableSchema,
     AIProvider provider = AIProvider.anthropic,
   }) async {
@@ -36,8 +38,8 @@ class PromptManager {
     
     try {
       final result = switch (provider) {
-        AIProvider.openai => await _callOpenAIPrompt(userPrompt, viewConfigurableSchema),
-        AIProvider.anthropic => await _callAnthropicPrompt(userPrompt, viewConfigurableSchema),
+        AIProvider.openai => await _callOpenAIPrompt(userPrompt, currentViewConfigurable, viewConfigurableSchema),
+        AIProvider.anthropic => await _callAnthropicPrompt(userPrompt, currentViewConfigurable, viewConfigurableSchema),
       };
       
       DebugLogger.aiCall(provider.name, userPrompt, response: result);
@@ -55,6 +57,7 @@ class PromptManager {
 
   Future<Map<String, dynamic>?> _callOpenAIPrompt(
     String userPrompt,
+    ViewConfigurable currentViewConfigurable,
     Map<String, dynamic> viewConfigurableSchema,
   ) async {
     final key = (const String.fromEnvironment('OPENAI_API_KEY').isNotEmpty
@@ -70,11 +73,12 @@ class PromptManager {
         'role': 'system',
         'content': '''
 You are a Flutter UI configuration expert.
-You will receive a JSON schema and a user request for UI changes.
+You will receive a JSON schema, current configuration state, and a user request for UI changes.
 
 You must respond with **only** a JSON object containing the requested changes.
 - Use the schema to understand available properties and their types
-- Only include the properties that need to be changed
+- Consider the current configuration to understand existing customizations
+- Only include the properties that need to be changed from the current state
 - Return valid JSON that matches the schema structure
 - Do not include explanations, comments, or extra fields
 
@@ -87,6 +91,9 @@ Response format: Pure JSON object only
             '''
 Schema:
 ${jsonEncode(viewConfigurableSchema)}
+
+Current Configuration:
+${jsonEncode(currentViewConfigurable.toJson())}
 
 User request: $userPrompt''',
       },
@@ -119,6 +126,7 @@ User request: $userPrompt''',
 
   Future<Map<String, dynamic>?> _callAnthropicPrompt(
     String userPrompt,
+    ViewConfigurable currentViewConfigurable,
     Map<String, dynamic> viewConfigurableSchema,
   ) async {
     final key = (const String.fromEnvironment('ANTHROPIC_API_KEY').isNotEmpty
@@ -132,16 +140,20 @@ User request: $userPrompt''',
     final prompt =
         '''
 You are a Flutter UI configuration expert.
-You will receive a JSON schema and a user request for UI changes.
+You will receive a JSON schema, current configuration state, and a user request for UI changes.
 
 You must respond with **only** a JSON object containing the requested changes.
 - Use the schema to understand available properties and their types
-- Only include the properties that need to be changed
+- Consider the current configuration to understand existing customizations
+- Only include the properties that need to be changed from the current state
 - Return valid JSON that matches the schema structure
 - Do not include explanations, comments, or extra fields
 
 Schema:
 ${jsonEncode(viewConfigurableSchema)}
+
+Current Configuration:
+${jsonEncode(currentViewConfigurable.toJson())}
 
 User request: $userPrompt
 

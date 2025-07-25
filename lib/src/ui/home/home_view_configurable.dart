@@ -1,8 +1,11 @@
 import 'package:ai_prompt_driven_app/src/model/appbar_config.dart';
 import 'package:ai_prompt_driven_app/src/model/scaffold_config.dart';
 import 'package:ai_prompt_driven_app/src/model/stat_card_config.dart';
+import 'package:ai_prompt_driven_app/src/model/greeting_card_config.dart';
+import 'package:ai_prompt_driven_app/src/model/greeting_model.dart';
 import 'package:ai_prompt_driven_app/src/model/view_configurable.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
 class HomeViewConfigurable extends Equatable implements ViewConfigurable {
   const HomeViewConfigurable({
@@ -10,12 +13,14 @@ class HomeViewConfigurable extends Equatable implements ViewConfigurable {
     this.appBarConfig,
     this.statCard1,
     this.statCard2,
+    this.greetingCardConfig,
   });
 
   final ScaffoldConfig? scaffoldConfig;
   final AppBarConfig? appBarConfig;
   final StatCardConfig? statCard1;
   final StatCardConfig? statCard2;
+  final GreetingCardConfig? greetingCardConfig;
 
   HomeViewConfigurable.initial()
     : this(
@@ -31,6 +36,16 @@ class HomeViewConfigurable extends Equatable implements ViewConfigurable {
           value: '95+',
           icon: 'globe',
         ),
+        greetingCardConfig: GreetingCardConfig(
+          gradientColors: [Colors.blue.shade300, Colors.purple.shade300],
+          borderRadius: 12.0,
+          textColor: Colors.white,
+          greetingFontSize: 24.0,
+          questionFontSize: 16.0,
+          languageFontSize: 12.0,
+          padding: const EdgeInsets.all(16),
+          greetingsList: GreetingModel.getPlaceholderData,
+        ),
       );
 
   @override
@@ -39,6 +54,7 @@ class HomeViewConfigurable extends Equatable implements ViewConfigurable {
     appBarConfig,
     statCard1,
     statCard2,
+    greetingCardConfig,
   ];
 
   @override
@@ -47,6 +63,7 @@ class HomeViewConfigurable extends Equatable implements ViewConfigurable {
     'appBarConfig': appBarConfig?.toJson(),
     'statCard1': statCard1?.toJson(),
     'statCard2': statCard2?.toJson(),
+    'greetingCardConfig': greetingCardConfig?.toJson(),
   };
 
   factory HomeViewConfigurable.fromJson(Map<String, dynamic> json) {
@@ -63,6 +80,9 @@ class HomeViewConfigurable extends Equatable implements ViewConfigurable {
       statCard2: json['statCard2'] != null
           ? StatCardConfig.fromJson(json['statCard2'])
           : null,
+      greetingCardConfig: json['greetingCardConfig'] != null
+          ? GreetingCardConfig.fromJson(json['greetingCardConfig'])
+          : null,
     );
   }
 
@@ -71,12 +91,14 @@ class HomeViewConfigurable extends Equatable implements ViewConfigurable {
     AppBarConfig? appBarConfig,
     StatCardConfig? statCard1,
     StatCardConfig? statCard2,
+    GreetingCardConfig? greetingCardConfig,
   }) {
     return HomeViewConfigurable(
       scaffoldConfig: scaffoldConfig ?? this.scaffoldConfig,
       appBarConfig: appBarConfig ?? this.appBarConfig,
       statCard1: statCard1 ?? this.statCard1,
       statCard2: statCard2 ?? this.statCard2,
+      greetingCardConfig: greetingCardConfig ?? this.greetingCardConfig,
     );
   }
 
@@ -86,6 +108,7 @@ class HomeViewConfigurable extends Equatable implements ViewConfigurable {
       'appBarConfig': AppBarConfig.schema,
       'statCard1': StatCardConfig.schema,
       'statCard2': StatCardConfig.schema,
+      'greetingCardConfig': GreetingCardConfig.schema,
     };
   }
 

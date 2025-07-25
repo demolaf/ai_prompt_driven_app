@@ -9,6 +9,18 @@ class GreetingModel {
     required this.language,
   });
 
+  factory GreetingModel.fromJson(Map<String, dynamic> json) {
+    return GreetingModel(
+      greeting: json['greeting'] as String,
+      question: json['question'] as String,
+      language: json['language'] as String,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {'greeting': greeting, 'question': question, 'language': language};
+  }
+
   static List<GreetingModel> get getPlaceholderData => [
     GreetingModel(
       greeting: 'Hello',
