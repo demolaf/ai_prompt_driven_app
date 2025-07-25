@@ -1,6 +1,8 @@
+import 'package:ai_prompt_driven_app/src/model/appbar_config.dart';
 import 'package:ai_prompt_driven_app/src/model/scaffold_config.dart';
 import 'package:ai_prompt_driven_app/src/model/view_configurable.dart';
 import 'package:ai_prompt_driven_app/src/ui/home/home_view_configurable.dart';
+import 'package:ai_prompt_driven_app/src/ui/profile/profile_view_configurable.dart';
 
 class Prompt {
   Prompt({required this.id, required this.title, required this.configurable});
@@ -30,8 +32,9 @@ class Prompt {
       Prompt(
         id: '123',
         title: 'Make background red',
-        configurable: HomeViewConfigurable(
+        configurable: ProfileViewConfigurable(
           scaffoldConfig: ScaffoldConfig(backgroundColor: 'FF8B0000'),
+          appBarConfig: AppBarConfig(title: 'Profile'),
         ),
       ),
     ];
@@ -44,7 +47,7 @@ class PromptManager {
   }
 
   List<Prompt> getProfilePrompts() {
-    return Prompt.homePrompts;
+    return Prompt.profilePrompts;
   }
 
   Prompt callPrompt(String id) {
