@@ -10,9 +10,6 @@ class PromptInputField extends OverlayWidget {
     this.onSubmit,
   });
 
-  // TODO(demolaf): add this to the static prompts available
-  static double width(BuildContext context) =>
-      MediaQuery.of(context).size.width * 0.7;
 
   final Function(String)? onSubmit;
 
@@ -68,26 +65,29 @@ class _PromptInputFieldState extends OverlayWidgetState<PromptInputField> {
       child: Stack(
         children: [
           ModalBarrier(onDismiss: dismiss),
-          CompositedTransformFollower(
-            link: widget.layerLink,
-            showWhenUnlinked: false,
-            offset: Offset(
-              -(PromptInputField.width(context) + 16),
-              -(widget.sourceWidgetSize.height + 100),
-            ),
-            child: Material(
-              type: MaterialType.transparency,
-              child: PromptInputContent(
-                width: PromptInputField.width(context),
-                textController: _textController,
-                focusNode: _focusNode,
-                onSubmit: () {
-                  if (_textController.text.trim().isNotEmpty) {
-                    widget.onSubmit?.call(_textController.text);
-                  }
-                },
-              ),
-            ),
+          LayoutBuilder(
+            builder: (context, constraints) {
+              return CompositedTransformFollower(
+                link: widget.layerLink,
+                showWhenUnlinked: false,
+                targetAnchor: Alignment.bottomLeft,
+                followerAnchor: Alignment.bottomRight,
+                offset: Offset(-16, 0),
+                child: Material(
+                  type: MaterialType.transparency,
+                  child: PromptInputContent(
+                    maxWidth: constraints.maxWidth - widget.sourceWidgetSize.width - 48,
+                    textController: _textController,
+                    focusNode: _focusNode,
+                    onSubmit: () {
+                      if (_textController.text.trim().isNotEmpty) {
+                        widget.onSubmit?.call(_textController.text);
+                      }
+                    },
+                  ),
+                ),
+              );
+            },
           ),
         ],
       ),
@@ -97,14 +97,14 @@ class _PromptInputFieldState extends OverlayWidgetState<PromptInputField> {
 
 class PromptInputContent extends StatelessWidget {
   const PromptInputContent({
-    required this.width,
+    required this.maxWidth,
     required this.textController,
     required this.focusNode,
     required this.onSubmit,
     super.key,
   });
 
-  final double width;
+  final double maxWidth;
   final TextEditingController textController;
   final FocusNode focusNode;
   final VoidCallback onSubmit;
@@ -113,7 +113,7 @@ class PromptInputContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(16),
-      width: width,
+      constraints: BoxConstraints(maxWidth: maxWidth),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
