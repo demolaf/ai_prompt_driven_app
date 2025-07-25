@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class OverlayManager {
   OverlayEntry? _entry;
   bool _isVisible = false;
+  Widget? _currentChild;
 
   bool get isVisible => _isVisible;
 
@@ -14,11 +15,19 @@ class OverlayManager {
     if (_isVisible) return;
 
     final overlay = Overlay.of(context);
+    _currentChild = child;
 
-    _entry = OverlayEntry(builder: (context) => child);
+    _entry = OverlayEntry(builder: (context) => _currentChild!);
 
     overlay.insert(_entry!);
     _isVisible = true;
+  }
+
+  void update({required Widget child}) {
+    if (!_isVisible || _entry == null) return;
+    
+    _currentChild = child;
+    _entry!.markNeedsBuild();
   }
 
   void hide({VoidCallback? onHide}) {
@@ -26,6 +35,7 @@ class OverlayManager {
 
     _entry?.remove();
     _entry = null;
+    _currentChild = null;
     _isVisible = false;
     onHide?.call();
   }

@@ -49,6 +49,36 @@ class _PromptFABState extends State<PromptFAB>
   }
 
   @override
+  void didUpdateWidget(PromptFAB oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    // If showReset changed and menu is visible, update the overlay
+    if (oldWidget.showReset != widget.showReset && _menuOverlay.isVisible) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && _menuOverlay.isVisible) {
+          _menuOverlay.update(
+            child: PromptFABMenu(
+              onMenuSelection: () {
+                hideMenu();
+              },
+              layerLink: layerLink,
+              onPromptTapped: widget.onPromptTapped,
+              onResetTapped: widget.onResetTapped,
+              sourceWidgetSize: (context.findRenderObject()! as RenderBox).size,
+              fabGlobalPosition: (context.findRenderObject()! as RenderBox)
+                  .localToGlobal(Offset.zero),
+              onDismiss: hideMenu,
+              availablePrompts: widget.availablePrompts,
+              showReset: widget.showReset,
+              onAskAISubmit: widget.onAskAISubmit,
+            ),
+          );
+        }
+      });
+    }
+  }
+
+  @override
   void dispose() {
     _menuOverlay.dispose();
     _rotationAnimationController.dispose();

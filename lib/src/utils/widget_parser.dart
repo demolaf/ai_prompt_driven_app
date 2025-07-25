@@ -1,98 +1,11 @@
-import 'package:ai_prompt_driven_app/src/model/stat_card_config.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class DynamicStatCard extends StatelessWidget {
-  const DynamicStatCard({
-    this.config,
-    super.key,
-  });
+/// Utility class for parsing widget configuration values
+class WidgetParser {
+  WidgetParser._();
 
-  final StatCardConfig? config;
-
-  @override
-  Widget build(BuildContext context) {
-    return Visibility(
-      visible: config?.visible ?? true,
-      child: _buildCard(),
-    );
-  }
-
-  Widget _buildCard() {
-    // Show empty container if no config provided
-    if (config == null) {
-      return Container(
-        padding: EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: CupertinoColors.systemGrey6,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Icon(
-              Icons.analytics,
-              size: 24,
-              color: CupertinoColors.systemGrey,
-            ),
-            SizedBox(height: 8),
-            Text(
-              '--',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: CupertinoColors.systemGrey,
-              ),
-            ),
-            Text(
-              'No data',
-              style: TextStyle(
-                fontSize: 12,
-                color: CupertinoColors.systemGrey,
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
-    return Container(
-      padding: EdgeInsets.all(config!.padding ?? 16),
-      decoration: BoxDecoration(
-        color: _parseColor(config!.backgroundColor) ?? CupertinoColors.systemGrey6,
-        borderRadius: BorderRadius.circular(config!.borderRadius ?? 12),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (config!.icon != null)
-            Icon(
-              _parseIcon(config!.icon!),
-              size: 24,
-              color: _parseColor(config!.iconColor) ?? CupertinoColors.systemBlue,
-            ),
-          if (config!.icon != null) SizedBox(height: 8),
-          Text(
-            config!.value,
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: _parseColor(config!.valueColor) ?? CupertinoColors.label,
-            ),
-          ),
-          Text(
-            config!.title,
-            style: TextStyle(
-              fontSize: 12,
-              color: _parseColor(config!.titleColor) ?? CupertinoColors.secondaryLabel,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Color? _parseColor(dynamic colorValue) {
+  /// Parses a color value from various formats
+  static Color? parseColor(dynamic colorValue) {
     if (colorValue == null) return null;
 
     if (colorValue is String) {
@@ -143,7 +56,8 @@ class DynamicStatCard extends StatelessWidget {
     return null;
   }
 
-  IconData _parseIcon(String iconName) {
+  /// Parses an icon name string to IconData
+  static IconData parseIcon(String iconName) {
     // Map string names to IconData
     switch (iconName.toLowerCase()) {
       case 'star':

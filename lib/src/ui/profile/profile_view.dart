@@ -1,6 +1,6 @@
 import 'package:ai_prompt_driven_app/src/ui/home/widgets/prompt_fab.dart';
 import 'package:ai_prompt_driven_app/src/ui/profile/profile_view_model.dart';
-import 'package:ai_prompt_driven_app/src/widgets/dynamic_scaffold.dart';
+import 'package:ai_prompt_driven_app/src/dynamic_widgets/dynamic_scaffold.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ai_prompt_driven_app/src/ui/profile/widgets/profile_header.dart';
