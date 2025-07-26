@@ -1,11 +1,11 @@
+import 'package:ai_prompt_driven_app/src/shared_widgets/dynamic_cupertino_sliver_navigation_bar.dart';
+import 'package:ai_prompt_driven_app/src/shared_widgets/dynamic_scaffold.dart';
 import 'package:ai_prompt_driven_app/src/ui/home/home_view_model.dart';
-import 'package:ai_prompt_driven_app/src/widgets/ux_feedback_overlay.dart';
+import 'package:ai_prompt_driven_app/src/shared_widgets/ux_feedback_overlay.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ai_prompt_driven_app/src/ui/profile/profile_view.dart';
 import 'package:ai_prompt_driven_app/src/ui/home/widgets/prompt_fab.dart';
-import 'package:ai_prompt_driven_app/src/dynamic_widgets/dynamic_scaffold.dart';
-import 'package:ai_prompt_driven_app/src/dynamic_widgets/dynamic_cupertino_sliver_navigation_bar.dart';
 import 'package:ai_prompt_driven_app/src/ui/home/widgets/dynamic_greeting_card.dart';
 import 'package:ai_prompt_driven_app/src/ui/home/widgets/dynamic_quick_action_grid.dart';
 import 'package:ai_prompt_driven_app/src/ui/home/widgets/recent_activity_list.dart';
