@@ -6,7 +6,6 @@
 
 1. **Clone the repository**
    ```bash
-   # Replace with your actual repository URL
    git clone https://github.com/demolaf/ai_prompt_driven_app
    cd ai_prompt_driven_app
    ```
