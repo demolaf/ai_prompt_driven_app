@@ -5,7 +5,9 @@ class ProfileHeaderConfig {
   factory ProfileHeaderConfig.fromJson(Map<String, dynamic> json) {
     return ProfileHeaderConfig(
       avatarSize: WidgetParser.parseDoubleFromJson(json['avatarSize']),
-      avatarBackgroundColor: WidgetParser.parseColorFromJson(json['avatarBackgroundColor']),
+      avatarBackgroundColor: WidgetParser.parseColorFromJson(
+        json['avatarBackgroundColor'],
+      ),
       avatarIcon: json['avatarIcon'] as String?,
       avatarIconSize: WidgetParser.parseDoubleFromJson(json['avatarIconSize']),
       avatarIconColor: WidgetParser.parseColorFromJson(json['avatarIconColor']),
@@ -67,7 +69,9 @@ class ProfileHeaderConfig {
     return {
       if (avatarSize != null) 'avatarSize': avatarSize,
       if (avatarBackgroundColor != null)
-        'avatarBackgroundColor': WidgetParser.colorToInt(avatarBackgroundColor!),
+        'avatarBackgroundColor': WidgetParser.colorToInt(
+          avatarBackgroundColor!,
+        ),
       if (avatarIcon != null) 'avatarIcon': avatarIcon,
       if (avatarIconSize != null) 'avatarIconSize': avatarIconSize,
       if (avatarIconColor != null)
@@ -81,13 +85,13 @@ class ProfileHeaderConfig {
       if (nameColor != null) 'nameColor': WidgetParser.colorToInt(nameColor!),
       if (email != null) 'email': email,
       if (emailFontSize != null) 'emailFontSize': emailFontSize,
-      if (emailColor != null) 'emailColor': WidgetParser.colorToInt(emailColor!),
+      if (emailColor != null)
+        'emailColor': WidgetParser.colorToInt(emailColor!),
       'showAvatar': showAvatar,
       'showName': showName,
       'showEmail': showEmail,
     };
   }
-
 
   static Map<String, dynamic> get schema => {
     'type': 'object',

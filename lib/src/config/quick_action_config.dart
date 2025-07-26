@@ -101,7 +101,8 @@ class QuickActionConfig {
     return {
       if (title != null) 'title': title,
       if (titleFontSize != null) 'titleFontSize': titleFontSize,
-      if (titleColor != null) 'titleColor': WidgetParser.colorToInt(titleColor!),
+      if (titleColor != null)
+        'titleColor': WidgetParser.colorToInt(titleColor!),
       if (titleFontWeight != null)
         'titleFontWeight': WidgetParser.fontWeightToString(titleFontWeight!),
       'layout': layout.name,
