@@ -5,9 +5,9 @@ import 'package:ai_prompt_driven_app/src/dynamic_widgets/dynamic_scaffold.dart';
 import 'package:ai_prompt_driven_app/src/widgets/ux_feedback_overlay.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ai_prompt_driven_app/src/dynamic_widgets/dynamic_profile_header.dart';
-import 'package:ai_prompt_driven_app/src/dynamic_widgets/dynamic_stats_section.dart';
-import 'package:ai_prompt_driven_app/src/dynamic_widgets/dynamic_settings_section.dart';
+import 'package:ai_prompt_driven_app/src/ui/profile/widgets/dynamic_profile_header.dart';
+import 'package:ai_prompt_driven_app/src/ui/profile/widgets/dynamic_stats_section.dart';
+import 'package:ai_prompt_driven_app/src/ui/profile/widgets/dynamic_settings_section.dart';
 
 class ProfileView extends StatefulWidget {
   const ProfileView({super.key});
