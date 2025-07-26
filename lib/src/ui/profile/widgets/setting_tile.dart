@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:ai_prompt_driven_app/src/model/setting_model.dart';
+import 'package:ai_prompt_driven_app/src/model/setting.dart';
 import 'package:ai_prompt_driven_app/src/utils/widget_parser.dart';
 
 class SettingTile extends StatelessWidget {

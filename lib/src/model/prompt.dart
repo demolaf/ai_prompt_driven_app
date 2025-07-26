@@ -2,6 +2,13 @@ import 'package:ai_prompt_driven_app/src/model/view_configurable.dart';
 import 'package:equatable/equatable.dart';
 
 class Prompt extends Equatable {
+  factory Prompt.fromJson(Map<String, dynamic> json) {
+    return Prompt(
+      id: json['id'] as String,
+      title: json['title'] as String,
+      configurable: ViewConfigurable.fromJson(json['configurable']),
+    );
+  }
   const Prompt({
     required this.id,
     required this.title,
@@ -14,14 +21,6 @@ class Prompt extends Equatable {
 
   @override
   List<Object?> get props => [id, title, configurable];
-
-  factory Prompt.fromJson(Map<String, dynamic> json) {
-    return Prompt(
-      id: json['id'] as String,
-      title: json['title'] as String,
-      configurable: ViewConfigurable.fromJson(json['configurable']),
-    );
-  }
 
   static List<Map<String, dynamic>> get allPrompts {
     return [...homePrompts, ...profilePrompts];

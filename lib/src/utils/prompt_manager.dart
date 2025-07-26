@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:ai_prompt_driven_app/src/model/prompt.dart';
 import 'package:ai_prompt_driven_app/src/model/view_configurable.dart';
 import 'package:ai_prompt_driven_app/src/utils/debug_logger.dart';
@@ -135,18 +136,24 @@ User request: $userPrompt''',
     final data = jsonDecode(res.body);
     final content = (data['choices'][0]['message']['content'] as String).trim();
 
-    DebugLogger.info('OpenAI raw response', data: {
-      'statusCode': res.statusCode,
-      'content': content,
-      'usage': data['usage'],
-    });
+    DebugLogger.info(
+      'OpenAI raw response',
+      data: {
+        'statusCode': res.statusCode,
+        'content': content,
+        'usage': data['usage'],
+      },
+    );
 
     final parsedResult = jsonDecode(content) as Map<String, dynamic>;
-    
-    DebugLogger.info('OpenAI parsed result', data: {
-      'parsedKeys': parsedResult.keys.toList(),
-      'parsedData': parsedResult,
-    });
+
+    DebugLogger.info(
+      'OpenAI parsed result',
+      data: {
+        'parsedKeys': parsedResult.keys.toList(),
+        'parsedData': parsedResult,
+      },
+    );
 
     return parsedResult;
   }
@@ -210,21 +217,25 @@ Response (JSON only):''';
     final data = jsonDecode(res.body);
     final content = (data['content'][0]['text'] as String).trim();
 
-    DebugLogger.info('Anthropic raw response', data: {
-      'statusCode': res.statusCode,
-      'content': content,
-      'usage': data['usage'],
-    });
+    DebugLogger.info(
+      'Anthropic raw response',
+      data: {
+        'statusCode': res.statusCode,
+        'content': content,
+        'usage': data['usage'],
+      },
+    );
 
     // Extract JSON from Claude's response (it might include explanations)
     final jsonMatch = RegExp(r'\{[\s\S]*\}').firstMatch(content);
     Map<String, dynamic> parsedResult;
-    
+
     if (jsonMatch != null) {
       final extractedJson = jsonMatch.group(0)!;
-      DebugLogger.info('Anthropic extracted JSON', data: {
-        'extractedJson': extractedJson,
-      });
+      DebugLogger.info(
+        'Anthropic extracted JSON',
+        data: {'extractedJson': extractedJson},
+      );
       parsedResult = jsonDecode(extractedJson) as Map<String, dynamic>;
     } else {
       // If no JSON found, try parsing the entire content
@@ -243,15 +254,20 @@ Response (JSON only):''';
       }
     }
 
-    DebugLogger.info('Anthropic parsed result', data: {
-      'parsedKeys': parsedResult.keys.toList(),
-      'parsedData': parsedResult,
-    });
+    DebugLogger.info(
+      'Anthropic parsed result',
+      data: {
+        'parsedKeys': parsedResult.keys.toList(),
+        'parsedData': parsedResult,
+      },
+    );
 
     // Additional logging for all AI responses
-    print('=== FULL AI RESPONSE ===');
-    print(parsedResult);
-    print('========================');
+    if (kDebugMode) {
+      print('=== FULL AI RESPONSE ===');
+      print(parsedResult);
+      print('========================');
+    }
 
     return parsedResult;
   }

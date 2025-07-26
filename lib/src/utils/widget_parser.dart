@@ -138,4 +138,76 @@ class WidgetParser {
         return Icons.analytics; // Default fallback icon
     }
   }
+
+  /// Parses a font weight string to FontWeight
+  static FontWeight parseFontWeight(String fontWeight) {
+    switch (fontWeight) {
+      case 'w100':
+        return FontWeight.w100;
+      case 'w200':
+        return FontWeight.w200;
+      case 'w300':
+        return FontWeight.w300;
+      case 'w400':
+      case 'normal':
+        return FontWeight.w400;
+      case 'w500':
+        return FontWeight.w500;
+      case 'w600':
+      case 'semibold':
+        return FontWeight.w600;
+      case 'w700':
+      case 'bold':
+        return FontWeight.w700;
+      case 'w800':
+        return FontWeight.w800;
+      case 'w900':
+        return FontWeight.w900;
+      default:
+        return FontWeight.w600;
+    }
+  }
+
+  /// Converts a FontWeight to string representation
+  static String fontWeightToString(FontWeight fontWeight) {
+    switch (fontWeight) {
+      case FontWeight.w100:
+        return 'w100';
+      case FontWeight.w200:
+        return 'w200';
+      case FontWeight.w300:
+        return 'w300';
+      case FontWeight.w400:
+        return 'w400';
+      case FontWeight.w500:
+        return 'w500';
+      case FontWeight.w600:
+        return 'w600';
+      case FontWeight.w700:
+        return 'w700';
+      case FontWeight.w800:
+        return 'w800';
+      case FontWeight.w900:
+        return 'w900';
+      default:
+        return 'w600';
+    }
+  }
+
+  /// Parses a color from JSON with null safety
+  static Color? parseColorFromJson(dynamic colorValue) {
+    if (colorValue == null) return null;
+    if (colorValue is int) return Color(colorValue);
+    return parseColor(colorValue);
+  }
+
+  /// Converts a Color to int representation for JSON
+  static int colorToInt(Color color) {
+    return color.toARGB32();
+  }
+
+  /// Parses a double from JSON with null safety
+  static double? parseDoubleFromJson(dynamic value) {
+    return value?.toDouble();
+  }
 }

@@ -3,11 +3,7 @@ import 'package:ai_prompt_driven_app/src/config/quick_action_config.dart';
 import 'package:ai_prompt_driven_app/src/utils/widget_parser.dart';
 
 class DynamicQuickActionGrid extends StatelessWidget {
-  const DynamicQuickActionGrid({
-    this.config,
-    this.onActionTapped,
-    super.key,
-  });
+  const DynamicQuickActionGrid({this.config, this.onActionTapped, super.key});
 
   final QuickActionConfig? config;
   final Function(QuickActionItem action)? onActionTapped;
@@ -45,7 +41,7 @@ class DynamicQuickActionGrid extends StatelessWidget {
 
   Widget _buildActionLayout(List<QuickActionItem> actions) {
     final layout = config?.layout ?? QuickActionLayout.grid;
-    
+
     switch (layout) {
       case QuickActionLayout.grid:
         return _buildGridLayout(actions);
@@ -79,7 +75,7 @@ class DynamicQuickActionGrid extends StatelessWidget {
 
   Widget _buildListLayout(List<QuickActionItem> actions) {
     final mainAxisSpacing = config?.mainAxisSpacing ?? 8.0;
-    
+
     return Column(
       children: actions.asMap().entries.map((entry) {
         final isLast = entry.key == actions.length - 1;
@@ -93,7 +89,10 @@ class DynamicQuickActionGrid extends StatelessWidget {
     );
   }
 
-  Widget _buildActionTile(QuickActionItem action, {required bool isGridLayout}) {
+  Widget _buildActionTile(
+    QuickActionItem action, {
+    required bool isGridLayout,
+  }) {
     final defaultBackgroundColor = CupertinoColors.systemBlue.withOpacity(0.1);
     final defaultColor = CupertinoColors.systemBlue;
     final defaultBorderColor = CupertinoColors.systemBlue.withOpacity(0.3);
@@ -113,7 +112,7 @@ class DynamicQuickActionGrid extends StatelessWidget {
           color: backgroundColor,
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
-            color: action.backgroundColor != null 
+            color: action.backgroundColor != null
                 ? (action.color ?? defaultBorderColor)
                 : defaultBorderColor,
           ),

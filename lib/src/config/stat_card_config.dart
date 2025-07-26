@@ -1,6 +1,32 @@
 import 'package:equatable/equatable.dart';
 
 class StatCardConfig extends Equatable {
+  factory StatCardConfig.fromJson(Map<String, dynamic> json) {
+    String? iconString;
+    final iconData = json['icon'];
+
+    if (iconData is Map<String, dynamic>) {
+      // New format: convert back to string representation for StatCard
+      // For now, we'll use a placeholder or extract meaningful info
+      iconString = 'icon_${iconData['codePoint'].toRadixString(16)}';
+    } else if (iconData is String) {
+      // Legacy string format
+      iconString = iconData;
+    }
+
+    return StatCardConfig(
+      title: json['title'] ?? '',
+      value: json['value'] ?? '',
+      icon: iconString,
+      backgroundColor: json['backgroundColor'] as String?,
+      titleColor: json['titleColor'] as String?,
+      valueColor: json['valueColor'] as String?,
+      iconColor: json['iconColor'] as String?,
+      padding: json['padding']?.toDouble(),
+      borderRadius: json['borderRadius']?.toDouble(),
+      visible: json['visible'] ?? true,
+    );
+  }
   const StatCardConfig({
     required this.title,
     required this.value,
@@ -51,57 +77,6 @@ class StatCardConfig extends Equatable {
     'borderRadius': borderRadius,
     'visible': visible,
   };
-
-  factory StatCardConfig.fromJson(Map<String, dynamic> json) {
-    String? iconString;
-    final iconData = json['icon'];
-
-    if (iconData is Map<String, dynamic>) {
-      // New format: convert back to string representation for StatCard
-      // For now, we'll use a placeholder or extract meaningful info
-      iconString = 'icon_${iconData['codePoint'].toRadixString(16)}';
-    } else if (iconData is String) {
-      // Legacy string format
-      iconString = iconData;
-    }
-
-    return StatCardConfig(
-      title: json['title'] ?? '',
-      value: json['value'] ?? '',
-      icon: iconString,
-      backgroundColor: json['backgroundColor'] as String?,
-      titleColor: json['titleColor'] as String?,
-      valueColor: json['valueColor'] as String?,
-      iconColor: json['iconColor'] as String?,
-      padding: json['padding']?.toDouble(),
-      borderRadius: json['borderRadius']?.toDouble(),
-      visible: json['visible'] ?? true,
-    );
-  }
-
-  StatCardConfig copyWith({
-    String? title,
-    String? value,
-    String? icon,
-    String? backgroundColor,
-    String? titleColor,
-    String? valueColor,
-    String? iconColor,
-    double? padding,
-    double? borderRadius,
-    bool? visible,
-  }) => StatCardConfig(
-    title: title ?? this.title,
-    value: value ?? this.value,
-    icon: icon ?? this.icon,
-    backgroundColor: backgroundColor ?? this.backgroundColor,
-    titleColor: titleColor ?? this.titleColor,
-    valueColor: valueColor ?? this.valueColor,
-    iconColor: iconColor ?? this.iconColor,
-    padding: padding ?? this.padding,
-    borderRadius: borderRadius ?? this.borderRadius,
-    visible: visible ?? this.visible,
-  );
 
   static Map<String, dynamic> get schema {
     return {

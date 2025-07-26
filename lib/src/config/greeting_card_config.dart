@@ -1,35 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:ai_prompt_driven_app/src/model/greeting_model.dart';
+import 'package:ai_prompt_driven_app/src/model/greeting.dart';
 
 class GreetingCardConfig {
-  const GreetingCardConfig({
-    this.gradientColors,
-    this.borderRadius,
-    this.textColor,
-    this.greetingFontSize,
-    this.questionFontSize,
-    this.languageFontSize,
-    this.shadowColor,
-    this.shadowBlurRadius,
-    this.shadowOffset,
-    this.padding,
-    this.margin,
-    this.greetingsList,
-  });
-
-  final List<Color>? gradientColors;
-  final double? borderRadius;
-  final Color? textColor;
-  final double? greetingFontSize;
-  final double? questionFontSize;
-  final double? languageFontSize;
-  final Color? shadowColor;
-  final double? shadowBlurRadius;
-  final Offset? shadowOffset;
-  final EdgeInsets? padding;
-  final EdgeInsets? margin;
-  final List<GreetingModel>? greetingsList;
-
   factory GreetingCardConfig.fromJson(Map<String, dynamic> json) {
     return GreetingCardConfig(
       gradientColors: json['gradientColors'] != null
@@ -78,6 +50,33 @@ class GreetingCardConfig {
           : null,
     );
   }
+  const GreetingCardConfig({
+    this.gradientColors,
+    this.borderRadius,
+    this.textColor,
+    this.greetingFontSize,
+    this.questionFontSize,
+    this.languageFontSize,
+    this.shadowColor,
+    this.shadowBlurRadius,
+    this.shadowOffset,
+    this.padding,
+    this.margin,
+    this.greetingsList,
+  });
+
+  final List<Color>? gradientColors;
+  final double? borderRadius;
+  final Color? textColor;
+  final double? greetingFontSize;
+  final double? questionFontSize;
+  final double? languageFontSize;
+  final Color? shadowColor;
+  final double? shadowBlurRadius;
+  final Offset? shadowOffset;
+  final EdgeInsets? padding;
+  final EdgeInsets? margin;
+  final List<GreetingModel>? greetingsList;
 
   Map<String, dynamic> toJson() {
     return {

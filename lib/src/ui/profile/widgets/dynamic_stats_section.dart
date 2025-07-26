@@ -10,7 +10,10 @@ class DynamicStatsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Visibility(visible: config?.visible ?? true, child: _buildStatsSection());
+    return Visibility(
+      visible: config?.visible ?? true,
+      child: _buildStatsSection(),
+    );
   }
 
   Widget _buildStatsSection() {
@@ -36,15 +39,26 @@ class DynamicStatsSection extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(config!.padding ?? 20),
       decoration: BoxDecoration(
-        color: WidgetParser.parseColor(config!.backgroundColor) ?? CupertinoColors.systemGrey6,
+        color:
+            WidgetParser.parseColor(config!.backgroundColor) ??
+            CupertinoColors.systemGrey6,
         borderRadius: BorderRadius.circular(config!.borderRadius ?? 12),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          StatItem(value: config!.conversationsValue, label: config!.conversationsLabel),
-          StatItem(value: config!.daysActiveValue, label: config!.daysActiveLabel),
-          StatItem(value: config!.wordsGeneratedValue, label: config!.wordsGeneratedLabel),
+          StatItem(
+            value: config!.conversationsValue,
+            label: config!.conversationsLabel,
+          ),
+          StatItem(
+            value: config!.daysActiveValue,
+            label: config!.daysActiveLabel,
+          ),
+          StatItem(
+            value: config!.wordsGeneratedValue,
+            label: config!.wordsGeneratedLabel,
+          ),
         ],
       ),
     );

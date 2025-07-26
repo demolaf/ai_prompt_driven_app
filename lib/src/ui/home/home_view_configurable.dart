@@ -3,7 +3,7 @@ import 'package:ai_prompt_driven_app/src/config/greeting_card_config.dart';
 import 'package:ai_prompt_driven_app/src/config/quick_action_config.dart';
 import 'package:ai_prompt_driven_app/src/config/scaffold_config.dart';
 import 'package:ai_prompt_driven_app/src/config/stat_card_config.dart';
-import 'package:ai_prompt_driven_app/src/model/greeting_model.dart';
+import 'package:ai_prompt_driven_app/src/model/greeting.dart';
 import 'package:ai_prompt_driven_app/src/model/view_configurable.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -17,13 +17,6 @@ class HomeViewConfigurable extends Equatable implements ViewConfigurable {
     this.greetingCardConfig,
     this.quickActionConfig,
   });
-
-  final ScaffoldConfig? scaffoldConfig;
-  final AppBarConfig? appBarConfig;
-  final StatCardConfig? statCard1;
-  final StatCardConfig? statCard2;
-  final GreetingCardConfig? greetingCardConfig;
-  final QuickActionConfig? quickActionConfig;
 
   HomeViewConfigurable.initial()
     : this(
@@ -63,26 +56,6 @@ class HomeViewConfigurable extends Equatable implements ViewConfigurable {
         ),
       );
 
-  @override
-  List<Object?> get props => [
-    scaffoldConfig,
-    appBarConfig,
-    statCard1,
-    statCard2,
-    greetingCardConfig,
-    quickActionConfig,
-  ];
-
-  @override
-  Map<String, dynamic> toJson() => {
-    'scaffoldConfig': scaffoldConfig?.toJson(),
-    'appBarConfig': appBarConfig?.toJson(),
-    'statCard1': statCard1?.toJson(),
-    'statCard2': statCard2?.toJson(),
-    'greetingCardConfig': greetingCardConfig?.toJson(),
-    'quickActionConfig': quickActionConfig?.toJson(),
-  };
-
   factory HomeViewConfigurable.fromJson(Map<String, dynamic> json) {
     return HomeViewConfigurable(
       scaffoldConfig: json['scaffoldConfig'] != null
@@ -106,23 +79,22 @@ class HomeViewConfigurable extends Equatable implements ViewConfigurable {
     );
   }
 
-  HomeViewConfigurable copyWith({
-    ScaffoldConfig? scaffoldConfig,
-    AppBarConfig? appBarConfig,
-    StatCardConfig? statCard1,
-    StatCardConfig? statCard2,
-    GreetingCardConfig? greetingCardConfig,
-    QuickActionConfig? quickActionConfig,
-  }) {
-    return HomeViewConfigurable(
-      scaffoldConfig: scaffoldConfig ?? this.scaffoldConfig,
-      appBarConfig: appBarConfig ?? this.appBarConfig,
-      statCard1: statCard1 ?? this.statCard1,
-      statCard2: statCard2 ?? this.statCard2,
-      greetingCardConfig: greetingCardConfig ?? this.greetingCardConfig,
-      quickActionConfig: quickActionConfig ?? this.quickActionConfig,
-    );
-  }
+  final ScaffoldConfig? scaffoldConfig;
+  final AppBarConfig? appBarConfig;
+  final StatCardConfig? statCard1;
+  final StatCardConfig? statCard2;
+  final GreetingCardConfig? greetingCardConfig;
+  final QuickActionConfig? quickActionConfig;
+
+  @override
+  Map<String, dynamic> toJson() => {
+    'scaffoldConfig': scaffoldConfig?.toJson(),
+    'appBarConfig': appBarConfig?.toJson(),
+    'statCard1': statCard1?.toJson(),
+    'statCard2': statCard2?.toJson(),
+    'greetingCardConfig': greetingCardConfig?.toJson(),
+    'quickActionConfig': quickActionConfig?.toJson(),
+  };
 
   static Map<String, dynamic> get schema {
     return {
@@ -159,4 +131,14 @@ class HomeViewConfigurable extends Equatable implements ViewConfigurable {
 
     return result;
   }
+
+  @override
+  List<Object?> get props => [
+    scaffoldConfig,
+    appBarConfig,
+    statCard1,
+    statCard2,
+    greetingCardConfig,
+    quickActionConfig,
+  ];
 }

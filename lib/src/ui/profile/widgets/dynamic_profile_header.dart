@@ -3,11 +3,7 @@ import 'package:ai_prompt_driven_app/src/config/profile_header_config.dart';
 import 'package:ai_prompt_driven_app/src/utils/widget_parser.dart';
 
 class DynamicProfileHeader extends StatelessWidget {
-  const DynamicProfileHeader({
-    this.config,
-    this.onAvatarTapped,
-    super.key,
-  });
+  const DynamicProfileHeader({this.config, this.onAvatarTapped, super.key});
 
   final ProfileHeaderConfig? config;
   final VoidCallback? onAvatarTapped;
@@ -54,10 +50,12 @@ class DynamicProfileHeader extends StatelessWidget {
 
   Widget _buildAvatar() {
     final avatarSize = config?.avatarSize ?? 120.0;
-    final avatarBackgroundColor = config?.avatarBackgroundColor ?? CupertinoColors.systemGrey5;
+    final avatarBackgroundColor =
+        config?.avatarBackgroundColor ?? CupertinoColors.systemGrey5;
     final avatarIcon = config?.avatarIcon ?? 'person';
     final avatarIconSize = config?.avatarIconSize ?? 60.0;
-    final avatarIconColor = config?.avatarIconColor ?? CupertinoColors.systemGrey;
+    final avatarIconColor =
+        config?.avatarIconColor ?? CupertinoColors.systemGrey;
     final avatarImageUrl = config?.avatarImageUrl;
 
     return GestureDetector(
@@ -115,7 +113,7 @@ class DynamicProfileHeader extends StatelessWidget {
         ),
       );
     }
-    
+
     // Default to icon if no image URL provided
     return Icon(
       WidgetParser.parseIcon(avatarIcon),
@@ -148,10 +146,7 @@ class DynamicProfileHeader extends StatelessWidget {
 
     return Text(
       email,
-      style: TextStyle(
-        fontSize: emailFontSize,
-        color: emailColor,
-      ),
+      style: TextStyle(fontSize: emailFontSize, color: emailColor),
       textAlign: TextAlign.center,
     );
   }

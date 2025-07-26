@@ -1,8 +1,18 @@
 import 'package:flutter/cupertino.dart';
+import 'package:ai_prompt_driven_app/src/utils/widget_parser.dart';
 
 enum QuickActionLayout { grid, list }
 
 class QuickActionItem {
+  factory QuickActionItem.fromJson(Map<String, dynamic> json) {
+    return QuickActionItem(
+      id: json['id'] as String,
+      title: json['title'] as String,
+      icon: json['icon'] as String,
+      color: WidgetParser.parseColorFromJson(json['color']),
+      backgroundColor: WidgetParser.parseColorFromJson(json['backgroundColor']),
+    );
+  }
   const QuickActionItem({
     required this.id,
     required this.title,
@@ -19,48 +29,48 @@ class QuickActionItem {
   final Color? backgroundColor;
   final VoidCallback? onTap;
 
-  factory QuickActionItem.fromJson(Map<String, dynamic> json) {
-    return QuickActionItem(
-      id: json['id'] as String,
-      title: json['title'] as String,
-      icon: json['icon'] as String,
-      color: json['color'] != null ? Color(json['color']) : null,
-      backgroundColor: json['backgroundColor'] != null 
-          ? Color(json['backgroundColor']) 
-          : null,
-    );
-  }
-
   Map<String, dynamic> toJson() {
     return {
       'id': id,
       'title': title,
       'icon': icon,
-      if (color != null) 'color': color!.toARGB32(),
-      if (backgroundColor != null) 'backgroundColor': backgroundColor!.toARGB32(),
+      if (color != null) 'color': WidgetParser.colorToInt(color!),
+      if (backgroundColor != null)
+        'backgroundColor': WidgetParser.colorToInt(backgroundColor!),
     };
-  }
-
-  QuickActionItem copyWith({
-    String? id,
-    String? title,
-    String? icon,
-    Color? color,
-    Color? backgroundColor,
-    VoidCallback? onTap,
-  }) {
-    return QuickActionItem(
-      id: id ?? this.id,
-      title: title ?? this.title,
-      icon: icon ?? this.icon,
-      color: color ?? this.color,
-      backgroundColor: backgroundColor ?? this.backgroundColor,
-      onTap: onTap ?? this.onTap,
-    );
   }
 }
 
 class QuickActionConfig {
+  factory QuickActionConfig.fromJson(Map<String, dynamic> json) {
+    return QuickActionConfig(
+      title: json['title'] as String?,
+      titleFontSize: json['titleFontSize']?.toDouble(),
+      titleColor: WidgetParser.parseColorFromJson(json['titleColor']),
+      titleFontWeight: json['titleFontWeight'] != null
+          ? WidgetParser.parseFontWeight(json['titleFontWeight'] as String)
+          : null,
+      layout: json['layout'] != null
+          ? QuickActionLayout.values.firstWhere(
+              (e) => e.name == json['layout'],
+              orElse: () => QuickActionLayout.grid,
+            )
+          : QuickActionLayout.grid,
+      spacing: json['spacing']?.toDouble(),
+      crossAxisSpacing: json['crossAxisSpacing']?.toDouble(),
+      mainAxisSpacing: json['mainAxisSpacing']?.toDouble(),
+      crossAxisCount: json['crossAxisCount'] as int?,
+      childAspectRatio: json['childAspectRatio']?.toDouble(),
+      actions: json['actions'] != null
+          ? (json['actions'] as List<dynamic>)
+                .map(
+                  (action) =>
+                      QuickActionItem.fromJson(action as Map<String, dynamic>),
+                )
+                .toList()
+          : null,
+    );
+  }
   const QuickActionConfig({
     this.title,
     this.titleFontSize,
@@ -87,46 +97,21 @@ class QuickActionConfig {
   final double? childAspectRatio;
   final List<QuickActionItem>? actions;
 
-  factory QuickActionConfig.fromJson(Map<String, dynamic> json) {
-    return QuickActionConfig(
-      title: json['title'] as String?,
-      titleFontSize: json['titleFontSize']?.toDouble(),
-      titleColor: json['titleColor'] != null ? Color(json['titleColor']) : null,
-      titleFontWeight: json['titleFontWeight'] != null
-          ? _getFontWeightFromString(json['titleFontWeight'] as String)
-          : null,
-      layout: json['layout'] != null
-          ? QuickActionLayout.values.firstWhere(
-              (e) => e.name == json['layout'],
-              orElse: () => QuickActionLayout.grid,
-            )
-          : QuickActionLayout.grid,
-      spacing: json['spacing']?.toDouble(),
-      crossAxisSpacing: json['crossAxisSpacing']?.toDouble(),
-      mainAxisSpacing: json['mainAxisSpacing']?.toDouble(),
-      crossAxisCount: json['crossAxisCount'] as int?,
-      childAspectRatio: json['childAspectRatio']?.toDouble(),
-      actions: json['actions'] != null
-          ? (json['actions'] as List<dynamic>)
-              .map((action) => QuickActionItem.fromJson(action as Map<String, dynamic>))
-              .toList()
-          : null,
-    );
-  }
-
   Map<String, dynamic> toJson() {
     return {
       if (title != null) 'title': title,
       if (titleFontSize != null) 'titleFontSize': titleFontSize,
-      if (titleColor != null) 'titleColor': titleColor!.toARGB32(),
-      if (titleFontWeight != null) 'titleFontWeight': _getStringFromFontWeight(titleFontWeight!),
+      if (titleColor != null) 'titleColor': WidgetParser.colorToInt(titleColor!),
+      if (titleFontWeight != null)
+        'titleFontWeight': WidgetParser.fontWeightToString(titleFontWeight!),
       'layout': layout.name,
       if (spacing != null) 'spacing': spacing,
       if (crossAxisSpacing != null) 'crossAxisSpacing': crossAxisSpacing,
       if (mainAxisSpacing != null) 'mainAxisSpacing': mainAxisSpacing,
       if (crossAxisCount != null) 'crossAxisCount': crossAxisCount,
       if (childAspectRatio != null) 'childAspectRatio': childAspectRatio,
-      if (actions != null) 'actions': actions!.map((action) => action.toJson()).toList(),
+      if (actions != null)
+        'actions': actions!.map((action) => action.toJson()).toList(),
     };
   }
 
@@ -158,80 +143,11 @@ class QuickActionConfig {
     );
   }
 
-  static FontWeight _getFontWeightFromString(String fontWeight) {
-    switch (fontWeight) {
-      case 'w100':
-        return FontWeight.w100;
-      case 'w200':
-        return FontWeight.w200;
-      case 'w300':
-        return FontWeight.w300;
-      case 'w400':
-      case 'normal':
-        return FontWeight.w400;
-      case 'w500':
-        return FontWeight.w500;
-      case 'w600':
-      case 'semibold':
-        return FontWeight.w600;
-      case 'w700':
-      case 'bold':
-        return FontWeight.w700;
-      case 'w800':
-        return FontWeight.w800;
-      case 'w900':
-        return FontWeight.w900;
-      default:
-        return FontWeight.w600;
-    }
-  }
-
-  static String _getStringFromFontWeight(FontWeight fontWeight) {
-    switch (fontWeight) {
-      case FontWeight.w100:
-        return 'w100';
-      case FontWeight.w200:
-        return 'w200';
-      case FontWeight.w300:
-        return 'w300';
-      case FontWeight.w400:
-        return 'w400';
-      case FontWeight.w500:
-        return 'w500';
-      case FontWeight.w600:
-        return 'w600';
-      case FontWeight.w700:
-        return 'w700';
-      case FontWeight.w800:
-        return 'w800';
-      case FontWeight.w900:
-        return 'w900';
-      default:
-        return 'w600';
-    }
-  }
-
   static List<QuickActionItem> get defaultActions => [
-    QuickActionItem(
-      id: 'translate',
-      title: 'Translate',
-      icon: 'translate',
-    ),
-    QuickActionItem(
-      id: 'summarize',
-      title: 'Summarize',
-      icon: 'summarize',
-    ),
-    QuickActionItem(
-      id: 'code_help',
-      title: 'Code Help',
-      icon: 'code',
-    ),
-    QuickActionItem(
-      id: 'write_email',
-      title: 'Write Email',
-      icon: 'email',
-    ),
+    QuickActionItem(id: 'translate', title: 'Translate', icon: 'translate'),
+    QuickActionItem(id: 'summarize', title: 'Summarize', icon: 'summarize'),
+    QuickActionItem(id: 'code_help', title: 'Code Help', icon: 'code'),
+    QuickActionItem(id: 'write_email', title: 'Write Email', icon: 'email'),
   ];
 
   static Map<String, dynamic> get schema => {
@@ -249,8 +165,18 @@ class QuickActionConfig {
       'titleFontWeight': {
         'type': 'string',
         'enum': [
-          'w100', 'w200', 'w300', 'w400', 'w500', 'w600', 'w700', 'w800', 'w900',
-          'normal', 'bold', 'semibold',
+          'w100',
+          'w200',
+          'w300',
+          'w400',
+          'w500',
+          'w600',
+          'w700',
+          'w800',
+          'w900',
+          'normal',
+          'bold',
+          'semibold',
         ],
         'description': 'Font weight for the section title',
       },

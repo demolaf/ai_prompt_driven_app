@@ -1,6 +1,20 @@
 import 'package:equatable/equatable.dart';
 
 class StatsSectionConfig extends Equatable {
+  factory StatsSectionConfig.fromJson(Map<String, dynamic> json) {
+    return StatsSectionConfig(
+      conversationsValue: json['conversationsValue'] ?? '0',
+      daysActiveValue: json['daysActiveValue'] ?? '0',
+      wordsGeneratedValue: json['wordsGeneratedValue'] ?? '0',
+      conversationsLabel: json['conversationsLabel'] ?? 'Conversations',
+      daysActiveLabel: json['daysActiveLabel'] ?? 'Days Active',
+      wordsGeneratedLabel: json['wordsGeneratedLabel'] ?? 'Words Generated',
+      backgroundColor: json['backgroundColor'] as String?,
+      padding: json['padding']?.toDouble(),
+      borderRadius: json['borderRadius']?.toDouble(),
+      visible: json['visible'] ?? true,
+    );
+  }
   const StatsSectionConfig({
     required this.conversationsValue,
     required this.daysActiveValue,
@@ -51,45 +65,6 @@ class StatsSectionConfig extends Equatable {
     'borderRadius': borderRadius,
     'visible': visible,
   };
-
-  factory StatsSectionConfig.fromJson(Map<String, dynamic> json) {
-    return StatsSectionConfig(
-      conversationsValue: json['conversationsValue'] ?? '0',
-      daysActiveValue: json['daysActiveValue'] ?? '0',
-      wordsGeneratedValue: json['wordsGeneratedValue'] ?? '0',
-      conversationsLabel: json['conversationsLabel'] ?? 'Conversations',
-      daysActiveLabel: json['daysActiveLabel'] ?? 'Days Active',
-      wordsGeneratedLabel: json['wordsGeneratedLabel'] ?? 'Words Generated',
-      backgroundColor: json['backgroundColor'] as String?,
-      padding: json['padding']?.toDouble(),
-      borderRadius: json['borderRadius']?.toDouble(),
-      visible: json['visible'] ?? true,
-    );
-  }
-
-  StatsSectionConfig copyWith({
-    String? conversationsValue,
-    String? daysActiveValue,
-    String? wordsGeneratedValue,
-    String? conversationsLabel,
-    String? daysActiveLabel,
-    String? wordsGeneratedLabel,
-    String? backgroundColor,
-    double? padding,
-    double? borderRadius,
-    bool? visible,
-  }) => StatsSectionConfig(
-    conversationsValue: conversationsValue ?? this.conversationsValue,
-    daysActiveValue: daysActiveValue ?? this.daysActiveValue,
-    wordsGeneratedValue: wordsGeneratedValue ?? this.wordsGeneratedValue,
-    conversationsLabel: conversationsLabel ?? this.conversationsLabel,
-    daysActiveLabel: daysActiveLabel ?? this.daysActiveLabel,
-    wordsGeneratedLabel: wordsGeneratedLabel ?? this.wordsGeneratedLabel,
-    backgroundColor: backgroundColor ?? this.backgroundColor,
-    padding: padding ?? this.padding,
-    borderRadius: borderRadius ?? this.borderRadius,
-    visible: visible ?? this.visible,
-  );
 
   static Map<String, dynamic> get schema {
     return {

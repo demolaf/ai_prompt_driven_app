@@ -3,26 +3,6 @@ import 'package:flutter/cupertino.dart';
 enum SettingType { toggle, navigation, action }
 
 class SettingModel {
-  const SettingModel({
-    required this.id,
-    required this.title,
-    required this.subtitle,
-    required this.icon,
-    required this.type,
-    this.value,
-    this.onToggle,
-    this.onTap,
-  });
-
-  final String id;
-  final String title;
-  final String subtitle;
-  final String icon; // Icon name as string (e.g., 'moon', 'settings', 'bell')
-  final SettingType type;
-  final bool? value;
-  final ValueChanged<bool>? onToggle;
-  final VoidCallback? onTap;
-
   factory SettingModel.fromJson(Map<String, dynamic> json) {
     String iconString;
     final iconData = json['icon'];
@@ -51,6 +31,25 @@ class SettingModel {
       value: json['value'] as bool?,
     );
   }
+  const SettingModel({
+    required this.id,
+    required this.title,
+    required this.subtitle,
+    required this.icon,
+    required this.type,
+    this.value,
+    this.onToggle,
+    this.onTap,
+  });
+
+  final String id;
+  final String title;
+  final String subtitle;
+  final String icon; // Icon name as string (e.g., 'moon', 'settings', 'bell')
+  final SettingType type;
+  final bool? value;
+  final ValueChanged<bool>? onToggle;
+  final VoidCallback? onTap;
 
   Map<String, dynamic> toJson() {
     return {

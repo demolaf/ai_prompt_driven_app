@@ -1,8 +1,4 @@
 class GreetingModel {
-  final String greeting;
-  final String question;
-  final String language;
-
   const GreetingModel({
     required this.greeting,
     required this.question,
@@ -16,6 +12,9 @@ class GreetingModel {
       language: json['language'] as String,
     );
   }
+  final String greeting;
+  final String question;
+  final String language;
 
   Map<String, dynamic> toJson() {
     return {'greeting': greeting, 'question': question, 'language': language};

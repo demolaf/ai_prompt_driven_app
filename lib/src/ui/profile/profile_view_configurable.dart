@@ -3,7 +3,7 @@ import 'package:ai_prompt_driven_app/src/config/profile_header_config.dart';
 import 'package:ai_prompt_driven_app/src/config/scaffold_config.dart';
 import 'package:ai_prompt_driven_app/src/config/settings_section_config.dart';
 import 'package:ai_prompt_driven_app/src/config/stats_section_config.dart';
-import 'package:ai_prompt_driven_app/src/model/setting_model.dart';
+import 'package:ai_prompt_driven_app/src/model/setting.dart';
 import 'package:ai_prompt_driven_app/src/model/view_configurable.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
@@ -81,22 +81,16 @@ class ProfileViewConfigurable extends Equatable implements ViewConfigurable {
   final SettingsSectionConfig? settingsSectionConfig;
 
   @override
-  List<Object?> get props => [
-    scaffoldConfig,
-    appBarConfig,
-    profileHeaderConfig,
-    statsSectionConfig,
-    settingsSectionConfig,
-  ];
-
-  @override
   Map<String, dynamic> toJson() {
     return {
       if (scaffoldConfig != null) 'scaffoldConfig': scaffoldConfig!.toJson(),
       if (appBarConfig != null) 'appBarConfig': appBarConfig!.toJson(),
-      if (profileHeaderConfig != null) 'profileHeaderConfig': profileHeaderConfig!.toJson(),
-      if (statsSectionConfig != null) 'statsSectionConfig': statsSectionConfig!.toJson(),
-      if (settingsSectionConfig != null) 'settingsSectionConfig': settingsSectionConfig!.toJson(),
+      if (profileHeaderConfig != null)
+        'profileHeaderConfig': profileHeaderConfig!.toJson(),
+      if (statsSectionConfig != null)
+        'statsSectionConfig': statsSectionConfig!.toJson(),
+      if (settingsSectionConfig != null)
+        'settingsSectionConfig': settingsSectionConfig!.toJson(),
     };
   }
 
@@ -154,7 +148,7 @@ class ProfileViewConfigurable extends Equatable implements ViewConfigurable {
         // Merge settings arrays
         final currentSettings = result['settings'] as List<dynamic>? ?? [];
         final updatedSettings = value;
-        
+
         // Create a map of existing settings by ID for quick lookup
         final existingSettingsMap = <String, Map<String, dynamic>>{};
         for (final setting in currentSettings) {
@@ -162,14 +156,16 @@ class ProfileViewConfigurable extends Equatable implements ViewConfigurable {
             existingSettingsMap[setting['id'] as String] = setting;
           }
         }
-        
+
         // Add or update settings from the update
         for (final newSetting in updatedSettings) {
           if (newSetting is Map<String, dynamic> && newSetting['id'] != null) {
             final settingId = newSetting['id'] as String;
             if (existingSettingsMap.containsKey(settingId)) {
               // Merge with existing setting, preserving all fields
-              final existing = Map<String, dynamic>.from(existingSettingsMap[settingId]!);
+              final existing = Map<String, dynamic>.from(
+                existingSettingsMap[settingId]!,
+              );
               newSetting.forEach((key, value) {
                 existing[key] = value;
               });
@@ -182,9 +178,12 @@ class ProfileViewConfigurable extends Equatable implements ViewConfigurable {
             // AI didn't provide ID - try to infer which setting to update
             final inferredId = _inferSettingId(newSetting, existingSettingsMap);
             if (inferredId != null) {
-              final existing = Map<String, dynamic>.from(existingSettingsMap[inferredId]!);
+              final existing = Map<String, dynamic>.from(
+                existingSettingsMap[inferredId]!,
+              );
               newSetting.forEach((key, value) {
-                if (key != 'id') { // Don't overwrite the ID
+                if (key != 'id') {
+                  // Don't overwrite the ID
                   existing[key] = value;
                 }
               });
@@ -192,7 +191,7 @@ class ProfileViewConfigurable extends Equatable implements ViewConfigurable {
             }
           }
         }
-        
+
         // Convert back to list
         result['settings'] = existingSettingsMap.values.toList();
       } else {
@@ -204,13 +203,18 @@ class ProfileViewConfigurable extends Equatable implements ViewConfigurable {
   }
 
   /// Infers which setting ID to use when AI doesn't provide one
-  String? _inferSettingId(Map<String, dynamic> newSetting, Map<String, Map<String, dynamic>> existingSettings) {
+  String? _inferSettingId(
+    Map<String, dynamic> newSetting,
+    Map<String, Map<String, dynamic>> existingSettings,
+  ) {
     // Strategy 1: If only updating 'value' and there's only one toggle setting, use that
-    if (newSetting.keys.length == 1 && newSetting.containsKey('value') && newSetting['value'] is bool) {
+    if (newSetting.keys.length == 1 &&
+        newSetting.containsKey('value') &&
+        newSetting['value'] is bool) {
       final toggleSettings = existingSettings.entries
           .where((entry) => entry.value['type'] == 'toggle')
           .toList();
-      
+
       if (toggleSettings.length == 1) {
         return toggleSettings.first.key;
       }
@@ -236,4 +240,13 @@ class ProfileViewConfigurable extends Equatable implements ViewConfigurable {
 
     return null; // Could not infer
   }
+
+  @override
+  List<Object?> get props => [
+    scaffoldConfig,
+    appBarConfig,
+    profileHeaderConfig,
+    statsSectionConfig,
+    settingsSectionConfig,
+  ];
 }
