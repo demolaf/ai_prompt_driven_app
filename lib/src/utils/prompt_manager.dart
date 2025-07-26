@@ -114,6 +114,18 @@ User request: $userPrompt''',
       },
     ];
 
+    // Log the full prompt being sent to OpenAI
+    DebugLogger.info(
+      'OpenAI prompt being sent',
+      data: {
+        'system_message': messages[0]['content'],
+        'user_message': messages[1]['content'],
+        'model': 'gpt-4o-mini',
+        'max_tokens': 1500,
+        'temperature': 0.2,
+      },
+    );
+
     final res = await http.post(
       Uri.parse('https://api.openai.com/v1/chat/completions'),
       headers: {
@@ -192,6 +204,17 @@ ${jsonEncode(currentViewConfigurable.toJson())}
 User request: $userPrompt
 
 Response (JSON only):''';
+
+    // Log the full prompt being sent to Anthropic
+    DebugLogger.info(
+      'Anthropic prompt being sent',
+      data: {
+        'prompt': prompt,
+        'model': 'claude-3-haiku-20240307',
+        'max_tokens': 1500,
+        'prompt_length': prompt.length,
+      },
+    );
 
     final res = await http.post(
       Uri.parse('https://api.anthropic.com/v1/messages'),
