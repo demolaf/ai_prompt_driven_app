@@ -48,9 +48,11 @@ class DynamicGreetingCard extends StatelessWidget {
       ),
       child: Padding(
         padding: padding,
-        child: Center(
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 data.greeting,
@@ -61,7 +63,7 @@ class DynamicGreetingCard extends StatelessWidget {
                 ),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: 8),
+              SizedBox(height: 6),
               Text(
                 data.question,
                 style: TextStyle(
@@ -70,7 +72,7 @@ class DynamicGreetingCard extends StatelessWidget {
                 ),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: 4),
+              SizedBox(height: 2),
               Text(
                 data.language,
                 style: TextStyle(
