@@ -1,5 +1,6 @@
 import 'package:ai_prompt_driven_app/src/config/appbar_config.dart';
 import 'package:ai_prompt_driven_app/src/config/greeting_card_config.dart';
+import 'package:ai_prompt_driven_app/src/config/quick_action_config.dart';
 import 'package:ai_prompt_driven_app/src/config/scaffold_config.dart';
 import 'package:ai_prompt_driven_app/src/config/stat_card_config.dart';
 import 'package:ai_prompt_driven_app/src/model/greeting_model.dart';
@@ -14,6 +15,7 @@ class HomeViewConfigurable extends Equatable implements ViewConfigurable {
     this.statCard1,
     this.statCard2,
     this.greetingCardConfig,
+    this.quickActionConfig,
   });
 
   final ScaffoldConfig? scaffoldConfig;
@@ -21,6 +23,7 @@ class HomeViewConfigurable extends Equatable implements ViewConfigurable {
   final StatCardConfig? statCard1;
   final StatCardConfig? statCard2;
   final GreetingCardConfig? greetingCardConfig;
+  final QuickActionConfig? quickActionConfig;
 
   HomeViewConfigurable.initial()
     : this(
@@ -46,6 +49,18 @@ class HomeViewConfigurable extends Equatable implements ViewConfigurable {
           padding: const EdgeInsets.all(16),
           greetingsList: GreetingModel.getPlaceholderData,
         ),
+        quickActionConfig: QuickActionConfig(
+          title: 'Quick Actions',
+          titleFontSize: 18.0,
+          titleFontWeight: FontWeight.w600,
+          layout: QuickActionLayout.grid,
+          spacing: 12.0,
+          crossAxisSpacing: 12.0,
+          mainAxisSpacing: 12.0,
+          crossAxisCount: 2,
+          childAspectRatio: 3.0,
+          actions: QuickActionConfig.defaultActions,
+        ),
       );
 
   @override
@@ -55,6 +70,7 @@ class HomeViewConfigurable extends Equatable implements ViewConfigurable {
     statCard1,
     statCard2,
     greetingCardConfig,
+    quickActionConfig,
   ];
 
   @override
@@ -64,6 +80,7 @@ class HomeViewConfigurable extends Equatable implements ViewConfigurable {
     'statCard1': statCard1?.toJson(),
     'statCard2': statCard2?.toJson(),
     'greetingCardConfig': greetingCardConfig?.toJson(),
+    'quickActionConfig': quickActionConfig?.toJson(),
   };
 
   factory HomeViewConfigurable.fromJson(Map<String, dynamic> json) {
@@ -83,6 +100,9 @@ class HomeViewConfigurable extends Equatable implements ViewConfigurable {
       greetingCardConfig: json['greetingCardConfig'] != null
           ? GreetingCardConfig.fromJson(json['greetingCardConfig'])
           : null,
+      quickActionConfig: json['quickActionConfig'] != null
+          ? QuickActionConfig.fromJson(json['quickActionConfig'])
+          : null,
     );
   }
 
@@ -92,6 +112,7 @@ class HomeViewConfigurable extends Equatable implements ViewConfigurable {
     StatCardConfig? statCard1,
     StatCardConfig? statCard2,
     GreetingCardConfig? greetingCardConfig,
+    QuickActionConfig? quickActionConfig,
   }) {
     return HomeViewConfigurable(
       scaffoldConfig: scaffoldConfig ?? this.scaffoldConfig,
@@ -99,6 +120,7 @@ class HomeViewConfigurable extends Equatable implements ViewConfigurable {
       statCard1: statCard1 ?? this.statCard1,
       statCard2: statCard2 ?? this.statCard2,
       greetingCardConfig: greetingCardConfig ?? this.greetingCardConfig,
+      quickActionConfig: quickActionConfig ?? this.quickActionConfig,
     );
   }
 
@@ -109,6 +131,7 @@ class HomeViewConfigurable extends Equatable implements ViewConfigurable {
       'statCard1': StatCardConfig.schema,
       'statCard2': StatCardConfig.schema,
       'greetingCardConfig': GreetingCardConfig.schema,
+      'quickActionConfig': QuickActionConfig.schema,
     };
   }
 

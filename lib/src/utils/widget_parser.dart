@@ -118,6 +118,22 @@ class WidgetParser {
         return Icons.location_on;
       case 'help':
         return Icons.help;
+      case 'translate':
+        return Icons.translate;
+      case 'summarize':
+        return Icons.summarize;
+      case 'code':
+      case 'code_help':
+        return Icons.code;
+      case 'email':
+      case 'mail':
+        return Icons.email;
+      case 'write':
+        return Icons.edit;
+      case 'send':
+        return Icons.send;
+      case 'save':
+        return Icons.save;
       default:
         return Icons.analytics; // Default fallback icon
     }

@@ -1,6 +1,8 @@
 import 'package:ai_prompt_driven_app/src/config/appbar_config.dart';
+import 'package:ai_prompt_driven_app/src/config/profile_header_config.dart';
 import 'package:ai_prompt_driven_app/src/config/scaffold_config.dart';
 import 'package:ai_prompt_driven_app/src/config/settings_section_config.dart';
+import 'package:ai_prompt_driven_app/src/config/stats_section_config.dart';
 import 'package:ai_prompt_driven_app/src/model/setting_model.dart';
 import 'package:ai_prompt_driven_app/src/model/view_configurable.dart';
 import 'package:equatable/equatable.dart';
@@ -10,6 +12,8 @@ class ProfileViewConfigurable extends Equatable implements ViewConfigurable {
   const ProfileViewConfigurable({
     this.scaffoldConfig,
     this.appBarConfig,
+    this.profileHeaderConfig,
+    this.statsSectionConfig,
     this.settingsSectionConfig,
   });
 
@@ -17,6 +21,29 @@ class ProfileViewConfigurable extends Equatable implements ViewConfigurable {
     : this(
         scaffoldConfig: ScaffoldConfig(backgroundColor: 'FFFFFFFF'),
         appBarConfig: AppBarConfig(title: 'Profile'),
+        profileHeaderConfig: ProfileHeaderConfig(
+          avatarSize: 120.0,
+          avatarBackgroundColor: CupertinoColors.systemGrey5,
+          avatarIcon: 'person',
+          avatarIconSize: 60.0,
+          avatarIconColor: CupertinoColors.systemGrey,
+          spacing: 16.0,
+          name: 'John Doe',
+          nameFontSize: 24.0,
+          nameFontWeight: FontWeight.bold,
+          nameColor: CupertinoColors.label,
+          email: 'john.doe@example.com',
+          emailFontSize: 16.0,
+          emailColor: CupertinoColors.secondaryLabel,
+          showAvatar: true,
+          showName: true,
+          showEmail: true,
+        ),
+        statsSectionConfig: StatsSectionConfig(
+          conversationsValue: '1,247',
+          daysActiveValue: '35',
+          wordsGeneratedValue: '2.4k',
+        ),
         settingsSectionConfig: SettingsSectionConfig(
           title: 'Settings',
           titleFontSize: 18.0,
@@ -35,6 +62,12 @@ class ProfileViewConfigurable extends Equatable implements ViewConfigurable {
       appBarConfig: json['appBarConfig'] != null
           ? AppBarConfig.fromJson(json['appBarConfig'])
           : null,
+      profileHeaderConfig: json['profileHeaderConfig'] != null
+          ? ProfileHeaderConfig.fromJson(json['profileHeaderConfig'])
+          : null,
+      statsSectionConfig: json['statsSectionConfig'] != null
+          ? StatsSectionConfig.fromJson(json['statsSectionConfig'])
+          : null,
       settingsSectionConfig: json['settingsSectionConfig'] != null
           ? SettingsSectionConfig.fromJson(json['settingsSectionConfig'])
           : null,
@@ -43,21 +76,27 @@ class ProfileViewConfigurable extends Equatable implements ViewConfigurable {
 
   final ScaffoldConfig? scaffoldConfig;
   final AppBarConfig? appBarConfig;
+  final ProfileHeaderConfig? profileHeaderConfig;
+  final StatsSectionConfig? statsSectionConfig;
   final SettingsSectionConfig? settingsSectionConfig;
 
   @override
   List<Object?> get props => [
     scaffoldConfig,
     appBarConfig,
+    profileHeaderConfig,
+    statsSectionConfig,
     settingsSectionConfig,
   ];
 
   @override
   Map<String, dynamic> toJson() {
     return {
-      'scaffoldConfig': scaffoldConfig?.toJson(),
-      'appBarConfig': appBarConfig?.toJson(),
-      'settingsSectionConfig': settingsSectionConfig?.toJson(),
+      if (scaffoldConfig != null) 'scaffoldConfig': scaffoldConfig!.toJson(),
+      if (appBarConfig != null) 'appBarConfig': appBarConfig!.toJson(),
+      if (profileHeaderConfig != null) 'profileHeaderConfig': profileHeaderConfig!.toJson(),
+      if (statsSectionConfig != null) 'statsSectionConfig': statsSectionConfig!.toJson(),
+      if (settingsSectionConfig != null) 'settingsSectionConfig': settingsSectionConfig!.toJson(),
     };
   }
 
@@ -65,6 +104,8 @@ class ProfileViewConfigurable extends Equatable implements ViewConfigurable {
     return {
       'scaffoldConfig': ScaffoldConfig.schema,
       'appBarConfig': AppBarConfig.schema,
+      'profileHeaderConfig': ProfileHeaderConfig.schema,
+      'statsSectionConfig': StatsSectionConfig.schema,
       'settingsSectionConfig': SettingsSectionConfig.schema,
     };
   }
@@ -94,7 +135,7 @@ class ProfileViewConfigurable extends Equatable implements ViewConfigurable {
         } else {
           result[key] = _deepMerge(result[key] as Map<String, dynamic>, value);
         }
-      } else if (value != null) {
+      } else {
         result[key] = value;
       }
     });
@@ -131,7 +172,7 @@ class ProfileViewConfigurable extends Equatable implements ViewConfigurable {
         
         // Convert back to list
         result['settings'] = existingSettingsMap.values.toList();
-      } else if (value != null) {
+      } else {
         result[key] = value;
       }
     });

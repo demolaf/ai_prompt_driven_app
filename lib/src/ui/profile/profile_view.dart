@@ -1,11 +1,12 @@
+import 'package:ai_prompt_driven_app/src/dynamic_widgets/dynamic_cupertino_sliver_navigation_bar.dart';
 import 'package:ai_prompt_driven_app/src/ui/home/widgets/prompt_fab.dart';
 import 'package:ai_prompt_driven_app/src/ui/profile/profile_view_model.dart';
 import 'package:ai_prompt_driven_app/src/dynamic_widgets/dynamic_scaffold.dart';
 import 'package:ai_prompt_driven_app/src/widgets/ux_feedback_overlay.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ai_prompt_driven_app/src/ui/profile/widgets/profile_header.dart';
-import 'package:ai_prompt_driven_app/src/ui/profile/widgets/stats_section.dart';
+import 'package:ai_prompt_driven_app/src/dynamic_widgets/dynamic_profile_header.dart';
+import 'package:ai_prompt_driven_app/src/dynamic_widgets/dynamic_stats_section.dart';
 import 'package:ai_prompt_driven_app/src/dynamic_widgets/dynamic_settings_section.dart';
 
 class ProfileView extends StatefulWidget {
@@ -50,11 +51,11 @@ class _ProfileViewState extends State<ProfileView> {
             config: state.configurable?.scaffoldConfig,
             body: CustomScrollView(
               slivers: [
-                CupertinoSliverNavigationBar(
+                DynamicCupertinoSliverNavigationBar(
+                  config: state.configurable?.appBarConfig,
                   backgroundColor: Colors.transparent,
                   border: Border.fromBorderSide(BorderSide.none),
                   alwaysShowMiddle: false,
-                  largeTitle: Text('Profile'),
                 ),
                 SliverPadding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -65,8 +66,15 @@ class _ProfileViewState extends State<ProfileView> {
                         child: Column(
                           spacing: 32,
                           children: [
-                            ProfileHeader(),
-                            StatsSection(),
+                            DynamicProfileHeader(
+                              config: state.configurable?.profileHeaderConfig,
+                              onAvatarTapped: () {
+                                // Handle avatar tap - could open image picker
+                              },
+                            ),
+                            DynamicStatsSection(
+                              config: state.configurable?.statsSectionConfig,
+                            ),
                             DynamicSettingsSection(
                               config: state.configurable?.settingsSectionConfig,
                               onSettingChanged: (id, value) {

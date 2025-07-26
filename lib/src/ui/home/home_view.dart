@@ -7,7 +7,7 @@ import 'package:ai_prompt_driven_app/src/ui/home/widgets/prompt_fab.dart';
 import 'package:ai_prompt_driven_app/src/dynamic_widgets/dynamic_scaffold.dart';
 import 'package:ai_prompt_driven_app/src/dynamic_widgets/dynamic_cupertino_sliver_navigation_bar.dart';
 import 'package:ai_prompt_driven_app/src/dynamic_widgets/dynamic_greeting_card.dart';
-import 'package:ai_prompt_driven_app/src/ui/home/widgets/quick_action_grid.dart';
+import 'package:ai_prompt_driven_app/src/dynamic_widgets/dynamic_quick_action_grid.dart';
 import 'package:ai_prompt_driven_app/src/ui/home/widgets/recent_activity_list.dart';
 import 'package:ai_prompt_driven_app/src/dynamic_widgets/dynamic_stat_card.dart';
 
@@ -90,7 +90,13 @@ class _HomeViewState extends State<HomeView> {
                                 ),
                               ],
                             ),
-                            QuickActionGrid(),
+                            DynamicQuickActionGrid(
+                              config: state.configurable?.quickActionConfig,
+                              onActionTapped: (action) {
+                                // Handle quick action tap
+                                // Could integrate with AI or navigation
+                              },
+                            ),
                             RecentActivityList(),
                           ],
                         ),
