@@ -49,3 +49,5 @@ environment.json
 
 # Claude Code local settings
 .claude/settings.local.json
+
+EVALUATION_README.md
