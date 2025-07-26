@@ -87,7 +87,7 @@ class SettingModel {
 
   static List<SettingModel> get defaultSettings => [
     SettingModel(
-      id: 'dark_mode',
+      id: '1',
       title: 'Dark Mode',
       subtitle: 'Use dark theme',
       icon: 'moon',

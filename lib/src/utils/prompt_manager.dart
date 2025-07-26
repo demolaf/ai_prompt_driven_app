@@ -248,6 +248,11 @@ Response (JSON only):''';
       'parsedData': parsedResult,
     });
 
+    // Additional logging for all AI responses
+    print('=== FULL AI RESPONSE ===');
+    print(parsedResult);
+    print('========================');
+
     return parsedResult;
   }
 }

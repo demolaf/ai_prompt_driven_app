@@ -162,20 +162,6 @@ class Prompt extends Equatable {
       },
     },
     {
-      'id': '790',
-      'title': 'Hide email and make compact profile',
-      'configurable': {
-        'type': 'profile',
-        'profileHeaderConfig': {
-          'avatarSize': 80.0,
-          'avatarImageUrl': null,
-          'spacing': 12.0,
-          'nameFontSize': 20.0,
-          'showEmail': false,
-        },
-      },
-    },
-    {
       'id': '792',
       'title': 'Use network image for avatar',
       'configurable': {
